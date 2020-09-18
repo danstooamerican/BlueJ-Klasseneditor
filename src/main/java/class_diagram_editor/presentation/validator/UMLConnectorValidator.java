@@ -28,7 +28,7 @@ public class UMLConnectorValidator implements GConnectorValidator {
 
     @Override
     public boolean validate(GConnector source, GConnector target) {
-        return true;
+        return !source.getParent().equals(target.getParent());
     }
 
     @Override
