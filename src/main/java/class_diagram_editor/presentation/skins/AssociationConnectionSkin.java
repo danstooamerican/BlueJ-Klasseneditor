@@ -1,5 +1,7 @@
 package class_diagram_editor.presentation.skins;
 
+import class_diagram_editor.presentation.skins.arrows.AssociationArrowHead;
+import class_diagram_editor.presentation.skins.arrows.UMLArrow;
 import de.tesis.dynaware.grapheditor.GConnectionSkin;
 import de.tesis.dynaware.grapheditor.GJointSkin;
 import de.tesis.dynaware.grapheditor.model.GConnection;
@@ -19,17 +21,18 @@ public class AssociationConnectionSkin extends GConnectionSkin {
 
     private static final double OFFSET_FROM_CONNECTOR = ConnectorSkin.RADIUS;
 
-    private final Arrow arrow = new Arrow();
+    private final Arrow arrow;
     private final Group root = new Group();
 
     public AssociationConnectionSkin(GConnection connection) {
         super(connection);
 
+        this.arrow = new UMLArrow(new AssociationArrowHead());
+
         arrow.setManaged(false);
         arrow.getStyleClass().setAll(STYLE_CLASS);
         arrow.setHeadWidth(28);
-        arrow.setHeadLength(20);
-        arrow.setHeadRadius(10);
+        arrow.setHeadLength(15);
 
         root.getChildren().addAll(arrow);
     }
