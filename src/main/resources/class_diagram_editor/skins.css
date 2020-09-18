@@ -1,0 +1,73 @@
+.input-connector, .output-connector {
+    -fx-stroke: darkslategrey;
+    -fx-stroke-type: inside;
+    -fx-fill: white;
+    -fx-stroke-width: 1;
+    -fx-effect: dropshadow(one-pass-box, rgba(180, 180, 180), 5, 0, 1, 1);
+}
+
+.input-connector:hover, .input-connector:pressed, .output-connector:hover, .output-connector:pressed {
+    -fx-stroke-width: 2;
+}
+
+.input-connector:allowed, .output-connector:allowed {
+    -fx-stroke-width: 2;
+    -fx-fill: mediumseagreen;
+}
+
+.input-connector:forbidden, .output-connector:forbidden {
+    -fx-stroke-width: 2;
+    -fx-fill: tomato;
+}
+
+.association-connection .arrow-line {
+    -fx-stroke: darkslategrey;
+    -fx-effect: dropshadow(one-pass-box, rgba(180, 180, 180), 5, 0, 1, 1);
+}
+
+.association-connection .arrow-head {
+    -fx-stroke: darkslategrey;
+    -fx-fill: transparent;
+    -fx-effect: dropshadow(one-pass-box, rgba(180, 180, 180), 5, 0, 1, 1);
+}
+
+.extends-connection .arrow-line {
+    -fx-stroke: darkslategrey;
+    -fx-effect: dropshadow(one-pass-box, rgba(180, 180, 180), 5, 0, 1, 1);
+}
+
+.extends-connection .arrow-head {
+    -fx-stroke: darkslategrey;
+    -fx-fill: white;
+    -fx-effect: dropshadow(one-pass-box, rgba(180, 180, 180), 5, 0, 1, 1);
+}
+
+.implements-connection .arrow-line {
+    -fx-stroke: darkslategrey;
+    -fx-stroke-dash-array: 15;
+    -fx-effect: dropshadow(one-pass-box, rgba(180, 180, 180), 5, 0, 1, 1);
+}
+
+.implements-connection .arrow-head {
+    -fx-stroke: darkslategrey;
+    -fx-fill: white;
+    -fx-effect: dropshadow(one-pass-box, rgba(180, 180, 180), 5, 0, 1, 1);
+}
+
+.diagram-separator {
+    -fx-background-color: black;
+    -fx-effect: none;
+}
+
+.diagram-separator *.line {
+    -fx-border-style: solid;
+    -fx-border-width: 1px;
+}
+
+.abstract {
+    -fx-font-style: italic;
+}
+
+.static {
+    -fx-underline: true;
+}
