@@ -63,7 +63,24 @@ public class ClassDiagram {
     }
 
     public void addAssociationRelation(String startId, String endId) {
-        // TODO: implement me. Code generation unclear
+        Associatable start = null;
+        Associatable end = null;
+
+        if (classes.containsKey(startId)) {
+            start = classes.get(startId);
+        } else if (interfaces.containsKey(startId)) {
+            start = interfaces.get(startId);
+        }
+
+        if (classes.containsKey(endId)) {
+            end = classes.get(endId);
+        } else if (interfaces.containsKey(endId)) {
+            end = interfaces.get(endId);
+        }
+
+        if (start != null && end != null) {
+            end.addAssociation(start);
+        }
     }
 
     public Iterator<CodeElement> iterator() {

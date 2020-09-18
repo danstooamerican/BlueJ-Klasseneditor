@@ -161,7 +161,7 @@ public class MainScreenViewModel implements ViewModel {
         classDiagram.addImplementsRelation(interfaceId, classId);
     }
 
-    public void addAssociationRelation(String startId, String endId) {
+    public void addOneWayAssociationRelation(String startId, String endId) {
         classDiagram.addAssociationRelation(startId, endId);
     }
 

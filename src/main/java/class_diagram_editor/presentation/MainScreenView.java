@@ -109,7 +109,7 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
                     viewModel.addImplementsRelation(targetId, sourceId);
                     break;
                 case AssociationConnectionSkin.TYPE:
-                    viewModel.addAssociationRelation(sourceId, targetId);
+                    viewModel.addOneWayAssociationRelation(sourceId, targetId);
                     break;
             }
 

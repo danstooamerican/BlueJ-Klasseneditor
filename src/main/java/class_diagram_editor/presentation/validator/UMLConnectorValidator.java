@@ -40,10 +40,12 @@ public class UMLConnectorValidator implements GConnectorValidator {
         final String sourceType = source.getParent().getType();
         final String targetType = target.getParent().getType();
 
-        if (targetType.equals("class")) {
+        if (sourceType.equals("class") && targetType.equals("class")) {
             return ExtendsConnectionSkin.TYPE;
         } else if (sourceType.equals("interface") && targetType.equals("interface")) {
             return ExtendsConnectionSkin.TYPE;
+        } else if (sourceType.equals("interface") && targetType.equals("class")) {
+            return AssociationConnectionSkin.TYPE;
         } else if (targetType.equals("interface")) {
             return ImplementsConnectionSkin.TYPE;
         }

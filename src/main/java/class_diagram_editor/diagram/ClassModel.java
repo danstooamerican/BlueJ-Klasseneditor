@@ -8,25 +8,29 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Setter
-public class ClassModel implements CodeElement {
+public class ClassModel implements CodeElement, Associatable {
 
     private StringProperty name = new SimpleStringProperty();
 
     private boolean isAbstract;
 
     private ClassModel extendsClass;
-    private Collection<InterfaceModel> implementsInterfaces;
+    private Set<InterfaceModel> implementsInterfaces;
+    private Set<Associatable> associations;
 
-    private List<AttributeModel> attributes;
-    private List<MethodModel> methods;
+    private Set<AttributeModel> attributes;
+    private Set<MethodModel> methods;
 
     public ClassModel() {
-        this.implementsInterfaces = new ArrayList<>();
-        this.attributes = new ArrayList<>();
-        this.methods = new ArrayList<>();
+        this.implementsInterfaces = new HashSet<>();
+        this.associations = new HashSet<>();
+        this.attributes = new HashSet<>();
+        this.methods = new HashSet<>();
     }
 
     @Override
@@ -72,11 +76,11 @@ public class ClassModel implements CodeElement {
     }
 
     public List<AttributeModel> getAttributes() {
-        return attributes;
+        return new ArrayList<>(attributes);
     }
 
     public List<MethodModel> getMethods() {
-        return methods;
+        return new ArrayList<>(methods);
     }
 
     public void addMethod(MethodModel methodModel) {
@@ -89,5 +93,20 @@ public class ClassModel implements CodeElement {
 
     public void addInterface(InterfaceModel interfaceModel) {
         implementsInterfaces.add(interfaceModel);
+    }
+
+    @Override
+    public void addAssociation(Associatable associatable) {
+        associations.add(associatable);
+    }
+
+    @Override
+    public void removeAssociation(Associatable associatable) {
+        associations.remove(associatable);
+    }
+
+    @Override
+    public Collection<Associatable> getAssociations() {
+        return new ArrayList<>(associations);
     }
 }
