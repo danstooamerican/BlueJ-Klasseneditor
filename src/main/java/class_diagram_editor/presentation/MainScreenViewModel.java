@@ -47,7 +47,9 @@ public class MainScreenViewModel implements ViewModel {
     }
 
     public void generateCode() {
-        sourceCodeControl.generate(classDiagram);
+        if (sourceCodeControl != null) {
+            sourceCodeControl.generate(classDiagram);
+        }
     }
 
     public void addRandomClass() {

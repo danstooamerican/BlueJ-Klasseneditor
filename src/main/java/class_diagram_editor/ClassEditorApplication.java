@@ -19,9 +19,9 @@ public class ClassEditorApplication extends Application implements Runnable {
         this.sourceCodeControl = sourceCodeControl;
     }
 
-    public ClassEditorApplication() {
+    public ClassEditorApplication(SourceCodeControl sourceCodeControl) {
         this.title = "Klasseneditor";
-        this.sourceCodeControl = null;
+        this.sourceCodeControl = sourceCodeControl;
     }
 
     public static void main(String[] args) {
