@@ -58,7 +58,7 @@ public class ClassDiagram {
         Associatable end = findElement(endId);
 
         if (start != null && end != null) {
-            end.addAssociation(start);
+            start.addAssociation(end.getName().toLowerCase() + start.getAssociations().size(), end);
         }
     }
 

@@ -5,6 +5,8 @@ import class_diagram_editor.diagram.InterfaceModel;
 import class_diagram_editor.diagram.AttributeModel;
 import class_diagram_editor.diagram.MethodModel;
 import class_diagram_editor.diagram.Extendable;
+import class_diagram_editor.diagram.Associatable;
+import java.util.Map;
 import class_diagram_editor.code_generation.generators.Generator;
 
 class ClassGenerator extends Generator<ClassModel> {
@@ -14,7 +16,12 @@ class ClassGenerator extends Generator<ClassModel> {
             «FOR AttributeModel attributeModel : c.getAttributes()»
                 «generateAttribute(attributeModel).trim()»
             «ENDFOR»
-            «IF c.hasAttributes() && c.hasMethods()»
+            «IF c.hasAssociations()»
+                «FOR Map.Entry<String, Associatable> associatable : c.getAssociations().entrySet()»
+                    private «associatable.getValue().getName()» «associatable.getKey()»;
+                «ENDFOR»
+            «ENDIF»
+            «IF (c.hasAttributes() || c.hasAssociations()) && c.hasMethods()»
 
             «ENDIF»
             «FOR MethodModel methodModel : c.getMethods() SEPARATOR '\n'»

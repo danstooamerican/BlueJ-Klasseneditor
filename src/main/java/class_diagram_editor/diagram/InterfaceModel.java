@@ -2,13 +2,14 @@ package class_diagram_editor.diagram;
 
 import class_diagram_editor.code_generation.CodeElement;
 import class_diagram_editor.code_generation.CodeGenerator;
-import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Setter
@@ -16,14 +17,14 @@ public class InterfaceModel implements CodeElement, Associatable, Extendable {
 
     private String name;
 
-    private Set<Associatable> associations;
+    private Map<String, Associatable> associations;
     private Set<Extendable> extendsInterfaces;
     private List<MethodModel> methods;
 
     public InterfaceModel() {
         this.methods = new ArrayList<>();
         this.extendsInterfaces = new HashSet<>();
-        this.associations = new HashSet<>();
+        this.associations = new HashMap<>();
     }
 
     @Override
@@ -63,17 +64,22 @@ public class InterfaceModel implements CodeElement, Associatable, Extendable {
     }
 
     @Override
-    public void addAssociation(Associatable associatable) {
-        associations.add(associatable);
+    public boolean hasAssociations() {
+        return !associations.isEmpty();
     }
 
     @Override
-    public void removeAssociation(Associatable associatable) {
-        associations.remove(associatable);
+    public void addAssociation(String identifier, Associatable associatable) {
+        associations.put(identifier, associatable);
     }
 
     @Override
-    public Collection<Associatable> getAssociations() {
-        return new ArrayList<>(associations);
+    public void removeAssociation(String identifier) {
+        associations.remove(identifier);
+    }
+
+    @Override
+    public Map<String, Associatable> getAssociations() {
+        return new HashMap<>(associations);
     }
 }

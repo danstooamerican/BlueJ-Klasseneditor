@@ -8,8 +8,10 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Setter
@@ -21,14 +23,14 @@ public class ClassModel implements CodeElement, Associatable, Extendable {
 
     private Extendable extendsType;
     private Set<InterfaceModel> implementsInterfaces;
-    private Set<Associatable> associations;
+    private Map<String, Associatable> associations;
 
     private Set<AttributeModel> attributes;
     private Set<MethodModel> methods;
 
     public ClassModel() {
         this.implementsInterfaces = new HashSet<>();
-        this.associations = new HashSet<>();
+        this.associations = new HashMap<>();
         this.attributes = new HashSet<>();
         this.methods = new HashSet<>();
     }
@@ -112,19 +114,29 @@ public class ClassModel implements CodeElement, Associatable, Extendable {
         attributes.add(attributeModel);
     }
 
-
     @Override
-    public void addAssociation(Associatable associatable) {
-        associations.add(associatable);
+    public boolean hasAssociations() {
+        return !getAssociations().isEmpty();
     }
 
     @Override
-    public void removeAssociation(Associatable associatable) {
-        associations.remove(associatable);
+    public void addAssociation(String identifier, Associatable associatable) {
+        associations.put(identifier, associatable);
     }
 
     @Override
-    public Collection<Associatable> getAssociations() {
-        return new ArrayList<>(associations);
+    public void removeAssociation(String identifier) {
+        associations.remove(identifier);
+    }
+
+    @Override
+    public Map<String, Associatable> getAssociations() {
+        final Map<String, Associatable> allAssociations = new HashMap<>(associations);
+
+        for (InterfaceModel interfaceModel : implementsInterfaces) {
+            allAssociations.putAll(interfaceModel.getAssociations());
+        }
+
+        return allAssociations;
     }
 }

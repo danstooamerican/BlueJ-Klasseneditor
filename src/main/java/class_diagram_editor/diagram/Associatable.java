@@ -1,15 +1,17 @@
 package class_diagram_editor.diagram;
 
-import java.util.Collection;
+import java.util.Map;
 
 public interface Associatable {
 
     String getName();
 
-    void addAssociation(Associatable associatable);
+    boolean hasAssociations();
 
-    void removeAssociation(Associatable associatable);
+    void addAssociation(String identifier, Associatable associatable);
 
-    Collection<Associatable> getAssociations();
+    void removeAssociation(String identifier);
+
+    Map<String, Associatable> getAssociations();
 
 }
