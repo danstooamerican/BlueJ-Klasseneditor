@@ -1,13 +1,24 @@
 package class_diagram_editor.diagram.code_generation
 
 import class_diagram_editor.diagram.ClassModel;
+import class_diagram_editor.diagram.InterfaceModel;
+import class_diagram_editor.diagram.AttributeModel;
+import class_diagram_editor.diagram.MethodModel;
 import class_diagram_editor.code_generation.generators.Generator;
 
 class ClassGenerator extends Generator<ClassModel> {
 
     override String generate(ClassModel c) '''
-        public «IF c.isAbstract()»abstract «ENDIF»class «c.getName()» «IF c.isExtending()»extends «c.getExtendsClass().getName()» «ENDIF»{
+        public«IF c.isAbstract()» abstract«ENDIF» class «c.getName()»«IF c.isExtending()» extends «c.getExtendsClass().getName()»«ENDIF»«IF c.isImplementingInterfaces()» implements «FOR InterfaceModel interfaceModel : c.getImplementsInterfaces() SEPARATOR ', '»«interfaceModel.getName()»«ENDFOR»«ENDIF» {
+            «FOR AttributeModel attributeModel : c.getAttributes()»
+                «generateAttribute(attributeModel).trim()»
+            «ENDFOR»
+            «IF c.hasAttributes() && c.hasMethods()»
 
+            «ENDIF»
+            «FOR MethodModel methodModel : c.getMethods() SEPARATOR '\n'»
+                «generateMethod(methodModel).trim()»
+            «ENDFOR»
         }
     '''
 

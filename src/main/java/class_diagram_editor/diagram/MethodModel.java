@@ -7,7 +7,6 @@ import java.util.List;
 
 @Setter
 public class MethodModel {
-
     private String name;
     private String returnType;
     private Visibility visibility;
@@ -30,10 +29,6 @@ public class MethodModel {
 
     public List<AttributeModel> getAttributes() {
         return attributes;
-    }
-
-    public MethodModel(Visibility visibility) {
-        this.visibility = visibility;
     }
 
     public Visibility getVisibility() {

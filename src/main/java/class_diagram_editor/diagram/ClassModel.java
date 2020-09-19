@@ -75,6 +75,10 @@ public class ClassModel implements CodeElement, Associatable {
         return implementsInterfaces;
     }
 
+    public boolean isImplementingInterfaces() {
+        return !implementsInterfaces.isEmpty();
+    }
+
     public List<AttributeModel> getAttributes() {
         return new ArrayList<>(attributes);
     }
