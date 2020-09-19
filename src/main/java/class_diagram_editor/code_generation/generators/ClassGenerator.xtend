@@ -17,6 +17,9 @@ class ClassGenerator extends Generator<ClassModel> {
                 «generateAttribute(attributeModel).trim()»
             «ENDFOR»
             «IF c.hasAssociations()»
+                «IF c.hasAttributes()»
+
+                «ENDIF»
                 «FOR Map.Entry<String, Associatable> associatable : c.getAssociations().entrySet()»
                     private «associatable.getValue().getName()» «associatable.getKey()»;
                 «ENDFOR»

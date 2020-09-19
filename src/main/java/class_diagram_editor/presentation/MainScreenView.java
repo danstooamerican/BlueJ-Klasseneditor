@@ -18,11 +18,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializable {
@@ -46,6 +48,9 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
     private BorderPane bdpRoot;
 
     private BooleanProperty drawAssociation;
+
+    private GModel graphModel;
+    private EditingDomain domain;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -109,7 +114,11 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
                     viewModel.addImplementsRelation(targetId, sourceId);
                     break;
                 case AssociationConnectionSkin.TYPE:
-                    viewModel.addOneWayAssociationRelation(sourceId, targetId);
+                    final String identifier = getAssociationIdentifier(sourceId);
+
+                    connection.setId(identifier);
+                    viewModel.addOneWayAssociationRelation(sourceId, targetId, identifier);
+
                     break;
             }
 
@@ -117,15 +126,27 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
         });
     }
 
+    private String getAssociationIdentifier(String sourceId) {
+        TextInputDialog dialog = new TextInputDialog();
+
+        dialog.setTitle("Assoziation erstellen");
+        dialog.setContentText("Identifier:");
+
+        Optional<String> result = dialog.showAndWait();
+
+        return result.orElseGet(() -> viewModel.getDefaultAssociationIdentifier(sourceId));
+
+    }
+
     private void addGraphModel(GraphEditor graphEditor) {
-        GModel graphModel = GraphFactory.eINSTANCE.createGModel();
+        graphModel = GraphFactory.eINSTANCE.createGModel();
 
         graphModel.setContentWidth(10000);
         graphModel.setContentHeight(10000);
 
         graphEditor.setModel(graphModel);
 
-        EditingDomain domain = AdapterFactoryEditingDomain.getEditingDomainFor(graphModel);
+        domain = AdapterFactoryEditingDomain.getEditingDomainFor(graphModel);
         viewModel.init(domain, graphModel);
     }
 }

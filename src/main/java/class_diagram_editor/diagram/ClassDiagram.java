@@ -53,16 +53,16 @@ public class ClassDiagram {
         }
     }
 
-    public void addAssociationRelation(String startId, String endId) {
+    public void addAssociationRelation(String startId, String endId, String identifier) {
         Associatable start = findElement(startId);
         Associatable end = findElement(endId);
 
         if (start != null && end != null) {
-            start.addAssociation(end.getName().toLowerCase() + start.getAssociations().size(), end);
+            start.addAssociation(identifier, end);
         }
     }
 
-    private<T> T findElement(String id) {
+    public<T> T findElement(String id) {
         if (classes.containsKey(id)) {
             return (T) classes.get(id);
         } else if (interfaces.containsKey(id)) {

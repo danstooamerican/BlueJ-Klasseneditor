@@ -1,6 +1,7 @@
 package class_diagram_editor.presentation;
 
 import class_diagram_editor.code_generation.SourceCodeControl;
+import class_diagram_editor.diagram.Associatable;
 import class_diagram_editor.diagram.AttributeModel;
 import class_diagram_editor.diagram.ClassDiagram;
 import class_diagram_editor.diagram.ClassModel;
@@ -28,6 +29,8 @@ import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+
+import java.util.Set;
 
 public class MainScreenViewModel implements ViewModel {
     private final SourceCodeControl sourceCodeControl;
@@ -163,8 +166,23 @@ public class MainScreenViewModel implements ViewModel {
         classDiagram.addImplementsRelation(interfaceId, classId);
     }
 
-    public void addOneWayAssociationRelation(String startId, String endId) {
-        classDiagram.addAssociationRelation(startId, endId);
+    public String getDefaultAssociationIdentifier(String id) {
+        Associatable associatable = classDiagram.findElement(id);
+
+        Set<String> identifiers = associatable.getAssociations().keySet();
+
+        final String defaultIdentifier = "association";
+        for (int i = 0; ; i++) {
+            String identifierCandidate = defaultIdentifier + i;
+
+            if (!identifiers.contains(identifierCandidate)) {
+                return identifierCandidate;
+            }
+        }
+    }
+
+    public void addOneWayAssociationRelation(String startId, String endId, String identifier) {
+        classDiagram.addAssociationRelation(startId, endId, identifier);
     }
 
     public GNodeSkin createNodeSkin(final GNode node) {
