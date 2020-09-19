@@ -76,7 +76,7 @@ public class MainScreenViewModel implements ViewModel {
         methodModel.setReturnType("String");
         methodModel.setAbstract(Math.random() < 0.5);
         methodModel.setStatic(Math.random() < 0.5);
-        methodModel.setVisibility(Visibility.PACKAGE_PRIVATE);
+        methodModel.setVisibility(Visibility.PUBLIC);
 
         for (int k = 0; k < 5 && Math.random() < 0.5; k++) {
             methodModel.addAttribute(createRandomAttribute(k));
@@ -155,8 +155,8 @@ public class MainScreenViewModel implements ViewModel {
         return connector;
     }
 
-    public void addExtendsRelation(String superClassId, String classId) {
-        classDiagram.addExtendsRelation(superClassId, classId);
+    public void addExtendsRelation(String superTypeId, String extendingTypeId) {
+        classDiagram.addExtendsRelation(superTypeId, extendingTypeId);
     }
 
     public void addImplementsRelation(String interfaceId, String classId) {

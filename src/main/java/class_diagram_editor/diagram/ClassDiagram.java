@@ -44,13 +44,32 @@ public class ClassDiagram {
         return uuid;
     }
 
-    public void addExtendsRelation(String superClass, String extendingClass) {
-        if (classes.containsKey(superClass) && classes.containsKey(extendingClass)) {
-            ClassModel superClassModel = classes.get(superClass);
-            ClassModel extendingClassModel = classes.get(extendingClass);
+    public void addExtendsRelation(String superTypeId, String extendingTypeId) {
+        Extendable superType = findElement(superTypeId);
+        Extendable extendingType = findElement(extendingTypeId);
 
-            extendingClassModel.setExtendsClass(superClassModel);
+        if (superType != null && extendingType != null) {
+            extendingType.addExtendsRelation(superType);
         }
+    }
+
+    public void addAssociationRelation(String startId, String endId) {
+        Associatable start = findElement(startId);
+        Associatable end = findElement(endId);
+
+        if (start != null && end != null) {
+            end.addAssociation(start);
+        }
+    }
+
+    private<T> T findElement(String id) {
+        if (classes.containsKey(id)) {
+            return (T) classes.get(id);
+        } else if (interfaces.containsKey(id)) {
+            return (T) interfaces.get(id);
+        }
+
+        return null;
     }
 
     public void addImplementsRelation(String interfaceId, String classId) {
@@ -59,27 +78,6 @@ public class ClassDiagram {
             ClassModel classModel = classes.get(classId);
 
             classModel.addInterface(interfaceModel);
-        }
-    }
-
-    public void addAssociationRelation(String startId, String endId) {
-        Associatable start = null;
-        Associatable end = null;
-
-        if (classes.containsKey(startId)) {
-            start = classes.get(startId);
-        } else if (interfaces.containsKey(startId)) {
-            start = interfaces.get(startId);
-        }
-
-        if (classes.containsKey(endId)) {
-            end = classes.get(endId);
-        } else if (interfaces.containsKey(endId)) {
-            end = interfaces.get(endId);
-        }
-
-        if (start != null && end != null) {
-            end.addAssociation(start);
         }
     }
 

@@ -13,13 +13,13 @@ import java.util.List;
 import java.util.Set;
 
 @Setter
-public class ClassModel implements CodeElement, Associatable {
+public class ClassModel implements CodeElement, Associatable, Extendable {
 
     private StringProperty name = new SimpleStringProperty();
 
     private boolean isAbstract;
 
-    private ClassModel extendsClass;
+    private Extendable extendsType;
     private Set<InterfaceModel> implementsInterfaces;
     private Set<Associatable> associations;
 
@@ -38,20 +38,15 @@ public class ClassModel implements CodeElement, Associatable {
         codeGenerator.visitClass(this);
     }
 
+
     public boolean isAbstract() {
         return isAbstract;
     }
 
-    public boolean isExtending() {
-        return extendsClass != null;
-    }
 
-    public boolean hasMethods() {
-        return !methods.isEmpty();
-    }
-
-    public boolean hasAttributes() {
-        return !attributes.isEmpty();
+    @Override
+    public String getName() {
+        return name.get();
     }
 
     public void setName(String name) {
@@ -62,14 +57,6 @@ public class ClassModel implements CodeElement, Associatable {
         return name;
     }
 
-    @Override
-    public String getName() {
-        return name.get();
-    }
-
-    public ClassModel getExtendsClass() {
-        return extendsClass;
-    }
 
     public Collection<InterfaceModel> getImplementsInterfaces() {
         return implementsInterfaces;
@@ -79,25 +66,52 @@ public class ClassModel implements CodeElement, Associatable {
         return !implementsInterfaces.isEmpty();
     }
 
-    public List<AttributeModel> getAttributes() {
-        return new ArrayList<>(attributes);
+    public void addInterface(InterfaceModel interfaceModel) {
+        implementsInterfaces.add(interfaceModel);
     }
+
+
+    @Override
+    public boolean isExtending() {
+        return extendsType != null;
+    }
+
+    @Override
+    public void addExtendsRelation(Extendable extendable) {
+        extendsType = extendable;
+    }
+
+    @Override
+    public Collection<Extendable> getExtendsRelations() {
+        return List.of(extendsType);
+    }
+
 
     public List<MethodModel> getMethods() {
         return new ArrayList<>(methods);
+    }
+
+    public boolean hasMethods() {
+        return !methods.isEmpty();
     }
 
     public void addMethod(MethodModel methodModel) {
         methods.add(methodModel);
     }
 
+
+    public List<AttributeModel> getAttributes() {
+        return new ArrayList<>(attributes);
+    }
+
+    public boolean hasAttributes() {
+        return !attributes.isEmpty();
+    }
+
     public void addAttribute(AttributeModel attributeModel) {
         attributes.add(attributeModel);
     }
 
-    public void addInterface(InterfaceModel interfaceModel) {
-        implementsInterfaces.add(interfaceModel);
-    }
 
     @Override
     public void addAssociation(Associatable associatable) {

@@ -11,17 +11,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Getter
 @Setter
-public class InterfaceModel implements CodeElement, Associatable {
+public class InterfaceModel implements CodeElement, Associatable, Extendable {
 
     private String name;
 
     private Set<Associatable> associations;
+    private Set<Extendable> extendsInterfaces;
     private List<MethodModel> methods;
 
     public InterfaceModel() {
         this.methods = new ArrayList<>();
+        this.extendsInterfaces = new HashSet<>();
         this.associations = new HashSet<>();
     }
 
@@ -36,6 +37,29 @@ public class InterfaceModel implements CodeElement, Associatable {
 
     public void addMethod(MethodModel methodModel) {
         methods.add(methodModel);
+    }
+
+    @Override
+    public boolean isExtending() {
+        return !extendsInterfaces.isEmpty();
+    }
+
+    @Override
+    public void addExtendsRelation(Extendable extendable) {
+        extendsInterfaces.add(extendable);
+    }
+
+    @Override
+    public Collection<Extendable> getExtendsRelations() {
+        return new ArrayList<>(extendsInterfaces);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<MethodModel> getMethods() {
+        return methods;
     }
 
     @Override
