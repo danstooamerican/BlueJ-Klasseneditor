@@ -11,10 +11,8 @@ abstract class Generator<T> {
         «attributeModel.getVisibility().getCode()»«IF attributeModel.isStatic()» static«ENDIF»«IF attributeModel.isFinal()» final«ENDIF» «attributeModel.getType()» «attributeModel.getName()»;
     '''
 
-    def String generateMethod(MethodModel methodModel) '''
-        «methodModel.getVisibility().getCode()»«IF methodModel.isStatic()» static«ENDIF»«IF methodModel.isAbstract()» abstract«ENDIF» «methodModel.getReturnType()» «methodModel.getName()»(«FOR AttributeModel attribute : methodModel.getAttributes() SEPARATOR ', '»«attribute.getType()» «attribute.getName()»«ENDFOR») {
-
-        }
+    def String generateMethodSignature(MethodModel methodModel) '''
+        «methodModel.getVisibility().getCode()»«IF methodModel.isStatic()» static«ENDIF»«IF methodModel.isAbstract()» abstract«ENDIF» «methodModel.getReturnType()» «methodModel.getName()»(«FOR AttributeModel attribute : methodModel.getAttributes() SEPARATOR ', '»«attribute.getType()» «attribute.getName()»«ENDFOR»)
     '''
 
 }
