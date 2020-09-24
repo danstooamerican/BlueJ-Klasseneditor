@@ -15,15 +15,15 @@ import java.util.Map;
 import java.util.Set;
 
 @Setter
-public class ClassModel implements CodeElement, Associatable, Extendable {
+public class ClassModel implements CodeElement, Connectable {
 
     private StringProperty name = new SimpleStringProperty();
 
     private boolean isAbstract;
 
-    private Extendable extendsType;
+    private Connectable extendsType;
     private Set<InterfaceModel> implementsInterfaces;
-    private Map<String, Associatable> associations;
+    private Map<String, Connectable> associations;
 
     private Set<AttributeModel> attributes;
     private Set<MethodModel> methods;
@@ -79,12 +79,12 @@ public class ClassModel implements CodeElement, Associatable, Extendable {
     }
 
     @Override
-    public void addExtendsRelation(Extendable extendable) {
+    public void addExtendsRelation(Connectable extendable) {
         extendsType = extendable;
     }
 
     @Override
-    public Collection<Extendable> getExtendsRelations() {
+    public Collection<Connectable> getExtendsRelations() {
         return List.of(extendsType);
     }
 
@@ -130,8 +130,8 @@ public class ClassModel implements CodeElement, Associatable, Extendable {
     }
 
     @Override
-    public Map<String, Associatable> getAssociations() {
-        final Map<String, Associatable> allAssociations = new HashMap<>(associations);
+    public Map<String, Connectable> getAssociations() {
+        final Map<String, Connectable> allAssociations = new HashMap<>(associations);
 
         for (InterfaceModel interfaceModel : implementsInterfaces) {
             allAssociations.putAll(interfaceModel.getAssociations());

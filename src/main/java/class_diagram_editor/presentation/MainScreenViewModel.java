@@ -1,7 +1,7 @@
 package class_diagram_editor.presentation;
 
 import class_diagram_editor.code_generation.SourceCodeControl;
-import class_diagram_editor.diagram.Associatable;
+import class_diagram_editor.diagram.Connectable;
 import class_diagram_editor.diagram.AttributeModel;
 import class_diagram_editor.diagram.ClassDiagram;
 import class_diagram_editor.diagram.ClassModel;
@@ -167,9 +167,9 @@ public class MainScreenViewModel implements ViewModel {
     }
 
     public String getDefaultAssociationIdentifier(String id) {
-        Associatable associatable = classDiagram.findElement(id);
+        Connectable connectable = classDiagram.findElement(id);
 
-        Set<String> identifiers = associatable.getAssociations().keySet();
+        Set<String> identifiers = connectable.getAssociations().keySet();
 
         final String defaultIdentifier = "association";
         for (int i = 0; ; i++) {

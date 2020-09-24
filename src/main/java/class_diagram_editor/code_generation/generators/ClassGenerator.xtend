@@ -4,15 +4,14 @@ import class_diagram_editor.diagram.ClassModel;
 import class_diagram_editor.diagram.InterfaceModel;
 import class_diagram_editor.diagram.AttributeModel;
 import class_diagram_editor.diagram.MethodModel;
-import class_diagram_editor.diagram.Extendable;
-import class_diagram_editor.diagram.Associatable;
+import class_diagram_editor.diagram.Connectable;
 import java.util.Map;
 import class_diagram_editor.code_generation.generators.Generator;
 
 class ClassGenerator extends Generator<ClassModel> {
 
     override String generate(ClassModel c) '''
-        public«IF c.isAbstract()» abstract«ENDIF» class «c.getName()»«IF c.isExtending()» extends «FOR Extendable extendable : c.getExtendsRelations() SEPARATOR ', '»«extendable.getName()»«ENDFOR»«ENDIF»«IF c.isImplementingInterfaces()» implements «FOR InterfaceModel interfaceModel : c.getImplementsInterfaces() SEPARATOR ', '»«interfaceModel.getName()»«ENDFOR»«ENDIF» {
+        public«IF c.isAbstract()» abstract«ENDIF» class «c.getName()»«IF c.isExtending()» extends «FOR Connectable connectable : c.getExtendsRelations() SEPARATOR ', '»«connectable.getName()»«ENDFOR»«ENDIF»«IF c.isImplementingInterfaces()» implements «FOR InterfaceModel interfaceModel : c.getImplementsInterfaces() SEPARATOR ', '»«interfaceModel.getName()»«ENDFOR»«ENDIF» {
             «FOR AttributeModel attributeModel : c.getAttributes()»
                 «generateAttribute(attributeModel).trim()»
             «ENDFOR»
@@ -20,8 +19,8 @@ class ClassGenerator extends Generator<ClassModel> {
                 «IF c.hasAttributes()»
 
                 «ENDIF»
-                «FOR Map.Entry<String, Associatable> associatable : c.getAssociations().entrySet()»
-                    private «associatable.getValue().getName()» «associatable.getKey()»;
+                «FOR Map.Entry<String, Connectable> connectable : c.getAssociations().entrySet()»
+                    private «connectable.getValue().getName()» «connectable.getKey()»;
                 «ENDFOR»
             «ENDIF»
             «IF (c.hasAttributes() || c.hasAssociations()) && c.hasMethods()»

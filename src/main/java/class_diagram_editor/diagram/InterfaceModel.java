@@ -13,12 +13,12 @@ import java.util.Map;
 import java.util.Set;
 
 @Setter
-public class InterfaceModel implements CodeElement, Associatable, Extendable {
+public class InterfaceModel implements CodeElement, Connectable {
 
     private String name;
 
-    private Map<String, Associatable> associations;
-    private Set<Extendable> extendsInterfaces;
+    private Map<String, Connectable> associations;
+    private Set<Connectable> extendsInterfaces;
     private List<MethodModel> methods;
 
     public InterfaceModel() {
@@ -46,12 +46,12 @@ public class InterfaceModel implements CodeElement, Associatable, Extendable {
     }
 
     @Override
-    public void addExtendsRelation(Extendable extendable) {
+    public void addExtendsRelation(Connectable extendable) {
         extendsInterfaces.add(extendable);
     }
 
     @Override
-    public Collection<Extendable> getExtendsRelations() {
+    public Collection<Connectable> getExtendsRelations() {
         return new ArrayList<>(extendsInterfaces);
     }
 
@@ -79,7 +79,13 @@ public class InterfaceModel implements CodeElement, Associatable, Extendable {
     }
 
     @Override
-    public Map<String, Associatable> getAssociations() {
-        return new HashMap<>(associations);
+    public Map<String, Connectable> getAssociations() {
+        Map<String, Connectable> allAssociations = new HashMap<>(associations);
+
+        for (Connectable interfaceModel : extendsInterfaces) {
+            allAssociations.putAll(interfaceModel.getAssociations());
+        }
+
+        return allAssociations;
     }
 }

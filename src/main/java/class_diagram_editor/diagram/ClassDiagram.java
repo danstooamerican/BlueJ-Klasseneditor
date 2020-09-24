@@ -45,17 +45,17 @@ public class ClassDiagram {
     }
 
     public void addExtendsRelation(String superTypeId, String extendingTypeId) {
-        Extendable superType = findElement(superTypeId);
-        Extendable extendingType = findElement(extendingTypeId);
+        Connectable superType = findElement(superTypeId);
+        Connectable extendingType = findElement(extendingTypeId);
 
         if (superType != null && extendingType != null) {
             extendingType.addExtendsRelation(superType);
         }
     }
 
-    public void addAssociationRelation(String startId, String endId, String identifier) {
-        Associatable start = findElement(startId);
-        Associatable end = findElement(endId);
+    public boolean addAssociationRelation(String startId, String endId, String identifier) {
+        Connectable start = findElement(startId);
+        Connectable end = findElement(endId);
 
         if (start != null && end != null) {
             start.addAssociation(identifier, end);
@@ -63,6 +63,7 @@ public class ClassDiagram {
     }
 
     public<T> T findElement(String id) {
+
         if (classes.containsKey(id)) {
             return (T) classes.get(id);
         } else if (interfaces.containsKey(id)) {
