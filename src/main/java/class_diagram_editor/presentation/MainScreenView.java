@@ -12,14 +12,19 @@ import de.tesis.dynaware.grapheditor.core.view.GraphEditorContainer;
 import de.tesis.dynaware.grapheditor.model.GConnector;
 import de.tesis.dynaware.grapheditor.model.GModel;
 import de.tesis.dynaware.grapheditor.model.GraphFactory;
+import de.tesis.dynaware.grapheditor.model.GraphPackage;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
+import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
@@ -100,6 +105,8 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
 
     private void addGraphControls(GraphEditor graphEditor) {
         graphEditor.setOnConnectionCreated(connection -> {
+            CompoundCommand command = null;
+
             GConnector connectorSource = connection.getSource();
             GConnector connectorTarget = connection.getTarget();
 
@@ -117,12 +124,21 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
                     final String identifier = getAssociationIdentifier(sourceId);
 
                     connection.setId(identifier);
-                    viewModel.addOneWayAssociationRelation(sourceId, targetId, identifier);
+                    boolean successful = viewModel.addOneWayAssociationRelation(sourceId, targetId, identifier);
+
+                    if (!successful) {
+                        command = new CompoundCommand();
+                        command.append(RemoveCommand.create(domain, graphModel, GraphPackage.Literals.GMODEL__CONNECTIONS, connection));
+                        command.append(RemoveCommand.create(domain, connection.getSource(), GraphPackage.Literals.GCONNECTOR__CONNECTIONS, connection));
+                        command.append(RemoveCommand.create(domain, connection.getTarget(), GraphPackage.Literals.GCONNECTOR__CONNECTIONS, connection));
+
+                        displayAssociationDuplicateError(identifier);
+                    }
 
                     break;
             }
 
-            return null;
+            return command;
         });
     }
 
@@ -135,7 +151,14 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
         Optional<String> result = dialog.showAndWait();
 
         return result.orElseGet(() -> viewModel.getDefaultAssociationIdentifier(sourceId));
+    }
 
+    private void displayAssociationDuplicateError(String identifier) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Duplikat erkannt");
+        alert.setContentText("Die Klasse hat schon eine Assoziation mit dem Namen '" + identifier + "'");
+
+        alert.show();
     }
 
     private void addGraphModel(GraphEditor graphEditor) {

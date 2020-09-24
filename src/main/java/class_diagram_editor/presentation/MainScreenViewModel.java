@@ -181,8 +181,8 @@ public class MainScreenViewModel implements ViewModel {
         }
     }
 
-    public void addOneWayAssociationRelation(String startId, String endId, String identifier) {
-        classDiagram.addAssociationRelation(startId, endId, identifier);
+    public boolean addOneWayAssociationRelation(String startId, String endId, String identifier) {
+        return classDiagram.addAssociationRelation(startId, endId, identifier);
     }
 
     public GNodeSkin createNodeSkin(final GNode node) {

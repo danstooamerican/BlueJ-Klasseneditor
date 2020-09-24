@@ -69,8 +69,14 @@ public class InterfaceModel implements CodeElement, Connectable {
     }
 
     @Override
-    public void addAssociation(String identifier, Associatable associatable) {
-        associations.put(identifier, associatable);
+    public boolean addAssociation(String identifier, Connectable connectable) {
+        if (getAssociations().containsKey(identifier)) {
+            return false;
+        }
+
+        associations.put(identifier, connectable);
+
+        return true;
     }
 
     @Override

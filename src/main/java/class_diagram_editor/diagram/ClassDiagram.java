@@ -58,8 +58,10 @@ public class ClassDiagram {
         Connectable end = findElement(endId);
 
         if (start != null && end != null) {
-            start.addAssociation(identifier, end);
+            return start.addAssociation(identifier, end);
         }
+
+        return false;
     }
 
     public<T> T findElement(String id) {
