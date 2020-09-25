@@ -19,16 +19,18 @@
 - Code aus Klassendiagramm generieren lassen
 - Grafische Benutzeroberfläche für das Zeichnen von Diagrammen
 - Korrektes Anzeigen der Klassendiagramm Datenstruktur
+- Klassendiagramm aus bestehenden Code generieren testen
 
 ## Mögliche Erweiterungen - bis 08.11.2020
+- Klassendiagramm aus bestehenden Code generieren
 - Umsetzung zusätzlicher UML-Klassendiagramm-Elemente
 	- Aggregation
 	- Komposition
 	- Assoziation (mit Kardinalitäten)
 	- Assoziationsklasse (optional)
 	- Enum (optional)
-- Konfigurationsmöglichkeit von verfügbaren Elementen
 - Syntaxüberprüfung während das Klassendiagramm erstellt wird
+- Konfigurationsmöglichkeit von verfügbaren Elementen (optional)
 - Darstellung von Beziehungen verbessern (nicht nur geradlinig) (optional)
 - Möglichkeit Klassen zu Paketen zuzuordnen (optional)
-- Klassendiagramm aus bestehenden Code generieren (optional)
+

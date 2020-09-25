@@ -13,3 +13,4 @@ KIT SOC4S Projekt: BlueJ Klasseneditor Prototyp
 - Code aus Klassendiagramm generieren lassen
 - Grafische Benutzeroberfläche für das Zeichnen von Diagrammen
 - Korrektes Anzeigen der Klassendiagramm Datenstruktur
+- Klassendiagramm aus bestehenden Code generieren testen

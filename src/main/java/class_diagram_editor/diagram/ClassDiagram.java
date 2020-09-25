@@ -65,7 +65,6 @@ public class ClassDiagram {
     }
 
     public<T> T findElement(String id) {
-
         if (classes.containsKey(id)) {
             return (T) classes.get(id);
         } else if (interfaces.containsKey(id)) {
