@@ -92,10 +92,6 @@ public class ClassDiagram {
         return new ClassModelIterator(codeElements);
     }
 
-    public void updateRandom() {
-        classes.values().stream().findFirst().ifPresent(classModel -> classModel.setName("I was updated"));
-    }
-
     private static class ClassModelIterator implements Iterator<CodeElement> {
 
         private final List<CodeElement> codeElements;
