@@ -1,14 +1,21 @@
 package class_diagram_editor.presentation;
 
+import class_diagram_editor.presentation.create_element.CreateElementView;
+import class_diagram_editor.presentation.create_element.CreateElementViewModel;
 import class_diagram_editor.presentation.graph_editor.GraphController;
+import de.saxsys.mvvmfx.FluentViewLoader;
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
+import de.saxsys.mvvmfx.ViewTuple;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -68,5 +75,26 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
         ckbAssociation.setOnAction(e -> {
             viewModel.setDrawAssociation(ckbAssociation.isSelected());
         });
+
+        btnCreateElement.setOnAction(e -> {
+            showCreateElementDialog();
+        });
+    }
+
+    private void showCreateElementDialog() {
+        Stage stage = new Stage();
+        stage.setTitle("Neues Element hinzufügen");
+
+        ViewTuple<CreateElementView, CreateElementViewModel> viewTuple = FluentViewLoader.fxmlView(CreateElementView.class)
+                .codeBehind(new CreateElementView())
+                .viewModel(new CreateElementViewModel(viewModel.getClassDiagram()))
+                .load();
+
+        Parent root = viewTuple.getView();
+
+        Scene scene = new Scene(root);
+
+        stage.setScene(scene);
+        stage.show();
     }
 }
