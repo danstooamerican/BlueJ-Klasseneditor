@@ -16,6 +16,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Separator;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
@@ -102,6 +104,12 @@ public class CreateElementView implements FxmlView<CreateElementViewModel>, Init
     @FXML
     private Separator sprElementAbstract;
 
+    @FXML
+    private TabPane tabPane;
+
+    @FXML
+    private Tab tabAttributes;
+
     public CreateElementView(Stage stage) {
         this.stage = stage;
     }
@@ -119,8 +127,12 @@ public class CreateElementView implements FxmlView<CreateElementViewModel>, Init
         tgbClass.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 lblImplementsTitle.setText("Implementierte Interfaces");
+
+                tabPane.getTabs().add(1, tabAttributes);
             } else {
                 lblImplementsTitle.setText("Erweiterte Interfaces");
+
+                tabPane.getTabs().remove(tabAttributes);
             }
 
             pnlElementExtends.setVisible(newValue);
