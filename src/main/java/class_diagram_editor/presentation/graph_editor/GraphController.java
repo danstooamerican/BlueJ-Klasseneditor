@@ -7,6 +7,7 @@ import class_diagram_editor.presentation.skins.AssociationConnectionSkin;
 import class_diagram_editor.presentation.skins.ExtendsConnectionSkin;
 import class_diagram_editor.presentation.skins.ImplementsConnectionSkin;
 import class_diagram_editor.presentation.validator.UMLConnectorValidator;
+import de.tesis.dynaware.grapheditor.Commands;
 import de.tesis.dynaware.grapheditor.GraphEditor;
 import de.tesis.dynaware.grapheditor.core.DefaultGraphEditor;
 import de.tesis.dynaware.grapheditor.core.view.GraphEditorContainer;
@@ -18,6 +19,7 @@ import de.tesis.dynaware.grapheditor.model.GraphPackage;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.input.KeyCode;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
@@ -28,6 +30,8 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import java.util.Optional;
 import java.util.Set;
 
+import static java.util.stream.Collectors.toList;
+
 public class GraphController {
 
     private EditingDomain domain;
@@ -36,6 +40,7 @@ public class GraphController {
     private final MainScreenViewModel viewModel;
     private final ClassDiagram classDiagram;
 
+    private GraphEditor graphEditor;
     private final GraphSkinFactory skinFactory;
 
     public GraphController(MainScreenViewModel viewModel) {
@@ -46,7 +51,7 @@ public class GraphController {
     }
 
     public Node initializeGraph() {
-        GraphEditor graphEditor = new DefaultGraphEditor();
+        graphEditor = new DefaultGraphEditor();
 
         GraphEditorContainer graphEditorContainer = new GraphEditorContainer();
         graphEditorContainer.setGraphEditor(graphEditor);
@@ -56,6 +61,18 @@ public class GraphController {
         addGraphModel(graphEditor);
 
         return graphEditorContainer;
+    }
+
+    public void deleteSelectedNodes() {
+        classDiagram.deleteElements(graphEditor.getSelectionManager().getSelectedNodes()
+                .stream()
+                .map(GNode::getId)
+                .collect(toList())
+        );
+
+        graphEditor.getSelectionManager().getSelectedNodes().forEach(gNode -> {
+            Commands.removeNode(graphModel, gNode);
+        });
     }
 
     private void addSkins(GraphEditor graphEditor) {
@@ -191,6 +208,10 @@ public class GraphController {
                 return identifierCandidate;
             }
         }
+    }
+
+    public void selectAllNodes() {
+        graphEditor.getSelectionManager().selectAll();
     }
 
     public enum NodeType {

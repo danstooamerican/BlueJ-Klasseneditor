@@ -53,6 +53,16 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
 
         Node graphEditor = graphController.initializeGraph();
         bdpRoot.centerProperty().setValue(graphEditor);
+
+        bdpRoot.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.DELETE) {
+                graphController.deleteSelectedNodes();
+            }
+
+            if (event.getCode() == KeyCode.A && event.isControlDown()) {
+                graphController.selectAllNodes();
+            }
+        });
     }
 
     private void addControlHandlers() {

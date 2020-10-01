@@ -88,6 +88,17 @@ public class ClassModel implements CodeElement, Connectable {
         return List.of(extendsType);
     }
 
+    @Override
+    public void removeReferencesTo(Connectable removedElement) {
+        if (extendsType != null && extendsType.getName().equals(removedElement.getName())) {
+            extendsType = null;
+        }
+
+        implementsInterfaces.removeIf(interfaceModel -> interfaceModel.getName().equals(removedElement.getName()));
+
+        associations.entrySet().removeIf(pair -> pair.getValue().getName().equals(removedElement.getName()));
+    }
+
 
     public List<MethodModel> getMethods() {
         return new ArrayList<>(methods);

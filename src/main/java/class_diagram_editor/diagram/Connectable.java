@@ -21,4 +21,5 @@ public interface Connectable {
 
     Collection<Connectable> getExtendsRelations();
 
+    void removeReferencesTo(Connectable removedElement);
 }

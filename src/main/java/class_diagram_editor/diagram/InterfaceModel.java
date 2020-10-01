@@ -94,4 +94,11 @@ public class InterfaceModel implements CodeElement, Connectable {
 
         return allAssociations;
     }
+
+    @Override
+    public void removeReferencesTo(Connectable removedElement) {
+        extendsInterfaces.removeIf(interfaceModel -> interfaceModel.getName().equals(removedElement.getName()));
+
+        associations.entrySet().removeIf(pair -> pair.getValue().getName().equals(removedElement.getName()));
+    }
 }

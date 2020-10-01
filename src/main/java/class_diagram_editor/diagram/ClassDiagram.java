@@ -64,6 +64,23 @@ public class ClassDiagram {
         return false;
     }
 
+    public void deleteElements(Collection<String> ids) {
+        ids.forEach(id -> {
+            Connectable removedElement = findElement(id);
+
+            classes.remove(id);
+            interfaces.remove(id);
+
+            classes.values().forEach(classModel -> {
+                classModel.removeReferencesTo(removedElement);
+            });
+
+            interfaces.values().forEach(interfaceModel -> {
+                interfaceModel.removeReferencesTo(removedElement);
+            });
+        });
+    }
+
     public<T> T findElement(String id) {
         if (classes.containsKey(id)) {
             return (T) classes.get(id);
