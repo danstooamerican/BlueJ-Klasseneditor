@@ -1,8 +1,10 @@
 package class_diagram_editor.presentation.validator;
 
 import class_diagram_editor.presentation.skins.AssociationConnectionSkin;
+import class_diagram_editor.presentation.skins.ClassSkin;
 import class_diagram_editor.presentation.skins.ExtendsConnectionSkin;
 import class_diagram_editor.presentation.skins.ImplementsConnectionSkin;
+import class_diagram_editor.presentation.skins.InterfaceSkin;
 import de.tesis.dynaware.grapheditor.GConnectorValidator;
 import de.tesis.dynaware.grapheditor.model.GConnector;
 import javafx.beans.property.BooleanProperty;
@@ -40,13 +42,13 @@ public class UMLConnectorValidator implements GConnectorValidator {
         final String sourceType = source.getParent().getType();
         final String targetType = target.getParent().getType();
 
-        if (sourceType.equals("class") && targetType.equals("class")) {
+        if (sourceType.equals(ClassSkin.TYPE) && targetType.equals(ClassSkin.TYPE)) {
             return ExtendsConnectionSkin.TYPE;
-        } else if (sourceType.equals("interface") && targetType.equals("interface")) {
+        } else if (sourceType.equals(InterfaceSkin.TYPE) && targetType.equals(InterfaceSkin.TYPE)) {
             return ExtendsConnectionSkin.TYPE;
-        } else if (sourceType.equals("interface") && targetType.equals("class")) {
+        } else if (sourceType.equals(InterfaceSkin.TYPE) && targetType.equals(ClassSkin.TYPE)) {
             return AssociationConnectionSkin.TYPE;
-        } else if (targetType.equals("interface")) {
+        } else if (targetType.equals(InterfaceSkin.TYPE)) {
             return ImplementsConnectionSkin.TYPE;
         }
 

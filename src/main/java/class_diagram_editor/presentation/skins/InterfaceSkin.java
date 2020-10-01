@@ -23,6 +23,8 @@ import javafx.stage.Stage;
 
 public class InterfaceSkin extends DefaultNodeSkin {
 
+    public static final String TYPE = "interface";
+
     private static final String SEPARATOR_CLASS = "diagram-separator";
 
     private final InterfaceModel interfaceModel;

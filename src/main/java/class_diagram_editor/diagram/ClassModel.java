@@ -162,4 +162,9 @@ public class ClassModel implements CodeElement, Connectable {
 
         return allAssociations;
     }
+
+    @Override
+    public String toString() {
+        return name.get();
+    }
 }

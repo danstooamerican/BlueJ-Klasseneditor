@@ -101,4 +101,9 @@ public class InterfaceModel implements CodeElement, Connectable {
 
         associations.entrySet().removeIf(pair -> pair.getValue().getName().equals(removedElement.getName()));
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }
