@@ -2,22 +2,29 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="500.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <bottom>
       <HBox alignment="CENTER_RIGHT" style="-fx-background-color: #DFDFDF;" BorderPane.alignment="CENTER">
          <children>
-            <Button cancelButton="true" mnemonicParsing="false" text="Abbrechen">
+            <Button fx:id="btnCancel" cancelButton="true" mnemonicParsing="false" text="Abbrechen">
                <HBox.margin>
                   <Insets bottom="8.0" right="16.0" top="8.0" />
                </HBox.margin>
             </Button>
-            <Button defaultButton="true" mnemonicParsing="false" text="Element erstellen">
+            <Button fx:id="btnCreateElement" defaultButton="true" mnemonicParsing="false" text="Element erstellen">
                <HBox.margin>
                   <Insets bottom="8.0" right="16.0" top="8.0" />
                </HBox.margin>
@@ -26,20 +33,102 @@
       </HBox>
    </bottom>
    <center>
-      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+      <TabPane tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
             <Tab text="Allgemein">
                 <BorderPane>
-                    <center>
-                        <Button cancelButton="true" mnemonicParsing="false" text="Tab1">
-                            <HBox.margin>
-                                <Insets bottom="8.0" right="16.0" top="8.0" />
-                            </HBox.margin>
-                        </Button>
-                    </center>
+                  <center>
+                     <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                        <children>
+                           <HBox alignment="CENTER" spacing="50.0">
+                              <children>
+                                 <RadioButton mnemonicParsing="false" selected="true" text="Klasse">
+                                    <toggleGroup>
+                                       <ToggleGroup fx:id="elementType" />
+                                    </toggleGroup>
+                                 </RadioButton>
+                                 <RadioButton mnemonicParsing="false" text="Interface" toggleGroup="$elementType" />
+                              </children>
+                              <padding>
+                                 <Insets bottom="16.0" top="16.0" />
+                              </padding>
+                           </HBox>
+                           <HBox alignment="CENTER_LEFT" spacing="20.0">
+                              <children>
+                                 <Label text="Name" />
+                                 <TextField fx:id="txbElementName" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                              </children>
+                              <padding>
+                                 <Insets bottom="8.0" left="16.0" right="16.0" top="8.0" />
+                              </padding>
+                           </HBox>
+                           <HBox alignment="CENTER_LEFT" spacing="20.0">
+                              <children>
+                                 <Label text="Abgeleitet von" />
+                                 <TextField fx:id="txbExtends" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                              </children>
+                              <padding>
+                                 <Insets bottom="8.0" left="16.0" right="16.0" top="8.0" />
+                              </padding>
+                           </HBox>
+                           <HBox alignment="CENTER_LEFT" spacing="20.0">
+                              <padding>
+                                 <Insets bottom="8.0" left="16.0" right="16.0" top="8.0" />
+                              </padding>
+                              <children>
+                                 <CheckBox fx:id="ckbAbstract" mnemonicParsing="false" text="abstrakt" />
+                              </children>
+                           </HBox>
+                           <HBox alignment="CENTER_LEFT" spacing="20.0">
+                              <padding>
+                                 <Insets bottom="8.0" left="16.0" right="16.0" top="8.0" />
+                              </padding>
+                              <children>
+                                 <Label text="Implementierte Interfaces">
+                                    <font>
+                                       <Font size="18.0" />
+                                    </font>
+                                 </Label>
+                              </children>
+                           </HBox>
+                           <BorderPane minWidth="450.0" VBox.vgrow="ALWAYS">
+                              <left>
+                                 <ListView fx:id="lstImplements" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                    <BorderPane.margin>
+                                       <Insets left="16.0" />
+                                    </BorderPane.margin>
+                                 </ListView>
+                              </left>
+                              <center>
+                                 <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" BorderPane.alignment="CENTER">
+                                    <children>
+                                       <HBox alignment="CENTER_LEFT" spacing="20.0">
+                                          <children>
+                                             <Label text="Name" />
+                                             <TextField fx:id="txbImplementsName" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                                          </children>
+                                          <padding>
+                                             <Insets bottom="8.0" left="16.0" right="16.0" top="8.0" />
+                                          </padding>
+                                       </HBox>
+                                       <Button fx:id="btnAddImplements" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Interface hinzufügen">
+                                          <VBox.margin>
+                                             <Insets left="16.0" right="16.0" />
+                                          </VBox.margin>
+                                       </Button>
+                                    </children>
+                                 </VBox>
+                              </center>
+                              <padding>
+                                 <Insets bottom="16.0" />
+                              </padding>
+                           </BorderPane>
+                        </children>
+                     </VBox>
+                  </center>
                 </BorderPane>
             </Tab>
-          <Tab text="Attribute" >
+          <Tab text="Attribute">
               <BorderPane>
                   <center>
                       <Button cancelButton="true" mnemonicParsing="false" text="Tab2">
@@ -50,7 +139,7 @@
                   </center>
               </BorderPane>
           </Tab>
-          <Tab text="Methoden" >
+          <Tab text="Methoden">
               <BorderPane>
                   <center>
                       <Button cancelButton="true" mnemonicParsing="false" text="Tab3">
