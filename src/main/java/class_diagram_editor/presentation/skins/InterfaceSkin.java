@@ -47,7 +47,7 @@ public class InterfaceSkin extends DefaultNodeSkin {
 
         getRoot().setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
-                showEditInterfaceDialog();
+                CreateElementView.showCreateElementDialog(new CreateElementModel(interfaceModel));
             }
         });
     }
@@ -82,22 +82,4 @@ public class InterfaceSkin extends DefaultNodeSkin {
 
         return layout;
     }
-
-    private void showEditInterfaceDialog() {
-        Stage stage = new Stage();
-        stage.setTitle("Element bearbeiten");
-
-        ViewTuple<CreateElementView, CreateElementViewModel> viewTuple = FluentViewLoader.fxmlView(CreateElementView.class)
-                .codeBehind(new CreateElementView())
-                .viewModel(new CreateElementViewModel(new CreateElementModel(interfaceModel)))
-                .load();
-
-        Parent root = viewTuple.getView();
-
-        Scene scene = new Scene(root);
-
-        stage.setScene(scene);
-        stage.show();
-    }
-
 }

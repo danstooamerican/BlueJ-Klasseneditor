@@ -85,7 +85,13 @@ public class ClassModel implements CodeElement, Connectable {
 
     @Override
     public Collection<Connectable> getExtendsRelations() {
-        return List.of(extendsType);
+        Collection<Connectable> extendsRelations = new ArrayList<>();
+
+        if (extendsType != null) {
+            extendsRelations.add(extendsType);
+        }
+
+        return extendsRelations;
     }
 
     @Override
