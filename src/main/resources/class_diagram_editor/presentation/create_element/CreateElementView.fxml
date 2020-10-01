@@ -19,19 +19,26 @@
 
 <BorderPane prefHeight="550.0" prefWidth="820.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <bottom>
-      <HBox alignment="CENTER_RIGHT" style="-fx-background-color: #DFDFDF;" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER_RIGHT" spacing="16.0" style="-fx-background-color: #DFDFDF;" BorderPane.alignment="CENTER">
          <children>
             <Button fx:id="btnCancel" cancelButton="true" mnemonicParsing="false" text="Abbrechen">
                <HBox.margin>
-                  <Insets bottom="8.0" right="16.0" top="8.0" />
+                  <Insets bottom="8.0" top="8.0" />
                </HBox.margin>
             </Button>
             <Button fx:id="btnCreateElement" defaultButton="true" mnemonicParsing="false" text="Element erstellen">
                <HBox.margin>
-                  <Insets bottom="8.0" right="16.0" top="8.0" />
+                  <Insets bottom="8.0" top="8.0" />
                </HBox.margin>
             </Button>
+            <Button fx:id="btnEditElement" defaultButton="true" mnemonicParsing="false" text="Element bearbeiten" />
          </children>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <padding>
+            <Insets left="16.0" right="16.0" />
+         </padding>
       </HBox>
    </bottom>
    <center>

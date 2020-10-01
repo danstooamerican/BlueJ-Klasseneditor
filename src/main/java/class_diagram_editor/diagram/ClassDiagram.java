@@ -12,10 +12,20 @@ import java.util.UUID;
 
 public class ClassDiagram {
 
+    private static ClassDiagram instance;
+
+    public static ClassDiagram getInstance() {
+        if (instance == null) {
+            instance = new ClassDiagram();
+        }
+
+        return instance;
+    }
+
     private final Map<String, ClassModel> classes;
     private final Map<String, InterfaceModel> interfaces;
 
-    public ClassDiagram() {
+    private ClassDiagram() {
         this.classes = new HashMap<>();
         this.interfaces = new HashMap<>();
     }

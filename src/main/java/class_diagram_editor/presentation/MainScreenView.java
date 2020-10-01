@@ -1,5 +1,6 @@
 package class_diagram_editor.presentation;
 
+import class_diagram_editor.presentation.create_element.CreateElementModel;
 import class_diagram_editor.presentation.create_element.CreateElementView;
 import class_diagram_editor.presentation.create_element.CreateElementViewModel;
 import class_diagram_editor.presentation.graph_editor.GraphController;
@@ -14,6 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -93,11 +95,11 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
 
     private void showCreateElementDialog() {
         Stage stage = new Stage();
-        stage.setTitle("Neues Element hinzufügen");
+        stage.setTitle("Element hinzufügen");
 
         ViewTuple<CreateElementView, CreateElementViewModel> viewTuple = FluentViewLoader.fxmlView(CreateElementView.class)
                 .codeBehind(new CreateElementView())
-                .viewModel(new CreateElementViewModel(viewModel.getClassDiagram()))
+                .viewModel(new CreateElementViewModel(new CreateElementModel(viewModel.getClassDiagram(), graphController)))
                 .load();
 
         Parent root = viewTuple.getView();

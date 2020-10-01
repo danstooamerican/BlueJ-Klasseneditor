@@ -2,15 +2,24 @@ package class_diagram_editor.presentation.skins;
 
 import class_diagram_editor.diagram.InterfaceModel;
 import class_diagram_editor.diagram.MethodModel;
+import class_diagram_editor.presentation.create_element.CreateElementModel;
+import class_diagram_editor.presentation.create_element.CreateElementView;
+import class_diagram_editor.presentation.create_element.CreateElementViewModel;
 import class_diagram_editor.presentation.main_screen.skins.generators.UMLMethodGenerator;
+import de.saxsys.mvvmfx.FluentViewLoader;
+import de.saxsys.mvvmfx.ViewTuple;
 import de.tesis.dynaware.grapheditor.core.skins.defaults.DefaultNodeSkin;
 import de.tesis.dynaware.grapheditor.model.GNode;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class InterfaceSkin extends DefaultNodeSkin {
 
@@ -35,6 +44,12 @@ public class InterfaceSkin extends DefaultNodeSkin {
         layout.getChildren().addAll(header, methodsSeparator, methods);
 
         getRoot().getChildren().add(layout);
+
+        getRoot().setOnMouseClicked(event -> {
+            if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+                showEditInterfaceDialog();
+            }
+        });
     }
 
     private Node getHeader() {
@@ -66,6 +81,23 @@ public class InterfaceSkin extends DefaultNodeSkin {
         }
 
         return layout;
+    }
+
+    private void showEditInterfaceDialog() {
+        Stage stage = new Stage();
+        stage.setTitle("Element bearbeiten");
+
+        ViewTuple<CreateElementView, CreateElementViewModel> viewTuple = FluentViewLoader.fxmlView(CreateElementView.class)
+                .codeBehind(new CreateElementView())
+                .viewModel(new CreateElementViewModel(new CreateElementModel(interfaceModel)))
+                .load();
+
+        Parent root = viewTuple.getView();
+
+        Scene scene = new Scene(root);
+
+        stage.setScene(scene);
+        stage.show();
     }
 
 }

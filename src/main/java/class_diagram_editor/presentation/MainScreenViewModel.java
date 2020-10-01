@@ -20,7 +20,7 @@ public class MainScreenViewModel implements ViewModel {
 
     public MainScreenViewModel(SourceCodeControl sourceCodeControl) {
         this.sourceCodeControl = sourceCodeControl;
-        this.classDiagram = new ClassDiagram();
+        this.classDiagram = ClassDiagram.getInstance();
 
         this.drawAssociation = new SimpleBooleanProperty();
     }
