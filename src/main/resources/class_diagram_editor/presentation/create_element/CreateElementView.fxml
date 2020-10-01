@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="550.0" prefWidth="820.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="600.0" prefWidth="820.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <bottom>
       <HBox alignment="CENTER_RIGHT" spacing="16.0" style="-fx-background-color: #DFDFDF;" BorderPane.alignment="CENTER">
          <children>
@@ -42,7 +42,7 @@
       </HBox>
    </bottom>
    <center>
-      <TabPane tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+      <TabPane tabClosingPolicy="UNAVAILABLE" tabMaxHeight="200.0" tabMaxWidth="200.0" BorderPane.alignment="CENTER">
         <tabs>
             <Tab text="Allgemein">
                 <BorderPane>
@@ -51,12 +51,12 @@
                         <children>
                            <HBox alignment="CENTER" spacing="50.0">
                               <children>
-                                 <RadioButton mnemonicParsing="false" selected="true" text="Klasse">
+                                 <RadioButton fx:id="tgbClass" mnemonicParsing="false" selected="true" text="Klasse">
                                     <toggleGroup>
                                        <ToggleGroup fx:id="elementType" />
                                     </toggleGroup>
                                  </RadioButton>
-                                 <RadioButton mnemonicParsing="false" text="Interface" toggleGroup="$elementType" />
+                                 <RadioButton fx:id="tgbInterface" mnemonicParsing="false" text="Interface" toggleGroup="$elementType" />
                               </children>
                               <padding>
                                  <Insets bottom="16.0" top="16.0" />
@@ -255,7 +255,7 @@
                      <ListView fx:id="lstMethods" BorderPane.alignment="CENTER" />
                   </left>
                   <center>
-                     <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                     <VBox BorderPane.alignment="CENTER">
                         <children>
                            <HBox alignment="CENTER" spacing="50.0">
                               <children>

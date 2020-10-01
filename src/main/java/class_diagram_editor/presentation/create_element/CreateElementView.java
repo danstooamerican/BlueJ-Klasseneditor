@@ -1,5 +1,6 @@
 package class_diagram_editor.presentation.create_element;
 
+import class_diagram_editor.diagram.InterfaceModel;
 import de.saxsys.mvvmfx.FluentViewLoader;
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
@@ -9,6 +10,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -47,6 +53,27 @@ public class CreateElementView implements FxmlView<CreateElementViewModel>, Init
     @FXML
     private Button btnEditElement;
 
+    @FXML
+    private ToggleButton tgbClass;
+
+    @FXML
+    private ToggleButton tgbInterface;
+
+    @FXML
+    private ToggleGroup elementType;
+
+    @FXML
+    private TextField txbElementName;
+
+    @FXML
+    private TextField txbElementExtends;
+
+    @FXML
+    private CheckBox ckbElementAbstract;
+
+    @FXML
+    private ListView<InterfaceModel> lstImplements;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if (viewModel.isEditMode()) {
@@ -56,5 +83,13 @@ public class CreateElementView implements FxmlView<CreateElementViewModel>, Init
             btnEditElement.setVisible(false);
             btnEditElement.setManaged(false);
         }
+
+        tgbClass.selectedProperty().bindBidirectional(viewModel.isClassProperty());
+        tgbInterface.setSelected(!viewModel.isClassProperty().get());
+
+        txbElementName.textProperty().bindBidirectional(viewModel.nameProperty());
+        txbElementExtends.textProperty().bindBidirectional(viewModel.extendsElementProperty());
+        ckbElementAbstract.selectedProperty().bindBidirectional(viewModel.isAbstractProperty());
+        lstImplements.itemsProperty().bindBidirectional(viewModel.implementedInterfacesProperty());
     }
 }
