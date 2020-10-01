@@ -38,6 +38,14 @@ public class ClassDiagram {
         return interfaces.get(id);
     }
 
+    public Collection<InterfaceModel> getInterfaces() {
+        return new ArrayList<>(interfaces.values());
+    }
+
+    public Collection<ClassModel> getClasses() {
+        return new ArrayList<>(classes.values());
+    }
+
     public String addClass(ClassModel classModel) {
         String uuid = UUID.randomUUID().toString();
 
@@ -96,6 +104,22 @@ public class ClassDiagram {
             return (T) classes.get(id);
         } else if (interfaces.containsKey(id)) {
             return (T) interfaces.get(id);
+        }
+
+        return null;
+    }
+
+    public String getIdOf(Connectable connectable) {
+        for (Map.Entry<String, ClassModel> classEntry : classes.entrySet()) {
+            if (classEntry.getValue().getName().equals(connectable.getName())) {
+                return classEntry.getKey();
+            }
+        }
+
+        for (Map.Entry<String, InterfaceModel> interfaceEntry : interfaces.entrySet()) {
+            if (interfaceEntry.getValue().getName().equals(connectable.getName())) {
+                return interfaceEntry.getKey();
+            }
         }
 
         return null;

@@ -4,13 +4,17 @@ import class_diagram_editor.diagram.ClassDiagram;
 import class_diagram_editor.diagram.Connectable;
 import class_diagram_editor.presentation.MainScreenViewModel;
 import class_diagram_editor.presentation.skins.AssociationConnectionSkin;
+import class_diagram_editor.presentation.skins.ClassSkin;
 import class_diagram_editor.presentation.skins.ExtendsConnectionSkin;
 import class_diagram_editor.presentation.skins.ImplementsConnectionSkin;
+import class_diagram_editor.presentation.skins.InterfaceSkin;
 import class_diagram_editor.presentation.validator.UMLConnectorValidator;
 import de.tesis.dynaware.grapheditor.Commands;
 import de.tesis.dynaware.grapheditor.GraphEditor;
 import de.tesis.dynaware.grapheditor.core.DefaultGraphEditor;
+import de.tesis.dynaware.grapheditor.core.connections.ConnectionCommands;
 import de.tesis.dynaware.grapheditor.core.view.GraphEditorContainer;
+import de.tesis.dynaware.grapheditor.model.GConnection;
 import de.tesis.dynaware.grapheditor.model.GConnector;
 import de.tesis.dynaware.grapheditor.model.GModel;
 import de.tesis.dynaware.grapheditor.model.GNode;
@@ -19,7 +23,6 @@ import de.tesis.dynaware.grapheditor.model.GraphPackage;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.input.KeyCode;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
@@ -27,6 +30,7 @@ import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Set;
 
@@ -184,6 +188,26 @@ public class GraphController {
         }
     }
 
+    public void addConnection(ConnectionType type, String startId, String endId) {
+        GNode start = null;
+        GNode end = null;
+
+        for (GNode node : graphModel.getNodes()) {
+            if (node.getId().equals(startId)) {
+                start = node;
+            } else if (node.getId().equals(endId)) {
+                end = node;
+            }
+        }
+
+        if (start != null && end != null) {
+            GConnector startConnector = start.getConnectors().get(0);
+            GConnector endConnector = end.getConnectors().get(0);
+
+            ConnectionCommands.addConnection(graphModel, startConnector, endConnector, type.value, new ArrayList<>());
+        }
+    }
+
     private GConnector createConnector(String type) {
         final String connectorType = type + "-input";
 
@@ -215,12 +239,24 @@ public class GraphController {
     }
 
     public enum NodeType {
-        CLASS("class"),
-        INTERFACE("interface");
+        CLASS(ClassSkin.TYPE),
+        INTERFACE(InterfaceSkin.TYPE);
 
         private final String value;
 
         NodeType(String value) {
+            this.value = value;
+        }
+    }
+
+    public enum ConnectionType {
+        EXTENDS(ExtendsConnectionSkin.TYPE),
+        IMPLEMENTS(ImplementsConnectionSkin.TYPE),
+        ASSOCIATION(AssociationConnectionSkin.TYPE);
+
+        private final String value;
+
+        ConnectionType(String value) {
             this.value = value;
         }
     }

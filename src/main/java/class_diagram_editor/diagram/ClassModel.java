@@ -94,6 +94,10 @@ public class ClassModel implements CodeElement, Connectable {
         return extendsRelations;
     }
 
+    public Connectable getExtendsClass() {
+        return extendsType;
+    }
+
     @Override
     public void removeReferencesTo(Connectable removedElement) {
         if (extendsType != null && extendsType.getName().equals(removedElement.getName())) {

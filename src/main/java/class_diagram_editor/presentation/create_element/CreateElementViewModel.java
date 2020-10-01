@@ -1,38 +1,58 @@
 package class_diagram_editor.presentation.create_element;
 
+import class_diagram_editor.diagram.ClassDiagram;
+import class_diagram_editor.diagram.ClassModel;
+import class_diagram_editor.diagram.Connectable;
 import class_diagram_editor.diagram.InterfaceModel;
 import de.saxsys.mvvmfx.ViewModel;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+
+import java.util.Collection;
+import java.util.HashSet;
 
 public class CreateElementViewModel implements ViewModel {
 
     private final CreateElementModel createElementModel;
+    private final ClassDiagram classDiagram;
 
     private final BooleanProperty isClass;
 
     private final StringProperty name;
-    private final StringProperty extendsElement;
+    private Connectable extendsElement;
     private final BooleanProperty isAbstract;
+
+    private final ListProperty<Connectable> classModels;
+
     private final ListProperty<InterfaceModel> implementedInterfaces;
+    private final ListProperty<InterfaceModel> unimplementedInterfaces;
 
     public CreateElementViewModel(CreateElementModel createElementModel) {
         this.createElementModel = createElementModel;
+        this.classDiagram = ClassDiagram.getInstance();
 
         this.isClass = new SimpleBooleanProperty(createElementModel.isClass());
         this.isAbstract = new SimpleBooleanProperty(createElementModel.isAbstract());
 
         this.name = new SimpleStringProperty(createElementModel.getName());
-        this.extendsElement = new SimpleStringProperty(createElementModel.getExtendsElement());
+        this.extendsElement = createElementModel.getExtendsElement();
 
         this.implementedInterfaces = new SimpleListProperty<>(FXCollections.observableArrayList(createElementModel.getImplementedInterfaces()));
+
+        Collection<InterfaceModel> unimplementedInterfaces = classDiagram.getInterfaces();
+        unimplementedInterfaces.removeAll(createElementModel.getImplementedInterfaces());
+        unimplementedInterfaces.removeIf(interfaceModel -> interfaceModel.getName().equals(name.get()));
+        this.unimplementedInterfaces = new SimpleListProperty<>(FXCollections.observableArrayList(unimplementedInterfaces));
+
+        Collection<ClassModel> classes = classDiagram.getClasses();
+        classes.removeIf(classModel -> classModel.getName().equals(name.get()));
+        this.classModels = new SimpleListProperty<>(FXCollections.observableArrayList(classes));
     }
 
     public boolean isEditMode() {
@@ -47,15 +67,51 @@ public class CreateElementViewModel implements ViewModel {
         return name;
     }
 
-    public StringProperty extendsElementProperty() {
-        return extendsElement;
-    }
-
     public BooleanProperty isAbstractProperty() {
         return isAbstract;
     }
 
     public ListProperty<InterfaceModel> implementedInterfacesProperty() {
         return implementedInterfaces;
+    }
+
+    public ListProperty<InterfaceModel> unimplementedInterfacesProperty() {
+        return unimplementedInterfaces;
+    }
+
+    public ListProperty<Connectable> classesProperty() {
+        return classModels;
+    }
+
+    public void setExtendsElement(Connectable connectable) {
+        extendsElement = connectable;
+    }
+
+    public void deleteImplementedInterface(InterfaceModel interfaceModel) {
+        implementedInterfaces.get().remove(interfaceModel);
+        unimplementedInterfaces.get().add(interfaceModel);
+    }
+
+    public void addImplementedInterface(InterfaceModel interfaceModel) {
+        implementedInterfaces.get().add(interfaceModel);
+        unimplementedInterfaces.get().remove(interfaceModel);
+    }
+
+    public void createElement() {
+        if (isClass.get()) {
+            ClassModel classModel = new ClassModel();
+            classModel.setName(name.get());
+            classModel.setAbstract(isAbstract.get());
+            classModel.setExtendsType(extendsElement);
+            classModel.setImplementsInterfaces(new HashSet<>(implementedInterfaces.get()));
+
+            createElementModel.addClass(classModel);
+        } else {
+            InterfaceModel interfaceModel = new InterfaceModel();
+            interfaceModel.setName(name.get());
+            interfaceModel.setExtendsInterfaces(new HashSet<>(implementedInterfaces.get()));
+
+            createElementModel.addInterface(interfaceModel);
+        }
     }
 }
