@@ -51,6 +51,11 @@ public class InterfaceModel implements CodeElement, Connectable {
     }
 
     @Override
+    public void removeExtendsRelation(Connectable connectable) {
+        extendsInterfaces.remove(connectable);
+    }
+
+    @Override
     public Collection<Connectable> getExtendsRelations() {
         return new ArrayList<>(extendsInterfaces);
     }

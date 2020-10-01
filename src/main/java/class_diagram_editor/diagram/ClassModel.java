@@ -84,6 +84,13 @@ public class ClassModel implements CodeElement, Connectable {
     }
 
     @Override
+    public void removeExtendsRelation(Connectable connectable) {
+        if (extendsType != null && extendsType.equals(connectable)) {
+            extendsType = null;
+        }
+    }
+
+    @Override
     public Collection<Connectable> getExtendsRelations() {
         Collection<Connectable> extendsRelations = new ArrayList<>();
 

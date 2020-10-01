@@ -41,12 +41,12 @@ public class GraphSkinFactory {
     public GConnectionSkin createConnectionSkin(final GConnection connection) {
         final String connectionType = connection.getType();
 
-        switch (connectionType) {
-            case ExtendsConnectionSkin.TYPE:
+        switch (GraphController.ConnectionType.valueOf(connectionType)) {
+            case EXTENDS:
                 return new ExtendsConnectionSkin(connection);
-            case ImplementsConnectionSkin.TYPE:
+            case IMPLEMENTS:
                 return new ImplementsConnectionSkin(connection);
-            case AssociationConnectionSkin.TYPE:
+            case ASSOCIATION:
                 return new AssociationConnectionSkin(connection);
         }
 

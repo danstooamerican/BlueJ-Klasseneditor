@@ -1,5 +1,6 @@
 package class_diagram_editor.presentation.skins;
 
+import class_diagram_editor.presentation.graph_editor.GraphController;
 import class_diagram_editor.presentation.skins.arrows.AssociationArrowHead;
 import class_diagram_editor.presentation.skins.arrows.UMLArrow;
 import de.tesis.dynaware.grapheditor.GConnectionSkin;
@@ -15,22 +16,16 @@ import javafx.scene.transform.Rotate;
 import java.util.List;
 import java.util.Map;
 
-public class AssociationConnectionSkin extends GConnectionSkin {
+public class AssociationConnectionSkin extends BaseConnectionSkin {
 
-    public static final String TYPE = "association-connection";
+    public static final String TYPE = GraphController.ConnectionType.ASSOCIATION.name();;
 
     private static final String STYLE_CLASS = "association-connection";
 
-    private static final double OFFSET_FROM_CONNECTOR = ConnectorSkin.RADIUS;
-
-    private final Arrow arrow;
-    private final Group root;
     private final Label identifier;
 
     public AssociationConnectionSkin(GConnection connection) {
         super(connection);
-
-        this.root = new Group();
 
         this.arrow = new UMLArrow(new AssociationArrowHead());
         arrow.setManaged(false);
@@ -40,29 +35,19 @@ public class AssociationConnectionSkin extends GConnectionSkin {
 
         identifier = new Label(connection.getId());
 
-        root.getChildren().addAll(arrow, identifier);
-    }
-
-    @Override
-    protected void selectionChanged(boolean isSelected) {
-
-    }
-
-    @Override
-    public void setJointSkins(List<GJointSkin> jointSkins) {
-
+        root.getChildren().clear();
+        root.getChildren().addAll(arrow, identifier, selectionHalo);
     }
 
     @Override
     public void draw(final Map<GConnectionSkin, Point2D[]> allPoints) {
+        super.draw(allPoints);
+
         final Point2D[] points = allPoints == null ? null : allPoints.get(this);
 
-        if (points != null && points.length >= 2)
-        {
+        if (points != null && points.length >= 2) {
             final Point2D start = points[0];
             final Point2D end = points[points.length - 1];
-
-            ArrowUtils.draw(arrow, start, end, OFFSET_FROM_CONNECTOR);
 
             final double angleInRadians = getAngleInRadians(start, end);
 
@@ -79,10 +64,5 @@ public class AssociationConnectionSkin extends GConnectionSkin {
         final double deltaY = end.getY() - start.getY();
 
         return Math.atan2(deltaX, deltaY);
-    }
-
-    @Override
-    public Node getRoot() {
-        return root;
     }
 }

@@ -52,7 +52,7 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
 
         bdpRoot.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.DELETE) {
-                graphController.deleteSelectedNodes();
+                graphController.deleteSelectedElements();
             }
 
             if (event.getCode() == KeyCode.A && event.isControlDown()) {

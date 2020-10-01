@@ -1,6 +1,7 @@
 package class_diagram_editor.diagram;
 
 import class_diagram_editor.code_generation.CodeElement;
+import class_diagram_editor.presentation.graph_editor.GraphController;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -141,6 +142,32 @@ public class ClassDiagram {
         codeElements.addAll(interfaces.values());
 
         return new ClassModelIterator(codeElements);
+    }
+
+    public void deleteExtendsConnection(String startId, String endId) {
+        Connectable start = findElement(startId);
+        Connectable end = findElement(endId);
+
+        if (start != null && end != null) {
+            start.removeExtendsRelation(end);
+        }
+    }
+
+    public void deleteImplementsConnection(String startId, String endId) {
+        ClassModel start = findElement(startId);
+        InterfaceModel end = findElement(endId);
+
+        if (start != null && end != null) {
+            start.getImplementsInterfaces().remove(end);
+        }
+    }
+
+    public void deleteAssociationConnection(String startId, String identifier) {
+        Connectable start = findElement(startId);
+
+        if (start != null && identifier != null) {
+            start.removeAssociation(identifier);
+        }
     }
 
     private static class ClassModelIterator implements Iterator<CodeElement> {

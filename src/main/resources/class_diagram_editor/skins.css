@@ -71,3 +71,9 @@
 .static {
     -fx-underline: true;
 }
+
+.connection-selection-halo {
+    -fx-stroke-width: 1;
+    -fx-stroke: deepskyblue;
+    -fx-stroke-dash-array: 4 4;
+}

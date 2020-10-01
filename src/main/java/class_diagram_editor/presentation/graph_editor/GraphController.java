@@ -67,7 +67,12 @@ public class GraphController {
         return graphEditorContainer;
     }
 
-    public void deleteSelectedNodes() {
+    public void deleteSelectedElements() {
+        deleteNodes();
+        deleteConnections();
+    }
+
+    private void deleteNodes() {
         classDiagram.deleteElements(graphEditor.getSelectionManager().getSelectedNodes()
                 .stream()
                 .map(GNode::getId)
@@ -76,6 +81,27 @@ public class GraphController {
 
         graphEditor.getSelectionManager().getSelectedNodes().forEach(gNode -> {
             Commands.removeNode(graphModel, gNode);
+        });
+    }
+
+    private void deleteConnections() {
+        graphEditor.getSelectionManager().getSelectedConnections().forEach(connection -> {
+            String startId = connection.getSource().getParent().getId();
+            String endId = connection.getTarget().getParent().getId();
+
+            switch (ConnectionType.valueOf(connection.getType().toUpperCase())) {
+                case EXTENDS:
+                    classDiagram.deleteExtendsConnection(startId, endId);
+                    break;
+                case IMPLEMENTS:
+                    classDiagram.deleteImplementsConnection(startId, endId);
+                    break;
+                case ASSOCIATION:
+                    classDiagram.deleteAssociationConnection(startId, connection.getId());
+                    break;
+            }
+
+            ConnectionCommands.removeConnection(graphModel, connection);
         });
     }
 
@@ -96,14 +122,14 @@ public class GraphController {
             String sourceId = connectorSource.getParent().getId();
             String targetId = connectorTarget.getParent().getId();
 
-            switch (connection.getType()) {
-                case ExtendsConnectionSkin.TYPE:
+            switch (ConnectionType.valueOf(connection.getType())) {
+                case EXTENDS:
                     viewModel.addExtendsRelation(targetId, sourceId);
                     break;
-                case ImplementsConnectionSkin.TYPE:
+                case IMPLEMENTS:
                     viewModel.addImplementsRelation(targetId, sourceId);
                     break;
-                case AssociationConnectionSkin.TYPE:
+                case ASSOCIATION:
                     final String identifier = getAssociationIdentifier(sourceId);
 
                     connection.setId(identifier);
@@ -204,7 +230,7 @@ public class GraphController {
             GConnector startConnector = start.getConnectors().get(0);
             GConnector endConnector = end.getConnectors().get(0);
 
-            ConnectionCommands.addConnection(graphModel, startConnector, endConnector, type.value, new ArrayList<>());
+            ConnectionCommands.addConnection(graphModel, startConnector, endConnector, type.name(), new ArrayList<>());
         }
     }
 
@@ -250,14 +276,8 @@ public class GraphController {
     }
 
     public enum ConnectionType {
-        EXTENDS(ExtendsConnectionSkin.TYPE),
-        IMPLEMENTS(ImplementsConnectionSkin.TYPE),
-        ASSOCIATION(AssociationConnectionSkin.TYPE);
-
-        private final String value;
-
-        ConnectionType(String value) {
-            this.value = value;
-        }
+        EXTENDS,
+        IMPLEMENTS,
+        ASSOCIATION,
     }
 }
