@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="class_diagram_editor.presentation.create_element.AttributesTabViewController">
+<center>
+    <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+        <children>
+            <HBox alignment="CENTER_LEFT" spacing="20.0">
+                <children>
+                    <Label text="Zugriff" />
+                </children>
+                <padding>
+                    <Insets left="16.0" right="16.0" top="16.0" />
+                </padding>
+            </HBox>
+            <FlowPane alignment="CENTER_LEFT" hgap="16.0" vgap="16.0">
+                <children>
+                    <RadioButton fx:id="rbnAttributePrivate" mnemonicParsing="false" selected="true" text="private">
+                        <toggleGroup>
+                            <ToggleGroup fx:id="attributeVisibility" />
+                        </toggleGroup>
+                    </RadioButton>
+                    <RadioButton fx:id="rbnAttributePublic" mnemonicParsing="false" text="public" toggleGroup="$attributeVisibility" />
+                    <RadioButton fx:id="rbnAttributeProtected" mnemonicParsing="false" text="protected" toggleGroup="$attributeVisibility" />
+                    <RadioButton fx:id="rbnAttributePackage" mnemonicParsing="false" text="package" toggleGroup="$attributeVisibility" />
+                </children>
+                <padding>
+                    <Insets bottom="16.0" left="16.0" right="16.0" top="8.0" />
+                </padding>
+            </FlowPane>
+            <Separator prefWidth="200.0">
+                <VBox.margin>
+                    <Insets left="16.0" right="16.0" />
+                </VBox.margin>
+            </Separator>
+            <HBox alignment="CENTER_LEFT" spacing="20.0">
+                <padding>
+                    <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+                </padding>
+                <children>
+                    <CheckBox fx:id="ckbAttributeStatic" mnemonicParsing="false" text="static" />
+                    <CheckBox fx:id="ckbAttributeFinal" mnemonicParsing="false" text="final" />
+                </children>
+            </HBox>
+            <Separator prefWidth="200.0">
+                <VBox.margin>
+                    <Insets left="16.0" right="16.0" />
+                </VBox.margin>
+            </Separator>
+            <HBox alignment="CENTER_LEFT" spacing="20.0">
+                <padding>
+                    <Insets bottom="8.0" left="16.0" right="16.0" top="16.0" />
+                </padding>
+                <children>
+                    <Label minWidth="35.0" text="Name" />
+                    <TextField fx:id="txbAttributeName" HBox.hgrow="ALWAYS" />
+                </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="20.0">
+                <padding>
+                    <Insets bottom="16.0" left="16.0" right="16.0" top="8.0" />
+                </padding>
+                <children>
+                    <Label minWidth="55.0" text="Datentyp" />
+                    <TextField fx:id="txbAttributeType" HBox.hgrow="ALWAYS" />
+                </children>
+            </HBox>
+            <Separator prefWidth="200.0">
+                <VBox.margin>
+                    <Insets left="16.0" right="16.0" />
+                </VBox.margin>
+            </Separator>
+            <HBox alignment="CENTER_LEFT" spacing="20.0">
+                <padding>
+                    <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+                </padding>
+                <children>
+                    <CheckBox fx:id="ckbAttributeGetter" mnemonicParsing="false" text="getter" />
+                    <CheckBox fx:id="ckbAttributeSetter" mnemonicParsing="false" text="setter" />
+                </children>
+            </HBox>
+            <Button fx:id="btnAddAttribute" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Attribut hinzufügen">
+                <VBox.margin>
+                    <Insets left="16.0" right="16.0" />
+                </VBox.margin>
+            </Button>
+            <Button fx:id="btnEditAttribute" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Attribut bearbeiten">
+                <VBox.margin>
+                    <Insets left="16.0" right="16.0" top="8.0" />
+                </VBox.margin>
+            </Button>
+        </children>
+    </VBox>
+</center>
+<left>
+    <ListView fx:id="lstAttributes" BorderPane.alignment="CENTER" />
+</left>
+</BorderPane>
