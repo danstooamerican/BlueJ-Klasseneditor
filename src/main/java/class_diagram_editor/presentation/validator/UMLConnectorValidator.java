@@ -58,7 +58,7 @@ public class UMLConnectorValidator implements GConnectorValidator {
         }
 
         // cyclic extension
-        if (targetConnectable.getExtendsRelations().contains(sourceConnectable)) {
+        if (targetConnectable.isExtending(sourceConnectable)) {
             return false;
         }
 

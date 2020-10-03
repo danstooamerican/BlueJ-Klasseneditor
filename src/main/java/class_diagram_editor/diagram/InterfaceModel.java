@@ -46,6 +46,25 @@ public class InterfaceModel implements CodeElement, Connectable {
     }
 
     @Override
+    public boolean isExtending(Connectable connectable) {
+        for (Connectable extendsType : extendsInterfaces) {
+            boolean isExtending = connectable.equals(extendsType);
+
+            if (isExtending) {
+                return true;
+            }
+
+            boolean transitiveExtending = extendsType.isExtending(connectable);
+
+            if (transitiveExtending) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
     public void addExtendsRelation(Connectable extendable) {
         extendsInterfaces.add(extendable);
     }

@@ -17,6 +17,8 @@ public interface Connectable {
 
     boolean isExtending();
 
+    boolean isExtending(Connectable connectable);
+
     void addExtendsRelation(Connectable extendable);
 
     void removeExtendsRelation(Connectable connectable);

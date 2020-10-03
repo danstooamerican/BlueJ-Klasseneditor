@@ -84,8 +84,7 @@ public class ClassSkin extends DefaultNodeSkin {
         layout.setPadding(new Insets(6, 8, 6, 8));
         layout.setAlignment(Pos.TOP_CENTER);
 
-        Label lblName = new Label();
-        lblName.textProperty().bind(classModel.nameProperty());
+        Label lblName = new Label(classModel.getName());
 
         if (classModel.isAbstract()) {
             Label lblAbstract = new Label("<<abstract>>");

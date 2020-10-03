@@ -90,12 +90,7 @@ public class GeneralTabController {
             if (!success) {
                 cbbElementExtends.getSelectionModel().select(viewModel.getExtendsElement());
 
-                Alert dialog = new Alert(Alert.AlertType.ERROR);
-
-                dialog.setTitle("Zyklische Vererbungshierarchie");
-                dialog.setContentText("A -> B -> A");
-
-                dialog.show();
+                showCyclicDependencyAlert();
             }
         });
     }
@@ -119,8 +114,19 @@ public class GeneralTabController {
             if (!cbbElementImplements.getSelectionModel().isEmpty()) {
                 InterfaceModel selectedInterface = cbbElementImplements.getValue();
 
-                viewModel.addImplementedInterface(selectedInterface);
+                if(!viewModel.addImplementedInterface(selectedInterface)) {
+                    showCyclicDependencyAlert();
+                }
             }
         });
+    }
+
+    private void showCyclicDependencyAlert() {
+        Alert dialog = new Alert(Alert.AlertType.ERROR);
+
+        dialog.setTitle("Zyklische Vererbungshierarchie");
+        dialog.setContentText("A -> B -> A");
+
+        dialog.show();
     }
 }

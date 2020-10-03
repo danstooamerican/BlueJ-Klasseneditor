@@ -41,12 +41,16 @@ public class GeneralTabViewModel {
         this.implementedInterfaces = new SimpleListProperty<>(FXCollections.observableArrayList(createElementModel.getImplementedInterfaces()));
         Collection<InterfaceModel> unimplementedInterfaces = new ArrayList<>(interfaceModels);
         unimplementedInterfaces.removeAll(createElementModel.getImplementedInterfaces());
-        unimplementedInterfaces.removeIf(interfaceModel -> interfaceModel.getName().equals(name.get()));
+        unimplementedInterfaces.removeIf(this::filterWithSameNameOrCycle);
 
         this.unimplementedInterfaces = new SimpleListProperty<>(FXCollections.observableArrayList(unimplementedInterfaces));
         Collection<ClassModel> classes = new ArrayList<>(classModels);
-        classes.removeIf(classModel -> classModel.getName().equals(name.get()));
+        classes.removeIf(this::filterWithSameNameOrCycle);
         this.classModels = new SimpleListProperty<>(FXCollections.observableArrayList(classes));
+    }
+
+    private boolean filterWithSameNameOrCycle(Connectable connectable) {
+        return connectable.getName().equals(name.get()) || (editedElement != null && connectable.isExtending(editedElement));
     }
 
     public void deleteImplementedInterface(InterfaceModel interfaceModel) {
@@ -54,9 +58,15 @@ public class GeneralTabViewModel {
         unimplementedInterfaces.get().add(interfaceModel);
     }
 
-    public void addImplementedInterface(InterfaceModel interfaceModel) {
+    public boolean addImplementedInterface(InterfaceModel interfaceModel) {
+        if (editedElement != null && interfaceModel.isExtending(editedElement)) {
+            return false;
+        }
+
         implementedInterfaces.get().add(interfaceModel);
         unimplementedInterfaces.get().remove(interfaceModel);
+
+        return true;
     }
 
 
@@ -65,7 +75,7 @@ public class GeneralTabViewModel {
             throw new IllegalArgumentException();
         }
 
-        if (!connectable.getExtendsRelations().contains(editedElement)) {
+        if (!connectable.isExtending(editedElement)) {
             extendsElement = connectable;
 
             return true;

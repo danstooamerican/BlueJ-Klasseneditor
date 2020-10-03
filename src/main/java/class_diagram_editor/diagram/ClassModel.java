@@ -2,8 +2,6 @@ package class_diagram_editor.diagram;
 
 import class_diagram_editor.code_generation.CodeElement;
 import class_diagram_editor.code_generation.CodeGenerator;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -20,7 +18,7 @@ import java.util.Set;
 @Setter
 public class ClassModel implements CodeElement, Connectable {
 
-    private StringProperty name = new SimpleStringProperty();
+    private String name;
 
     private boolean isAbstract;
 
@@ -64,17 +62,12 @@ public class ClassModel implements CodeElement, Connectable {
 
     @Override
     public String getName() {
-        return name.get();
-    }
-
-    public void setName(String name) {
-        this.name.setValue(name);
-    }
-
-    public StringProperty nameProperty() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public Collection<InterfaceModel> getImplementsInterfaces() {
         return implementsInterfaces;
@@ -92,6 +85,21 @@ public class ClassModel implements CodeElement, Connectable {
     @Override
     public boolean isExtending() {
         return extendsType != null;
+    }
+
+    @Override
+    public boolean isExtending(Connectable connectable) {
+        if (extendsType != null) {
+            boolean isExtending = connectable.equals(extendsType);
+
+            if (!isExtending) {
+                return extendsType.isExtending(connectable);
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     @Override
@@ -192,7 +200,7 @@ public class ClassModel implements CodeElement, Connectable {
 
     @Override
     public String toString() {
-        return name.get();
+        return name;
     }
 
     public void notifyChange() {
