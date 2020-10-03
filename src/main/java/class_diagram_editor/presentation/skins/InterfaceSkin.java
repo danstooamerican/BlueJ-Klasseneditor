@@ -49,7 +49,7 @@ public class InterfaceSkin extends DefaultNodeSkin {
 
         getRoot().setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
-                CreateElementView.showCreateElementDialog(new CreateElementModel(interfaceModel));
+                CreateElementView.showCreateElementDialog(new CreateElementModel(getItem().getId(), interfaceModel));
             }
         });
     }

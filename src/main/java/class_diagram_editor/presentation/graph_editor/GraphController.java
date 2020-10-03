@@ -3,10 +3,7 @@ package class_diagram_editor.presentation.graph_editor;
 import class_diagram_editor.diagram.ClassDiagram;
 import class_diagram_editor.diagram.Connectable;
 import class_diagram_editor.presentation.MainScreenViewModel;
-import class_diagram_editor.presentation.skins.AssociationConnectionSkin;
 import class_diagram_editor.presentation.skins.ClassSkin;
-import class_diagram_editor.presentation.skins.ExtendsConnectionSkin;
-import class_diagram_editor.presentation.skins.ImplementsConnectionSkin;
 import class_diagram_editor.presentation.skins.InterfaceSkin;
 import class_diagram_editor.presentation.validator.UMLConnectorValidator;
 import de.tesis.dynaware.grapheditor.Commands;
@@ -31,6 +28,7 @@ import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 
@@ -38,23 +36,39 @@ import static java.util.stream.Collectors.toList;
 
 public class GraphController {
 
+    private static GraphController instance;
+
+    public static GraphController getInstance() {
+        if (instance == null) {
+            instance = new GraphController();
+        }
+
+        return instance;
+    }
+
     private EditingDomain domain;
     private GModel graphModel;
 
-    private final MainScreenViewModel viewModel;
-    private final ClassDiagram classDiagram;
+    private MainScreenViewModel viewModel;
+    private ClassDiagram classDiagram;
 
     private GraphEditor graphEditor;
-    private final GraphSkinFactory skinFactory;
+    private GraphSkinFactory skinFactory;
 
-    public GraphController(MainScreenViewModel viewModel) {
+    private GraphController() {
+
+    }
+
+    public Node initialize(MainScreenViewModel viewModel) {
         this.viewModel = viewModel;
 
         this.classDiagram = viewModel.getClassDiagram();
         this.skinFactory = new GraphSkinFactory(classDiagram);
+
+        return initializeGraph();
     }
 
-    public Node initializeGraph() {
+    private Node initializeGraph() {
         graphEditor = new DefaultGraphEditor();
 
         GraphEditorContainer graphEditorContainer = new GraphEditorContainer();
@@ -215,6 +229,10 @@ public class GraphController {
     }
 
     public void addConnection(ConnectionType type, String startId, String endId) {
+        addConnection(type, startId, endId, null);
+    }
+
+    public void addConnection(ConnectionType type, String startId, String endId, String name) {
         GNode start = null;
         GNode end = null;
 
@@ -230,7 +248,31 @@ public class GraphController {
             GConnector startConnector = start.getConnectors().get(0);
             GConnector endConnector = end.getConnectors().get(0);
 
-            ConnectionCommands.addConnection(graphModel, startConnector, endConnector, type.name(), new ArrayList<>());
+            AddConnectionCommand command = new AddConnectionCommand(graphModel, startConnector, endConnector, type.name(), name);
+            domain.getCommandStack().execute(command);
+        }
+    }
+
+    public void clearConnections(String id) {
+        GNode toClear = null;
+
+        for (GNode node : graphModel.getNodes()) {
+            if (node.getId().equals(id)) {
+                toClear = node;
+                break;
+            }
+        }
+
+        if (toClear != null) {
+            Collection<GConnector> connectors = new ArrayList<>(toClear.getConnectors());
+
+            for (GConnector connector : connectors){
+                Collection<GConnection> toDelete = new ArrayList<>(connector.getConnections());
+
+                for (GConnection connection : toDelete) {
+                    ConnectionCommands.removeConnection(graphModel, connection);
+                }
+            }
         }
     }
 

@@ -57,7 +57,7 @@ public class ClassSkin extends DefaultNodeSkin {
 
         getRoot().setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
-                CreateElementView.showCreateElementDialog(new CreateElementModel(classModel));
+                CreateElementView.showCreateElementDialog(new CreateElementModel(getItem().getId(), classModel));
             }
         });
     }

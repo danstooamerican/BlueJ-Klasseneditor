@@ -9,12 +9,12 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class CreateElementViewModel implements ViewModel {
@@ -83,6 +83,10 @@ public class CreateElementViewModel implements ViewModel {
         return classModels;
     }
 
+    public Connectable getExtendsElement() {
+        return extendsElement;
+    }
+
     public void setExtendsElement(Connectable connectable) {
         extendsElement = connectable;
     }
@@ -99,19 +103,37 @@ public class CreateElementViewModel implements ViewModel {
 
     public void createElement() {
         if (isClass.get()) {
-            ClassModel classModel = new ClassModel();
-            classModel.setName(name.get());
-            classModel.setAbstract(isAbstract.get());
-            classModel.setExtendsType(extendsElement);
-            classModel.setImplementsInterfaces(new HashSet<>(implementedInterfaces.get()));
-
-            createElementModel.addClass(classModel);
+            createElementModel.addClass(getClassModel());
         } else {
-            InterfaceModel interfaceModel = new InterfaceModel();
-            interfaceModel.setName(name.get());
-            interfaceModel.setExtendsInterfaces(new HashSet<>(implementedInterfaces.get()));
-
-            createElementModel.addInterface(interfaceModel);
+            createElementModel.addInterface(getInterfaceModel());
         }
+    }
+
+    public void editElement() {
+        if (isClass.get()) {
+            createElementModel.editClass(getClassModel());
+        } else {
+            createElementModel.editInterface(getInterfaceModel());
+        }
+    }
+
+    private ClassModel getClassModel() {
+        ClassModel classModel = new ClassModel();
+        classModel.setName(name.get());
+        classModel.setAbstract(isAbstract.get());
+        classModel.setExtendsType(extendsElement);
+        classModel.setImplementsInterfaces(new HashSet<>(implementedInterfaces.get()));
+        classModel.setAssociations(new HashMap<>(createElementModel.getAssociations()));
+
+        return classModel;
+    }
+
+    private InterfaceModel getInterfaceModel() {
+        InterfaceModel interfaceModel = new InterfaceModel();
+        interfaceModel.setName(name.get());
+        interfaceModel.setExtendsInterfaces(new HashSet<>(implementedInterfaces.get()));
+        interfaceModel.setAssociations(new HashMap<>(createElementModel.getAssociations()));
+
+        return interfaceModel;
     }
 }

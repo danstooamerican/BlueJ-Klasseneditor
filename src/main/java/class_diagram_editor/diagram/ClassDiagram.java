@@ -1,7 +1,6 @@
 package class_diagram_editor.diagram;
 
 import class_diagram_editor.code_generation.CodeElement;
-import class_diagram_editor.presentation.graph_editor.GraphController;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -167,6 +166,22 @@ public class ClassDiagram {
 
         if (start != null && identifier != null) {
             start.removeAssociation(identifier);
+        }
+    }
+
+    public void edit(String id, ClassModel classModel) {
+        ClassModel toEdit = classes.get(id);
+
+        if (toEdit != null) {
+            toEdit.edit(classModel);
+        }
+    }
+
+    public void edit(String id, InterfaceModel interfaceModel) {
+        InterfaceModel toEdit = interfaces.get(id);
+
+        if (toEdit != null) {
+            toEdit.edit(interfaceModel);
         }
     }
 

@@ -45,9 +45,9 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
     public void initialize(URL url, ResourceBundle resourceBundle) {
         addControlHandlers();
 
-        graphController = new GraphController(viewModel);
+        graphController = GraphController.getInstance();
 
-        Node graphEditor = graphController.initializeGraph();
+        Node graphEditor = graphController.initialize(viewModel);
         bdpRoot.centerProperty().setValue(graphEditor);
 
         bdpRoot.setOnKeyPressed(event -> {
@@ -83,7 +83,7 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
         });
 
         btnCreateElement.setOnAction(e -> {
-            CreateElementView.showCreateElementDialog(new CreateElementModel(graphController));
+            CreateElementView.showCreateElementDialog(new CreateElementModel());
         });
     }
 

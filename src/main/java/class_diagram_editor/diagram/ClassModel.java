@@ -35,6 +35,15 @@ public class ClassModel implements CodeElement, Connectable {
         this.methods = new HashSet<>();
     }
 
+    public void edit(ClassModel classModel) {
+        this.isAbstract = classModel.isAbstract;
+        this.extendsType = classModel.extendsType;
+        this.implementsInterfaces = classModel.implementsInterfaces;
+        this.associations = classModel.associations;
+        this.attributes = classModel.attributes;
+        this.methods = classModel.methods;
+    }
+
     @Override
     public void accept(CodeGenerator codeGenerator) {
         codeGenerator.visitClass(this);

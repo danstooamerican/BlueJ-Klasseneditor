@@ -8,7 +8,9 @@ import class_diagram_editor.presentation.graph_editor.GraphController;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class CreateElementModel {
@@ -16,46 +18,53 @@ public class CreateElementModel {
     private final ClassDiagram classDiagram;
 
     private GraphController graphController;
+    private final boolean isEditMode;
 
     private final boolean isClass;
 
+    private final String id;
     private final String name;
     private Connectable extendsElement;
     private boolean isAbstract;
     private Collection<InterfaceModel> implementedInterfaces;
+    private final Map<String, Connectable> associations;
 
-    private CreateElementModel(Connectable connectable, boolean isClass) {
+    private CreateElementModel(String id, Connectable connectable, boolean isClass) {
         this.classDiagram = ClassDiagram.getInstance();
+        this.graphController = GraphController.getInstance();
 
-        if (connectable != null) {
+        this.isEditMode = connectable != null;
+
+        if (isEditMode) {
             this.name = connectable.getName();
+            this.associations = connectable.getAssociations();
         } else {
             this.name = "";
+            this.associations = new HashMap<>();
         }
 
-        this.graphController = null;
+        this.id = id;
         this.extendsElement = null;
         this.implementedInterfaces = new ArrayList<>();
+
         this.isAbstract = false;
         this.isClass = isClass;
     }
 
-    public CreateElementModel(GraphController graphController) {
-        this(null, true);
-
-        this.graphController = graphController;
+    public CreateElementModel() {
+        this(null, null, true);
     }
 
-    public CreateElementModel(ClassModel classModel) {
-        this(classModel, true);
+    public CreateElementModel(String id, ClassModel classModel) {
+        this(id, classModel, true);
 
         this.implementedInterfaces = classModel.getImplementsInterfaces();
         this.isAbstract = classModel.isAbstract();
         this.extendsElement = classModel.getExtendsClass();
     }
 
-    public CreateElementModel(InterfaceModel interfaceModel) {
-        this(interfaceModel, false);
+    public CreateElementModel(String id, InterfaceModel interfaceModel) {
+        this(id, interfaceModel, false);
 
         this.implementedInterfaces = interfaceModel.getExtendsRelations()
                 .stream()
@@ -68,6 +77,32 @@ public class CreateElementModel {
 
         graphController.addNode(GraphController.NodeType.CLASS, id);
 
+        addClassConnections(classModel);
+    }
+
+    public void addInterface(InterfaceModel interfaceModel) {
+        String id = classDiagram.addInterface(interfaceModel);
+
+        graphController.addNode(GraphController.NodeType.INTERFACE, id);
+
+        addInterfaceConnections(interfaceModel);
+    }
+
+    public void editClass(ClassModel classModel) {
+        graphController.clearConnections(id);
+        addClassConnections(classModel);
+
+        classDiagram.edit(id, classModel);
+    }
+
+    public void editInterface(InterfaceModel interfaceModel) {
+        graphController.clearConnections(id);
+        addInterfaceConnections(interfaceModel);
+
+        classDiagram.edit(id, interfaceModel);
+    }
+
+    private void addClassConnections(ClassModel classModel) {
         if (classModel.getExtendsClass() != null) {
             addConnections(GraphController.ConnectionType.EXTENDS, id, List.of(classModel.getExtendsClass()));
         }
@@ -76,14 +111,13 @@ public class CreateElementModel {
                 .stream()
                 .map(interfaceModel -> (Connectable) interfaceModel)
                 .collect(Collectors.toList()));
+
+        addConnections(id, classModel.getAssociations());
     }
 
-    public void addInterface(InterfaceModel interfaceModel) {
-        String id = classDiagram.addInterface(interfaceModel);
-
-        graphController.addNode(GraphController.NodeType.INTERFACE, id);
-
+    private void addInterfaceConnections(InterfaceModel interfaceModel) {
         addConnections(GraphController.ConnectionType.EXTENDS, id, interfaceModel.getExtendsRelations());
+        addConnections(id, interfaceModel.getAssociations());
     }
 
     private void addConnections(GraphController.ConnectionType type, String id, Collection<Connectable> connections) {
@@ -96,8 +130,20 @@ public class CreateElementModel {
         }
     }
 
+    private void addConnections(String id, Map<String, Connectable> connections) {
+        for (String connectionName : connections.keySet()) {
+            Connectable connectable = connections.get(connectionName);
+
+            String endId = classDiagram.getIdOf(connectable);
+
+            if (endId != null) {
+                graphController.addConnection(GraphController.ConnectionType.ASSOCIATION, id, endId, connectionName);
+            }
+        }
+    }
+
     public boolean isEditMode() {
-        return graphController == null;
+        return isEditMode;
     }
 
     public boolean isClass() {
@@ -118,5 +164,9 @@ public class CreateElementModel {
 
     public Collection<InterfaceModel> getImplementedInterfaces() {
         return implementedInterfaces;
+    }
+
+    public Map<String, Connectable> getAssociations() {
+        return associations;
     }
 }

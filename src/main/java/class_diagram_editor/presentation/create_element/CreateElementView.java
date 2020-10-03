@@ -151,6 +151,7 @@ public class CreateElementView implements FxmlView<CreateElementViewModel>, Init
         txbElementName.textProperty().bindBidirectional(viewModel.nameProperty());
 
         cbbElementExtends.itemsProperty().bind(viewModel.classesProperty());
+        cbbElementExtends.getSelectionModel().select(viewModel.getExtendsElement());
         cbbElementExtends.setOnAction(event -> {
             viewModel.setExtendsElement(cbbElementExtends.getValue());
         });
@@ -180,6 +181,11 @@ public class CreateElementView implements FxmlView<CreateElementViewModel>, Init
 
         btnCreateElement.setOnAction(event -> {
             viewModel.createElement();
+            stage.close();
+        });
+
+        btnEditElement.setOnAction(event -> {
+            viewModel.editElement();
             stage.close();
         });
     }

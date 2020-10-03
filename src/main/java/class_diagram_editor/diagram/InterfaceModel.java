@@ -111,4 +111,10 @@ public class InterfaceModel implements CodeElement, Connectable {
     public String toString() {
         return name;
     }
+
+    public void edit(InterfaceModel interfaceModel) {
+        this.associations = interfaceModel.associations;
+        this.extendsInterfaces = interfaceModel.extendsInterfaces;
+        this.methods = interfaceModel.methods;
+    }
 }
