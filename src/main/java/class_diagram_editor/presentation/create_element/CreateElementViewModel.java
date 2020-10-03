@@ -87,8 +87,18 @@ public class CreateElementViewModel implements ViewModel {
         return extendsElement;
     }
 
-    public void setExtendsElement(Connectable connectable) {
-        extendsElement = connectable;
+    public boolean setExtendsElement(Connectable connectable) {
+        if (connectable == null) {
+            throw new IllegalArgumentException();
+        }
+
+        if (!connectable.getExtendsRelations().contains(createElementModel.getEditedElement())) {
+            extendsElement = connectable;
+
+            return true;
+        }
+
+        return false;
     }
 
     public void deleteImplementedInterface(InterfaceModel interfaceModel) {

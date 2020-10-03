@@ -83,7 +83,7 @@ public class GraphController {
 
     public void deleteSelectedElements() {
         deleteNodes();
-        deleteConnections();
+        deleteSelectedConnections();
     }
 
     private void deleteNodes() {
@@ -98,7 +98,7 @@ public class GraphController {
         });
     }
 
-    private void deleteConnections() {
+    private void deleteSelectedConnections() {
         graphEditor.getSelectionManager().getSelectedConnections().forEach(connection -> {
             String startId = connection.getSource().getParent().getId();
             String endId = connection.getTarget().getParent().getId();
@@ -122,7 +122,7 @@ public class GraphController {
     private void addSkins(GraphEditor graphEditor) {
         graphEditor.setNodeSkinFactory(skinFactory::createNodeSkin);
         graphEditor.setConnectorSkinFactory(skinFactory::createConnectorSkin);
-        graphEditor.setConnectorValidator(new UMLConnectorValidator(viewModel.getDrawAssociation()));
+        graphEditor.setConnectorValidator(new UMLConnectorValidator(viewModel.getDrawAssociation(), viewModel.getClassDiagram()));
         graphEditor.setConnectionSkinFactory(skinFactory::createConnectionSkin);
     }
 
@@ -270,7 +270,9 @@ public class GraphController {
                 Collection<GConnection> toDelete = new ArrayList<>(connector.getConnections());
 
                 for (GConnection connection : toDelete) {
-                    ConnectionCommands.removeConnection(graphModel, connection);
+                    if (connection.getSource().equals(connector)) {
+                        ConnectionCommands.removeConnection(graphModel, connection);
+                    }
                 }
             }
         }

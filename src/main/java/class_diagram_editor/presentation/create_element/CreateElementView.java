@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -19,12 +20,14 @@ import javafx.scene.control.Separator;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class CreateElementView implements FxmlView<CreateElementViewModel>, Initializable {
@@ -153,7 +156,22 @@ public class CreateElementView implements FxmlView<CreateElementViewModel>, Init
         cbbElementExtends.itemsProperty().bind(viewModel.classesProperty());
         cbbElementExtends.getSelectionModel().select(viewModel.getExtendsElement());
         cbbElementExtends.setOnAction(event -> {
-            viewModel.setExtendsElement(cbbElementExtends.getValue());
+            if (cbbElementExtends.getValue() == null) {
+                return;
+            }
+
+            boolean success = viewModel.setExtendsElement(cbbElementExtends.getValue());
+
+            if (!success) {
+                cbbElementExtends.getSelectionModel().select(viewModel.getExtendsElement());
+
+                Alert dialog = new Alert(Alert.AlertType.ERROR);
+
+                dialog.setTitle("Zyklische Vererbungshierarchie");
+                dialog.setContentText("A -> B -> A");
+
+                dialog.show();
+            }
         });
 
         ckbElementAbstract.selectedProperty().bindBidirectional(viewModel.isAbstractProperty());

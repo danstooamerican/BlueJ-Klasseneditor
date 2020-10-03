@@ -18,7 +18,8 @@ public class CreateElementModel {
     private final ClassDiagram classDiagram;
 
     private GraphController graphController;
-    private final boolean isEditMode;
+
+    private final Connectable editedElement;
 
     private final boolean isClass;
 
@@ -33,9 +34,9 @@ public class CreateElementModel {
         this.classDiagram = ClassDiagram.getInstance();
         this.graphController = GraphController.getInstance();
 
-        this.isEditMode = connectable != null;
+        this.editedElement = connectable;
 
-        if (isEditMode) {
+        if (connectable != null) {
             this.name = connectable.getName();
             this.associations = connectable.getAssociations();
         } else {
@@ -142,8 +143,12 @@ public class CreateElementModel {
         }
     }
 
+    public Connectable getEditedElement() {
+        return editedElement;
+    }
+
     public boolean isEditMode() {
-        return isEditMode;
+        return editedElement != null;
     }
 
     public boolean isClass() {
