@@ -24,7 +24,7 @@ public class CreateElementModel {
 
     private final boolean isClass;
 
-    private final String id;
+    private String id;
     private final String name;
     private Connectable extendsElement;
     private boolean isAbstract;
@@ -84,7 +84,7 @@ public class CreateElementModel {
         if (id != null) {
             graphController.addNode(GraphController.NodeType.CLASS, id);
 
-            addClassConnections(classModel);
+            addClassConnections(classModel, id);
 
             return true;
         }
@@ -98,7 +98,7 @@ public class CreateElementModel {
         if (id != null) {
             graphController.addNode(GraphController.NodeType.INTERFACE, id);
 
-            addInterfaceConnections(interfaceModel);
+            addInterfaceConnections(interfaceModel, id);
 
             return true;
         }
@@ -108,7 +108,7 @@ public class CreateElementModel {
 
     public void editClass(ClassModel classModel) {
         graphController.clearConnections(id);
-        addClassConnections(classModel);
+        addClassConnections(classModel, id);
 
         classDiagram.edit(id, classModel);
         classModel.notifyChange();
@@ -116,12 +116,12 @@ public class CreateElementModel {
 
     public void editInterface(InterfaceModel interfaceModel) {
         graphController.clearConnections(id);
-        addInterfaceConnections(interfaceModel);
+        addInterfaceConnections(interfaceModel, id);
 
         classDiagram.edit(id, interfaceModel);
     }
 
-    private void addClassConnections(ClassModel classModel) {
+    private void addClassConnections(ClassModel classModel, String id) {
         if (classModel.getExtendsClass() != null) {
             addConnections(GraphController.ConnectionType.EXTENDS, id, List.of(classModel.getExtendsClass()));
         }
@@ -134,7 +134,7 @@ public class CreateElementModel {
         addConnections(id, classModel.getAssociations());
     }
 
-    private void addInterfaceConnections(InterfaceModel interfaceModel) {
+    private void addInterfaceConnections(InterfaceModel interfaceModel, String id) {
         addConnections(GraphController.ConnectionType.EXTENDS, id, interfaceModel.getExtendsRelations());
         addConnections(id, interfaceModel.getAssociations());
     }
