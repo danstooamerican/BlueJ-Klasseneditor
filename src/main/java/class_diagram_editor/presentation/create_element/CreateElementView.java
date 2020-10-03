@@ -4,6 +4,7 @@ import class_diagram_editor.diagram.AttributeModel;
 import class_diagram_editor.diagram.Connectable;
 import class_diagram_editor.diagram.InterfaceModel;
 import class_diagram_editor.diagram.Visibility;
+import class_diagram_editor.presentation.MainScreenView;
 import de.saxsys.mvvmfx.FluentViewLoader;
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
@@ -52,6 +53,7 @@ public class CreateElementView implements FxmlView<CreateElementViewModel>, Init
         Parent root = viewTuple.getView();
 
         Scene scene = new Scene(root);
+        scene.getStylesheets().add(CreateElementView.class.getResource("../../skins.css").toExternalForm());
 
         stage.setScene(scene);
         stage.show();
@@ -308,7 +310,7 @@ public class CreateElementView implements FxmlView<CreateElementViewModel>, Init
         ckbAttributeSetter.selectedProperty().bindBidirectional(viewModel.attributeSetterProperty());
 
         btnAddAttribute.disableProperty().bind(viewModel.attributeNameProperty().isEmpty().or(viewModel.attributeTypeProperty().isEmpty()).or(attributeAlreadyExists));
-        btnEditAttribute.disableProperty().bind(viewModel.attributeNameProperty().isEmpty().or(viewModel.attributeTypeProperty().isEmpty()).or(attributeAlreadyExists));
+        btnEditAttribute.disableProperty().bind(viewModel.attributeNameProperty().isEmpty().or(viewModel.attributeTypeProperty().isEmpty()));
 
         btnEditAttribute.visibleProperty().bind(lstAttributes.getSelectionModel().selectedIndexProperty().greaterThan(-1));
 

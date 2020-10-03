@@ -31,6 +31,13 @@ public class ClassSkin extends DefaultNodeSkin {
     public static final String ABSTRACT_CLASS = "abstract";
     public static final String STATIC_CLASS = "static";
 
+    private VBox layout;
+    private Node header;
+    private Node attributes;
+    private Node methods;
+    private Node attributesSeparator;
+    private Node methodsSeparator;
+
     private final ClassModel classModel;
 
     public ClassSkin(final GNode node, ClassModel classModel) {
@@ -38,20 +45,13 @@ public class ClassSkin extends DefaultNodeSkin {
 
         this.classModel = classModel;
 
-        VBox layout = new VBox();
+        layout = new VBox();
         layout.setAlignment(Pos.TOP_CENTER);
+        buildUI();
 
-        Node header = getHeader();
-        Node attributes = getAttributes();
-        Node methods = getMethods();
-
-        Separator attributesSeparator = new Separator();
-        attributesSeparator.getStyleClass().add(SEPARATOR_CLASS);
-
-        Separator methodsSeparator = new Separator();
-        methodsSeparator.getStyleClass().add(SEPARATOR_CLASS);
-
-        layout.getChildren().addAll(header, attributesSeparator, attributes, methodsSeparator, methods);
+        classModel.hasUpdatedProperty().addListener((observable, oldValue, newValue) -> {
+            buildUI();
+        });
 
         getRoot().getChildren().add(layout);
 
@@ -60,6 +60,23 @@ public class ClassSkin extends DefaultNodeSkin {
                 CreateElementView.showCreateElementDialog(new CreateElementModel(getItem().getId(), classModel));
             }
         });
+    }
+
+    private void buildUI() {
+        header = getHeader();
+
+        attributes = getAttributes();
+
+        methods = getMethods();
+
+        attributesSeparator = new Separator();
+        attributesSeparator.getStyleClass().add(SEPARATOR_CLASS);
+
+        methodsSeparator = new Separator();
+        methodsSeparator.getStyleClass().add(SEPARATOR_CLASS);
+
+        layout.getChildren().clear();
+        layout.getChildren().addAll(header, attributesSeparator, attributes, methodsSeparator, methods);
     }
 
     private Node getHeader() {
@@ -71,7 +88,9 @@ public class ClassSkin extends DefaultNodeSkin {
         lblName.textProperty().bind(classModel.nameProperty());
 
         if (classModel.isAbstract()) {
-            layout.getChildren().add(new Label("<<abstract>>"));
+            Label lblAbstract = new Label("<<abstract>>");
+
+            layout.getChildren().add(lblAbstract);
             lblName.getStyleClass().add(ABSTRACT_CLASS);
         }
 

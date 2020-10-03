@@ -202,6 +202,7 @@ public class ClassDiagram {
 
         if (toEdit != null) {
             toEdit.edit(classModel);
+            toEdit.notifyChange();
         }
     }
 
