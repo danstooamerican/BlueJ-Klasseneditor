@@ -111,12 +111,16 @@ public class CreateElementViewModel implements ViewModel {
         unimplementedInterfaces.get().remove(interfaceModel);
     }
 
-    public void createElement() {
+    public boolean createElement() {
+        boolean success;
+
         if (isClass.get()) {
-            createElementModel.addClass(getClassModel());
+            success = createElementModel.addClass(getClassModel());
         } else {
-            createElementModel.addInterface(getInterfaceModel());
+            success = createElementModel.addInterface(getInterfaceModel());
         }
+
+        return success;
     }
 
     public void editElement() {

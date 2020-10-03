@@ -198,8 +198,16 @@ public class CreateElementView implements FxmlView<CreateElementViewModel>, Init
         });
 
         btnCreateElement.setOnAction(event -> {
-            viewModel.createElement();
-            stage.close();
+            if (!viewModel.createElement()) {
+                Alert dialog = new Alert(Alert.AlertType.ERROR);
+
+                dialog.setTitle("Element existiert schon");
+                dialog.setContentText("Ein Element mit dem gleichen Namen existiert schon");
+
+                dialog.show();
+            } else {
+                stage.close();
+            }
         });
 
         btnEditElement.setOnAction(event -> {

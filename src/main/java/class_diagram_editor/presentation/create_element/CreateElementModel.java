@@ -73,20 +73,32 @@ public class CreateElementModel {
                 .collect(Collectors.toList());
     }
 
-    public void addClass(ClassModel classModel) {
+    public boolean addClass(ClassModel classModel) {
         String id = classDiagram.addClass(classModel);
 
-        graphController.addNode(GraphController.NodeType.CLASS, id);
+        if (id != null) {
+            graphController.addNode(GraphController.NodeType.CLASS, id);
 
-        addClassConnections(classModel);
+            addClassConnections(classModel);
+
+            return true;
+        }
+
+        return false;
     }
 
-    public void addInterface(InterfaceModel interfaceModel) {
+    public boolean addInterface(InterfaceModel interfaceModel) {
         String id = classDiagram.addInterface(interfaceModel);
 
-        graphController.addNode(GraphController.NodeType.INTERFACE, id);
+        if (id != null) {
+            graphController.addNode(GraphController.NodeType.INTERFACE, id);
 
-        addInterfaceConnections(interfaceModel);
+            addInterfaceConnections(interfaceModel);
+
+            return true;
+        }
+
+        return false;
     }
 
     public void editClass(ClassModel classModel) {

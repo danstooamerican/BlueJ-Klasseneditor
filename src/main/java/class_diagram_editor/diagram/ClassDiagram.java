@@ -47,6 +47,12 @@ public class ClassDiagram {
     }
 
     public String addClass(ClassModel classModel) {
+        Connectable element = findElementByName(classModel.getName());
+
+        if (element != null) {
+            return null;
+        }
+
         String uuid = UUID.randomUUID().toString();
 
         classes.put(uuid, classModel);
@@ -55,6 +61,12 @@ public class ClassDiagram {
     }
 
     public String addInterface(InterfaceModel interfaceModel) {
+        Connectable element = findElementByName(interfaceModel.getName());
+
+        if (element != null) {
+            return null;
+        }
+
         String uuid = UUID.randomUUID().toString();
 
         interfaces.put(uuid, interfaceModel);
@@ -104,6 +116,22 @@ public class ClassDiagram {
             return (T) classes.get(id);
         } else if (interfaces.containsKey(id)) {
             return (T) interfaces.get(id);
+        }
+
+        return null;
+    }
+
+    private<T> T findElementByName(String name) {
+        for (ClassModel classModel : classes.values()) {
+            if (classModel.getName().equals(name)) {
+                return (T) classModel;
+            }
+        }
+
+        for (InterfaceModel interfaceModel : interfaces.values()) {
+            if (interfaceModel.getName().equals(name)) {
+                return (T) interfaceModel;
+            }
         }
 
         return null;
