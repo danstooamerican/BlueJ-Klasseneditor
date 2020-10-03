@@ -50,9 +50,6 @@ public class GeneralTabController {
     }
 
     private void initElementType(GeneralTabViewModel viewModel, TabPane tabPane, Tab tabAttributes) {
-        tgbClass.selectedProperty().bindBidirectional(viewModel.isClassProperty());
-        tgbInterface.setSelected(!viewModel.isClassProperty().get());
-
         tgbClass.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 lblImplementsTitle.setText("Implementierte Interfaces");
@@ -64,15 +61,22 @@ public class GeneralTabController {
                 tabPane.getTabs().remove(tabAttributes);
             }
 
-            pnlElementExtends.setVisible(newValue);
-            pnlElementExtends.setManaged(newValue);
-
-            pnlElementAbstract.setVisible(newValue);
-            pnlElementAbstract.setManaged(newValue);
-
-            sprElementAbstract.setVisible(newValue);
-            sprElementAbstract.setManaged(newValue);
+            setClassSpecificElementsVisibility(newValue);
         });
+
+        tgbClass.selectedProperty().bindBidirectional(viewModel.isClassProperty());
+        tgbInterface.setSelected(!viewModel.isClassProperty().get());
+    }
+
+    private void setClassSpecificElementsVisibility(boolean value) {
+        pnlElementExtends.setVisible(value);
+        pnlElementExtends.setManaged(value);
+
+        pnlElementAbstract.setVisible(value);
+        pnlElementAbstract.setManaged(value);
+
+        sprElementAbstract.setVisible(value);
+        sprElementAbstract.setManaged(value);
     }
 
     private void initNameAndExtends(GeneralTabViewModel viewModel) {
