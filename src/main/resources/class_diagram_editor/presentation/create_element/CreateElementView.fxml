@@ -37,7 +37,7 @@
                <fx:include fx:id="generalTab" source="GeneralTab.fxml" />
             </Tab>
           <Tab fx:id="tabAttributes" text="Attribute">
-             <fx:include fx:id="attributesTab" source="AttributesTab.fxml" />
+             <fx:include fx:id="attributesTab" source="attributes_tab/AttributesTab.fxml" />
           </Tab>
           <Tab text="Methoden">
              <fx:include fx:id="methodsTab" source="MethodsTab.fxml" />

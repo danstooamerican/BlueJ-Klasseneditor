@@ -1,7 +1,8 @@
-package class_diagram_editor.presentation.create_element;
+package class_diagram_editor.presentation.create_element.attributes_tab;
 
 import class_diagram_editor.diagram.AttributeModel;
 import class_diagram_editor.diagram.Visibility;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
@@ -36,7 +37,7 @@ public class AttributesTabController {
 
     private final BooleanProperty attributeAlreadyExists = new SimpleBooleanProperty();
 
-    public void initialize(CreateElementViewModel viewModel) {
+    public void initialize(AttributesTabViewModel viewModel) {
         lstAttributes.setCellFactory(attributeModelListView -> new DeletableAttributeListCell((attibuteModel) -> {
             viewModel.deleteAttribute(attibuteModel);
 
@@ -68,18 +69,19 @@ public class AttributesTabController {
         rbnAttributeProtected.setUserData(Visibility.PROTECTED);
 
         attributeVisibility.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-            viewModel.setAttributeVisiblity((Visibility) newValue.getUserData());
+            viewModel.setVisibility((Visibility) newValue.getUserData());
         });
 
-        ckbAttributeFinal.selectedProperty().bindBidirectional(viewModel.attributeFinalProperty());
-        ckbAttributeStatic.selectedProperty().bindBidirectional(viewModel.attributeStaticProperty());
-        txbAttributeName.textProperty().bindBidirectional(viewModel.attributeNameProperty());
-        txbAttributeType.textProperty().bindBidirectional(viewModel.attributeTypeProperty());
-        ckbAttributeGetter.selectedProperty().bindBidirectional(viewModel.attributeGetterProperty());
-        ckbAttributeSetter.selectedProperty().bindBidirectional(viewModel.attributeSetterProperty());
+        ckbAttributeFinal.selectedProperty().bindBidirectional(viewModel.isFinalProperty());
+        ckbAttributeStatic.selectedProperty().bindBidirectional(viewModel.isStaticProperty());
+        txbAttributeName.textProperty().bindBidirectional(viewModel.nameProperty());
+        txbAttributeType.textProperty().bindBidirectional(viewModel.typeProperty());
+        ckbAttributeGetter.selectedProperty().bindBidirectional(viewModel.hasGetterProperty());
+        ckbAttributeSetter.selectedProperty().bindBidirectional(viewModel.hasSetterProperty());
 
-        btnAddAttribute.disableProperty().bind(viewModel.attributeNameProperty().isEmpty().or(viewModel.attributeTypeProperty().isEmpty()).or(attributeAlreadyExists));
-        btnEditAttribute.disableProperty().bind(viewModel.attributeNameProperty().isEmpty().or(viewModel.attributeTypeProperty().isEmpty()));
+        BooleanBinding nameOrTypeEmpty = viewModel.nameProperty().isEmpty().or(viewModel.typeProperty().isEmpty());
+        btnAddAttribute.disableProperty().bind(nameOrTypeEmpty.or(attributeAlreadyExists));
+        btnEditAttribute.disableProperty().bind(nameOrTypeEmpty);
 
         btnEditAttribute.visibleProperty().bind(lstAttributes.getSelectionModel().selectedIndexProperty().greaterThan(-1));
 

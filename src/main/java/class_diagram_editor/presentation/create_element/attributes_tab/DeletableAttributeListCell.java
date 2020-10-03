@@ -1,4 +1,4 @@
-package class_diagram_editor.presentation.create_element;
+package class_diagram_editor.presentation.create_element.attributes_tab;
 
 import class_diagram_editor.diagram.AttributeModel;
 import javafx.geometry.Pos;

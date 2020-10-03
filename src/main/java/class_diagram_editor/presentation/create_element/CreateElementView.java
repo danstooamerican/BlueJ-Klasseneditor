@@ -1,5 +1,9 @@
 package class_diagram_editor.presentation.create_element;
 
+import class_diagram_editor.presentation.create_element.attributes_tab.AttributesTabController;
+import class_diagram_editor.presentation.create_element.attributes_tab.AttributesTabViewModel;
+import class_diagram_editor.presentation.create_element.general_tab.GeneralTabController;
+import class_diagram_editor.presentation.create_element.methods_tab.MethodsTabController;
 import de.saxsys.mvvmfx.FluentViewLoader;
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
@@ -44,17 +48,11 @@ public class CreateElementView implements FxmlView<CreateElementViewModel>, Init
 
     private final Stage stage;
 
-    @InjectViewModel
-    private CreateElementViewModel viewModel;
+    @InjectViewModel private CreateElementViewModel viewModel;
 
-    @FXML
-    private GeneralTabController generalTabController;
-
-    @FXML
-    private AttributesTabController attributesTabController;
-
-    @FXML
-    private MethodsTabController methodsTabController;
+    @FXML private GeneralTabController generalTabController;
+    @FXML private AttributesTabController attributesTabController;
+    @FXML private MethodsTabController methodsTabController;
 
     @FXML private Button btnCreateElement;
     @FXML private Button btnEditElement;
@@ -70,7 +68,8 @@ public class CreateElementView implements FxmlView<CreateElementViewModel>, Init
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         generalTabController.initialize(viewModel, tabPane, tabAttributes);
-        attributesTabController.initialize(viewModel);
+        attributesTabController.initialize(viewModel.getAttributesTabViewModel());
+
         methodsTabController.initialize(viewModel);
 
         if (viewModel.isEditMode()) {
