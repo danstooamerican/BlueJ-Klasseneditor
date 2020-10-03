@@ -8,11 +8,11 @@ import javafx.scene.control.ListCell;
 import javafx.scene.layout.BorderPane;
 import javafx.util.Callback;
 
-public class DeletableListCell extends ListCell<InterfaceModel> {
+public class DeletableInterfaceListCell extends ListCell<InterfaceModel> {
 
-    private Callback<InterfaceModel, Void> onDeleted;
+    private final Callback<InterfaceModel, Void> onDeleted;
 
-    public DeletableListCell(Callback<InterfaceModel, Void> onDeleted) {
+    public DeletableInterfaceListCell(Callback<InterfaceModel, Void> onDeleted) {
         this.onDeleted = onDeleted;
     }
 
@@ -43,3 +43,4 @@ public class DeletableListCell extends ListCell<InterfaceModel> {
         }
     }
 }
+

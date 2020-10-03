@@ -1,5 +1,6 @@
 package class_diagram_editor.presentation.create_element;
 
+import class_diagram_editor.diagram.AttributeModel;
 import class_diagram_editor.diagram.ClassDiagram;
 import class_diagram_editor.diagram.ClassModel;
 import class_diagram_editor.diagram.Connectable;
@@ -17,7 +18,7 @@ public class CreateElementModel {
 
     private final ClassDiagram classDiagram;
 
-    private GraphController graphController;
+    private final GraphController graphController;
 
     private final Connectable editedElement;
 
@@ -29,6 +30,7 @@ public class CreateElementModel {
     private boolean isAbstract;
     private Collection<InterfaceModel> implementedInterfaces;
     private final Map<String, Connectable> associations;
+    private List<AttributeModel> attributes;
 
     private CreateElementModel(String id, Connectable connectable, boolean isClass) {
         this.classDiagram = ClassDiagram.getInstance();
@@ -48,6 +50,8 @@ public class CreateElementModel {
         this.extendsElement = null;
         this.implementedInterfaces = new ArrayList<>();
 
+        this.attributes = new ArrayList<>();
+
         this.isAbstract = false;
         this.isClass = isClass;
     }
@@ -62,6 +66,7 @@ public class CreateElementModel {
         this.implementedInterfaces = classModel.getImplementsInterfaces();
         this.isAbstract = classModel.isAbstract();
         this.extendsElement = classModel.getExtendsClass();
+        this.attributes = classModel.getAttributes();
     }
 
     public CreateElementModel(String id, InterfaceModel interfaceModel) {
@@ -106,6 +111,7 @@ public class CreateElementModel {
         addClassConnections(classModel);
 
         classDiagram.edit(id, classModel);
+        classModel.notifyChange();
     }
 
     public void editInterface(InterfaceModel interfaceModel) {
@@ -185,5 +191,9 @@ public class CreateElementModel {
 
     public Map<String, Connectable> getAssociations() {
         return associations;
+    }
+
+    public List<AttributeModel> getAttributes() {
+        return attributes;
     }
 }

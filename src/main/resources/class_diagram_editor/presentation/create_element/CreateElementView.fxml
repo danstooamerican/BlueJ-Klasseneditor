@@ -168,14 +168,14 @@
                            </HBox>
                            <FlowPane alignment="CENTER_LEFT" hgap="16.0" vgap="16.0">
                               <children>
-                                 <RadioButton mnemonicParsing="false" selected="true" text="private">
+                                 <RadioButton fx:id="rbnAttributePrivate" mnemonicParsing="false" selected="true" text="private">
                                     <toggleGroup>
                                        <ToggleGroup fx:id="attributeVisibility" />
                                     </toggleGroup>
                                  </RadioButton>
-                                 <RadioButton mnemonicParsing="false" text="public" toggleGroup="$attributeVisibility" />
-                                 <RadioButton mnemonicParsing="false" text="protected" toggleGroup="$attributeVisibility" />
-                                 <RadioButton mnemonicParsing="false" text="package" toggleGroup="$attributeVisibility" />
+                                 <RadioButton fx:id="rbnAttributePublic" mnemonicParsing="false" text="public" toggleGroup="$attributeVisibility" />
+                                 <RadioButton fx:id="rbnAttributeProtected" mnemonicParsing="false" text="protected" toggleGroup="$attributeVisibility" />
+                                 <RadioButton fx:id="rbnAttributePackage" mnemonicParsing="false" text="package" toggleGroup="$attributeVisibility" />
                               </children>
                               <padding>
                                  <Insets bottom="16.0" left="16.0" right="16.0" top="8.0" />

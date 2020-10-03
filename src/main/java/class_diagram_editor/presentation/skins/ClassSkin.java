@@ -28,8 +28,8 @@ public class ClassSkin extends DefaultNodeSkin {
     public static final String TYPE = "class";
 
     private static final String SEPARATOR_CLASS = "diagram-separator";
-    private static final String ABSTRACT_CLASS = "abstract";
-    private static final String STATIC_CLASS = "static";
+    public static final String ABSTRACT_CLASS = "abstract";
+    public static final String STATIC_CLASS = "static";
 
     private final ClassModel classModel;
 
