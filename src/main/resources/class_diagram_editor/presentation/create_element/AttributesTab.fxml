@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="class_diagram_editor.presentation.create_element.AttributesTabViewController">
+            fx:controller="class_diagram_editor.presentation.create_element.AttributesTabController">
 <center>
     <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
         <children>
