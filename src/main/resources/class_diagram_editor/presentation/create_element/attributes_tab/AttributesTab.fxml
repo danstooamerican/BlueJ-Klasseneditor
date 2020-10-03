@@ -13,9 +13,8 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="class_diagram_editor.presentation.create_element.attributes_tab.AttributesTabController">
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="class_diagram_editor.presentation.create_element.attributes_tab.AttributesTabController">
 <center>
     <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
         <children>
@@ -29,14 +28,14 @@
             </HBox>
             <FlowPane alignment="CENTER_LEFT" hgap="16.0" vgap="16.0">
                 <children>
-                    <RadioButton fx:id="rbnAttributePrivate" mnemonicParsing="false" selected="true" text="private">
+                    <RadioButton fx:id="rbnPrivate" mnemonicParsing="false" selected="true" text="private">
                         <toggleGroup>
                             <ToggleGroup fx:id="attributeVisibility" />
                         </toggleGroup>
                     </RadioButton>
-                    <RadioButton fx:id="rbnAttributePublic" mnemonicParsing="false" text="public" toggleGroup="$attributeVisibility" />
-                    <RadioButton fx:id="rbnAttributeProtected" mnemonicParsing="false" text="protected" toggleGroup="$attributeVisibility" />
-                    <RadioButton fx:id="rbnAttributePackage" mnemonicParsing="false" text="package" toggleGroup="$attributeVisibility" />
+                    <RadioButton fx:id="rbnPublic" mnemonicParsing="false" text="public" toggleGroup="$attributeVisibility" />
+                    <RadioButton fx:id="rbnProtected" mnemonicParsing="false" text="protected" toggleGroup="$attributeVisibility" />
+                    <RadioButton fx:id="rbnPackage" mnemonicParsing="false" text="package" toggleGroup="$attributeVisibility" />
                 </children>
                 <padding>
                     <Insets bottom="16.0" left="16.0" right="16.0" top="8.0" />
@@ -52,8 +51,8 @@
                     <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
                 </padding>
                 <children>
-                    <CheckBox fx:id="ckbAttributeStatic" mnemonicParsing="false" text="static" />
-                    <CheckBox fx:id="ckbAttributeFinal" mnemonicParsing="false" text="final" />
+                    <CheckBox fx:id="ckbStatic" mnemonicParsing="false" text="static" />
+                    <CheckBox fx:id="ckbFinal" mnemonicParsing="false" text="final" />
                 </children>
             </HBox>
             <Separator prefWidth="200.0">
@@ -67,7 +66,7 @@
                 </padding>
                 <children>
                     <Label minWidth="35.0" text="Name" />
-                    <TextField fx:id="txbAttributeName" HBox.hgrow="ALWAYS" />
+                    <TextField fx:id="txbName" HBox.hgrow="ALWAYS" />
                 </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" spacing="20.0">
@@ -76,7 +75,7 @@
                 </padding>
                 <children>
                     <Label minWidth="55.0" text="Datentyp" />
-                    <TextField fx:id="txbAttributeType" HBox.hgrow="ALWAYS" />
+                    <TextField fx:id="txbType" HBox.hgrow="ALWAYS" />
                 </children>
             </HBox>
             <Separator prefWidth="200.0">
@@ -89,8 +88,8 @@
                     <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
                 </padding>
                 <children>
-                    <CheckBox fx:id="ckbAttributeGetter" mnemonicParsing="false" text="getter" />
-                    <CheckBox fx:id="ckbAttributeSetter" mnemonicParsing="false" text="setter" />
+                    <CheckBox fx:id="ckbGetter" mnemonicParsing="false" text="getter" />
+                    <CheckBox fx:id="ckbSetter" mnemonicParsing="false" text="setter" />
                 </children>
             </HBox>
             <Button fx:id="btnAddAttribute" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Attribut hinzufügen">

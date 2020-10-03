@@ -18,19 +18,19 @@ public class AttributesTabController {
     @FXML private ListView<AttributeModel> lstAttributes;
 
     @FXML private ToggleGroup attributeVisibility;
-    @FXML private RadioButton rbnAttributePrivate;
-    @FXML private RadioButton rbnAttributePublic;
-    @FXML private RadioButton rbnAttributePackage;
-    @FXML private RadioButton rbnAttributeProtected;
+    @FXML private RadioButton rbnPrivate;
+    @FXML private RadioButton rbnPublic;
+    @FXML private RadioButton rbnPackage;
+    @FXML private RadioButton rbnProtected;
 
-    @FXML private CheckBox ckbAttributeStatic;
-    @FXML private CheckBox ckbAttributeFinal;
+    @FXML private CheckBox ckbStatic;
+    @FXML private CheckBox ckbFinal;
 
-    @FXML private TextField txbAttributeName;
-    @FXML private TextField txbAttributeType;
+    @FXML private TextField txbName;
+    @FXML private TextField txbType;
 
-    @FXML private CheckBox ckbAttributeGetter;
-    @FXML private CheckBox ckbAttributeSetter;
+    @FXML private CheckBox ckbGetter;
+    @FXML private CheckBox ckbSetter;
 
     @FXML private Button btnAddAttribute;
     @FXML private Button btnEditAttribute;
@@ -38,6 +38,14 @@ public class AttributesTabController {
     private final BooleanProperty attributeAlreadyExists = new SimpleBooleanProperty();
 
     public void initialize(AttributesTabViewModel viewModel) {
+        initAttributesList(viewModel);
+        initVisibility(viewModel);
+        initModifiers(viewModel);
+        initNameAndType(viewModel);
+        initControlButtons(viewModel);
+    }
+
+    private void initAttributesList(AttributesTabViewModel viewModel) {
         lstAttributes.setCellFactory(attributeModelListView -> new DeletableAttributeListCell((attibuteModel) -> {
             viewModel.deleteAttribute(attibuteModel);
 
@@ -49,45 +57,55 @@ public class AttributesTabController {
 
             switch (newValue.getVisibility()) {
                 case PRIVATE:
-                    attributeVisibility.selectToggle(rbnAttributePrivate);
+                    attributeVisibility.selectToggle(rbnPrivate);
                     break;
                 case PUBLIC:
-                    attributeVisibility.selectToggle(rbnAttributePublic);
+                    attributeVisibility.selectToggle(rbnPublic);
                     break;
                 case PACKAGE_PRIVATE:
-                    attributeVisibility.selectToggle(rbnAttributePackage);
+                    attributeVisibility.selectToggle(rbnPackage);
                     break;
                 case PROTECTED:
-                    attributeVisibility.selectToggle(rbnAttributeProtected);
+                    attributeVisibility.selectToggle(rbnProtected);
                     break;
             }
         });
+    }
 
-        rbnAttributePrivate.setUserData(Visibility.PRIVATE);
-        rbnAttributePublic.setUserData(Visibility.PUBLIC);
-        rbnAttributePackage.setUserData(Visibility.PACKAGE_PRIVATE);
-        rbnAttributeProtected.setUserData(Visibility.PROTECTED);
+    private void initVisibility(AttributesTabViewModel viewModel) {
+        rbnPrivate.setUserData(Visibility.PRIVATE);
+        rbnPublic.setUserData(Visibility.PUBLIC);
+        rbnPackage.setUserData(Visibility.PACKAGE_PRIVATE);
+        rbnProtected.setUserData(Visibility.PROTECTED);
 
         attributeVisibility.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
             viewModel.setVisibility((Visibility) newValue.getUserData());
         });
+    }
 
-        ckbAttributeFinal.selectedProperty().bindBidirectional(viewModel.isFinalProperty());
-        ckbAttributeStatic.selectedProperty().bindBidirectional(viewModel.isStaticProperty());
-        txbAttributeName.textProperty().bindBidirectional(viewModel.nameProperty());
-        txbAttributeType.textProperty().bindBidirectional(viewModel.typeProperty());
-        ckbAttributeGetter.selectedProperty().bindBidirectional(viewModel.hasGetterProperty());
-        ckbAttributeSetter.selectedProperty().bindBidirectional(viewModel.hasSetterProperty());
+    private void initModifiers(AttributesTabViewModel viewModel) {
+        ckbFinal.selectedProperty().bindBidirectional(viewModel.isFinalProperty());
+        ckbStatic.selectedProperty().bindBidirectional(viewModel.isStaticProperty());
 
+        ckbGetter.selectedProperty().bindBidirectional(viewModel.hasGetterProperty());
+        ckbSetter.selectedProperty().bindBidirectional(viewModel.hasSetterProperty());
+    }
+
+    private void initNameAndType(AttributesTabViewModel viewModel) {
+        txbName.textProperty().bindBidirectional(viewModel.nameProperty());
+        txbType.textProperty().bindBidirectional(viewModel.typeProperty());
+
+        txbName.textProperty().addListener((observable, oldValue, newValue) -> {
+            attributeAlreadyExists.set(viewModel.attributeExists(newValue));
+        });
+    }
+
+    private void initControlButtons(AttributesTabViewModel viewModel) {
         BooleanBinding nameOrTypeEmpty = viewModel.nameProperty().isEmpty().or(viewModel.typeProperty().isEmpty());
         btnAddAttribute.disableProperty().bind(nameOrTypeEmpty.or(attributeAlreadyExists));
         btnEditAttribute.disableProperty().bind(nameOrTypeEmpty);
 
         btnEditAttribute.visibleProperty().bind(lstAttributes.getSelectionModel().selectedIndexProperty().greaterThan(-1));
-
-        txbAttributeName.textProperty().addListener((observable, oldValue, newValue) -> {
-            attributeAlreadyExists.set(viewModel.attributeExists(newValue));
-        });
 
         btnAddAttribute.setOnAction(event -> {
             viewModel.addAttribute();
