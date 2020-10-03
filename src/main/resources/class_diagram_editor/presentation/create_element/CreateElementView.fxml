@@ -34,7 +34,7 @@
       <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="200.0" tabMaxWidth="200.0" BorderPane.alignment="CENTER">
         <tabs>
             <Tab text="Allgemein">
-               <fx:include fx:id="generalTab" source="GeneralTab.fxml" />
+               <fx:include fx:id="generalTab" source="general_tab/GeneralTab.fxml" />
             </Tab>
           <Tab fx:id="tabAttributes" text="Attribute">
              <fx:include fx:id="attributesTab" source="attributes_tab/AttributesTab.fxml" />

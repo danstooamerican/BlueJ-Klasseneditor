@@ -1,4 +1,4 @@
-package class_diagram_editor.presentation.create_element;
+package class_diagram_editor.presentation.create_element.general_tab;
 
 import class_diagram_editor.diagram.Connectable;
 import class_diagram_editor.diagram.InterfaceModel;
@@ -14,7 +14,6 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 
 public class GeneralTabController {
@@ -22,7 +21,6 @@ public class GeneralTabController {
     @FXML
     private ToggleButton tgbClass;
     @FXML private ToggleButton tgbInterface;
-    @FXML private ToggleGroup elementType;
     @FXML private TextField txbElementName;
     @FXML private ComboBox<Connectable> cbbElementExtends;
     @FXML private CheckBox ckbElementAbstract;
@@ -34,12 +32,26 @@ public class GeneralTabController {
     @FXML private HBox pnlElementAbstract;
     @FXML private Separator sprElementAbstract;
 
-    public void initialize(CreateElementViewModel viewModel, TabPane tabPane, Tab tabAttributes) {
-        if (viewModel.isEditMode()) {
-            tgbClass.setDisable(true);
-            tgbInterface.setDisable(true);
-            txbElementName.setDisable(true);
+    public void initialize(GeneralTabViewModel viewModel, TabPane tabPane, Tab tabAttributes, boolean isEditMode) {
+        if (isEditMode) {
+            initEditMode();
         }
+
+        initElementType(viewModel, tabPane, tabAttributes);
+        initNameAndExtends(viewModel);
+        initModifiers(viewModel);
+        initImplements(viewModel);
+    }
+
+    private void initEditMode() {
+        tgbClass.setDisable(true);
+        tgbInterface.setDisable(true);
+        txbElementName.setDisable(true);
+    }
+
+    private void initElementType(GeneralTabViewModel viewModel, TabPane tabPane, Tab tabAttributes) {
+        tgbClass.selectedProperty().bindBidirectional(viewModel.isClassProperty());
+        tgbInterface.setSelected(!viewModel.isClassProperty().get());
 
         tgbClass.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
@@ -61,10 +73,9 @@ public class GeneralTabController {
             sprElementAbstract.setVisible(newValue);
             sprElementAbstract.setManaged(newValue);
         });
+    }
 
-        tgbClass.selectedProperty().bindBidirectional(viewModel.isClassProperty());
-        tgbInterface.setSelected(!viewModel.isClassProperty().get());
-
+    private void initNameAndExtends(GeneralTabViewModel viewModel) {
         txbElementName.textProperty().bindBidirectional(viewModel.nameProperty());
 
         cbbElementExtends.itemsProperty().bind(viewModel.classesProperty());
@@ -87,8 +98,13 @@ public class GeneralTabController {
                 dialog.show();
             }
         });
+    }
 
+    private void initModifiers(GeneralTabViewModel viewModel) {
         ckbElementAbstract.selectedProperty().bindBidirectional(viewModel.isAbstractProperty());
+    }
+
+    private void initImplements(GeneralTabViewModel viewModel) {
         lstImplements.itemsProperty().bindBidirectional(viewModel.implementedInterfacesProperty());
 
         lstImplements.setCellFactory(interfaceModelListView -> new DeletableInterfaceListCell((interfaceModel) -> {
@@ -107,5 +123,4 @@ public class GeneralTabController {
             }
         });
     }
-
 }

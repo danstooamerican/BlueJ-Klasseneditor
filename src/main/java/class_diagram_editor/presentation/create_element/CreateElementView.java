@@ -67,7 +67,7 @@ public class CreateElementView implements FxmlView<CreateElementViewModel>, Init
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        generalTabController.initialize(viewModel, tabPane, tabAttributes);
+        generalTabController.initialize(viewModel.getGeneralTabViewModel(), tabPane, tabAttributes, viewModel.isEditMode());
         attributesTabController.initialize(viewModel.getAttributesTabViewModel());
 
         methodsTabController.initialize(viewModel);

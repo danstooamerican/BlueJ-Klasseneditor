@@ -1,4 +1,4 @@
-package class_diagram_editor.presentation.create_element;
+package class_diagram_editor.presentation.create_element.general_tab;
 
 import class_diagram_editor.diagram.InterfaceModel;
 import javafx.geometry.Pos;
