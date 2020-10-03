@@ -34,3 +34,8 @@
 - Darstellung von Beziehungen verbessern (nicht nur geradlinig) (optional)
 - Möglichkeit Klassen zu Paketen zuzuordnen (optional)
 
+- Warnung bei Veränderungen
+- Klassen ausblenden
+- Selektive Codegenerierung
+- Backup vor Codegenerierung
+- Exportieren als Bild (SVG)

@@ -27,9 +27,9 @@ class ClassGenerator extends Generator<ClassModel> {
 
             «ENDIF»
             «FOR MethodModel methodModel : c.getMethods() SEPARATOR '\n'»
-                «generateMethodSignature(methodModel).trim()» {
+                «generateMethodSignature(methodModel).trim()»«IF methodModel.isAbstract()»;«ELSE» {
 
-                }
+                }«ENDIF»
             «ENDFOR»
         }
     '''
