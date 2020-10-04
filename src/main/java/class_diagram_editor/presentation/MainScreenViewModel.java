@@ -56,7 +56,7 @@ public class MainScreenViewModel implements ViewModel {
         methodModel.setVisibility(Visibility.PUBLIC);
 
         for (int k = 0; k < 5 && Math.random() < 0.5; k++) {
-            methodModel.addAttribute(createRandomAttribute(k));
+            methodModel.addParameter(createRandomAttribute(k));
         }
 
         return methodModel;

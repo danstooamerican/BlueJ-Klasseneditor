@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.RadioButton?>
@@ -14,18 +13,17 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="class_diagram_editor.presentation.create_element.MethodsTabController">
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="class_diagram_editor.presentation.create_element.methods_tab.MethodsTabController">
 <left>
     <ListView fx:id="lstMethods" BorderPane.alignment="CENTER" />
 </left>
 <center>
-    <VBox BorderPane.alignment="CENTER">
+    <VBox prefHeight="525.0" prefWidth="564.0" BorderPane.alignment="CENTER">
         <children>
             <HBox alignment="CENTER" spacing="50.0">
                 <children>
-                    <RadioButton mnemonicParsing="false" selected="true" text="Methode">
+                    <RadioButton fx:id="rbnTypeMethod" mnemonicParsing="false" selected="true" text="Methode">
                         <toggleGroup>
                             <ToggleGroup fx:id="methodType" />
                         </toggleGroup>
@@ -54,14 +52,14 @@
             </HBox>
             <FlowPane alignment="CENTER_LEFT" hgap="16.0" vgap="16.0">
                 <children>
-                    <RadioButton mnemonicParsing="false" selected="true" text="public">
-                        <toggleGroup>
-                            <ToggleGroup fx:id="mehtodVisibility" />
-                        </toggleGroup>
+                    <RadioButton fx:id="rbnPublic" mnemonicParsing="false" selected="true" text="public">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="methodVisibility" />
+                     </toggleGroup>
                     </RadioButton>
-                    <RadioButton mnemonicParsing="false" text="private" toggleGroup="$mehtodVisibility" />
-                    <RadioButton mnemonicParsing="false" text="protected" toggleGroup="$mehtodVisibility" />
-                    <RadioButton mnemonicParsing="false" text="package" toggleGroup="$mehtodVisibility" />
+                    <RadioButton fx:id="rbnPrivate" mnemonicParsing="false" text="private" toggleGroup="$methodVisibility" />
+                    <RadioButton fx:id="rbnProtected" mnemonicParsing="false" text="protected" toggleGroup="$methodVisibility" />
+                    <RadioButton fx:id="rbnPackage" mnemonicParsing="false" text="package" toggleGroup="$methodVisibility" />
                 </children>
                 <padding>
                     <Insets bottom="16.0" left="16.0" right="16.0" top="8.0" />
@@ -72,16 +70,20 @@
                     <Insets left="16.0" right="16.0" />
                 </padding>
             </Separator>
-            <HBox alignment="CENTER_LEFT" spacing="20.0">
+            <HBox fx:id="pnlModifiers" alignment="CENTER_LEFT" spacing="20.0">
                 <padding>
                     <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
                 </padding>
                 <children>
-                    <CheckBox fx:id="ckbMethodStatic" mnemonicParsing="false" text="static" />
-                    <CheckBox fx:id="ckbMethodAbstract" mnemonicParsing="false" text="abstrakt" />
+                  <RadioButton fx:id="rbnStatic" mnemonicParsing="false" text="static">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="methodModifier" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton fx:id="rbnAbstract" mnemonicParsing="false" text="abstrakt" toggleGroup="$methodModifier" />
                 </children>
             </HBox>
-            <Separator prefWidth="200.0">
+            <Separator fx:id="sprModifiers" prefWidth="200.0">
                 <padding>
                     <Insets left="16.0" right="16.0" />
                 </padding>
@@ -92,21 +94,21 @@
                 </padding>
                 <children>
                     <Label minWidth="35.0" text="Name" />
-                    <TextField fx:id="txbMethodName" HBox.hgrow="ALWAYS" />
+                    <TextField fx:id="txbName" HBox.hgrow="ALWAYS" />
                 </children>
             </HBox>
-            <HBox alignment="CENTER_LEFT" spacing="20.0">
+            <HBox fx:id="pnlReturnType" alignment="CENTER_LEFT" spacing="20.0">
                 <padding>
-                    <Insets bottom="16.0" left="16.0" right="16.0" top="8.0" />
+                    <Insets bottom="8.0" left="16.0" right="16.0" top="8.0" />
                 </padding>
                 <children>
                     <Label minWidth="55.0" text="Rückgabewert" />
-                    <TextField fx:id="txbMethodReturnType" HBox.hgrow="ALWAYS" />
+                    <TextField fx:id="txbReturnType" HBox.hgrow="ALWAYS" />
                 </children>
             </HBox>
             <Separator prefWidth="200.0">
                 <VBox.margin>
-                    <Insets left="16.0" right="16.0" />
+                    <Insets left="16.0" right="16.0" top="8.0" />
                 </VBox.margin>
             </Separator>
             <HBox alignment="CENTER_LEFT" spacing="20.0">
@@ -126,13 +128,13 @@
                     <Insets left="16.0" />
                 </VBox.margin>
                 <left>
-                    <ListView fx:id="lstMethodParameter" BorderPane.alignment="CENTER" />
+                    <ListView fx:id="lstParameters" BorderPane.alignment="CENTER" />
                 </left>
                 <padding>
                     <Insets bottom="16.0" top="8.0" />
                 </padding>
                 <center>
-                    <VBox minWidth="300.0" BorderPane.alignment="CENTER">
+                    <VBox maxHeight="1.7976931348623157E308" minWidth="300.0" BorderPane.alignment="CENTER">
                         <children>
                             <HBox alignment="CENTER_LEFT" spacing="20.0">
                                 <padding>
@@ -166,6 +168,16 @@
                     </VBox>
                 </center>
             </BorderPane>
+            <Button fx:id="btnAddMethod" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Methode hinzufügen">
+               <VBox.margin>
+                  <Insets left="16.0" right="16.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="btnEditMethod" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Methode bearbeiten">
+               <VBox.margin>
+                  <Insets bottom="16.0" left="16.0" right="16.0" top="8.0" />
+               </VBox.margin>
+            </Button>
         </children>
     </VBox>
 </center>

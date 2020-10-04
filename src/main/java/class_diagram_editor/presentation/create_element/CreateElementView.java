@@ -1,7 +1,6 @@
 package class_diagram_editor.presentation.create_element;
 
 import class_diagram_editor.presentation.create_element.attributes_tab.AttributesTabController;
-import class_diagram_editor.presentation.create_element.attributes_tab.AttributesTabViewModel;
 import class_diagram_editor.presentation.create_element.general_tab.GeneralTabController;
 import class_diagram_editor.presentation.create_element.methods_tab.MethodsTabController;
 import de.saxsys.mvvmfx.FluentViewLoader;
@@ -69,8 +68,7 @@ public class CreateElementView implements FxmlView<CreateElementViewModel>, Init
     public void initialize(URL location, ResourceBundle resources) {
         generalTabController.initialize(viewModel.getGeneralTabViewModel(), tabPane, tabAttributes, viewModel.isEditMode());
         attributesTabController.initialize(viewModel.getAttributesTabViewModel());
-
-        methodsTabController.initialize(viewModel);
+        methodsTabController.initialize(viewModel.getMethodsTabViewModel());
 
         if (viewModel.isEditMode()) {
             btnCreateElement.setVisible(false);
@@ -88,7 +86,7 @@ public class CreateElementView implements FxmlView<CreateElementViewModel>, Init
             if (!viewModel.createElement()) {
                 Alert dialog = new Alert(Alert.AlertType.ERROR);
 
-                dialog.setTitle("Element existiert schon");
+                dialog.setTitle("Doppeltes Element");
                 dialog.setContentText("Ein Element mit dem gleichen Namen existiert schon");
 
                 dialog.show();

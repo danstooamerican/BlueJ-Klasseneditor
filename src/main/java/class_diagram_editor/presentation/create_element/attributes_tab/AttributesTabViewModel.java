@@ -23,18 +23,25 @@ public class AttributesTabViewModel {
     private final BooleanProperty hasGetter = new SimpleBooleanProperty();
     private final BooleanProperty hasSetter = new SimpleBooleanProperty();
 
+    private AttributeModel selectedAttribute = null;
+    private final BooleanProperty attributeSelected = new SimpleBooleanProperty();
+
     public AttributesTabViewModel(List<AttributeModel> attributes) {
         this.visibility = Visibility.PRIVATE;
         this.attributes = new SimpleListProperty<>(FXCollections.observableArrayList(attributes));
     }
 
-
     public void selectAttribute(AttributeModel attributeModel) {
-        name.set(attributeModel.getName());
-        type.set(attributeModel.getType());
-        visibility = attributeModel.getVisibility();
-        isStatic.set(attributeModel.isStatic());
-        isFinal.set(attributeModel.isFinal());
+        if (attributeModel != null) {
+            name.set(attributeModel.getName());
+            type.set(attributeModel.getType());
+            visibility = attributeModel.getVisibility();
+            isStatic.set(attributeModel.isStatic());
+            isFinal.set(attributeModel.isFinal());
+        }
+
+        selectedAttribute = attributeModel;
+        attributeSelected.set(attributeModel != null);
     }
 
     public boolean attributeExists(String name) {
@@ -56,9 +63,11 @@ public class AttributesTabViewModel {
         clearAttributeValues();
     }
 
-    public void editAttribute(AttributeModel selectedItem) {
-        setAttributeValues(selectedItem);
-        clearAttributeValues();
+    public void editAttribute() {
+        if (selectedAttribute != null) {
+            setAttributeValues(selectedAttribute);
+            clearAttributeValues();
+        }
     }
 
     public void deleteAttribute(AttributeModel attibuteModel) {
@@ -80,6 +89,9 @@ public class AttributesTabViewModel {
         isStatic.set(false);
         hasGetter.set(false);
         hasSetter.set(false);
+
+        selectedAttribute = null;
+        attributeSelected.set(false);
     }
 
 
@@ -117,5 +129,9 @@ public class AttributesTabViewModel {
 
     public BooleanProperty hasSetterProperty() {
         return hasSetter;
+    }
+
+    public BooleanProperty isAttributeSelected() {
+        return attributeSelected;
     }
 }

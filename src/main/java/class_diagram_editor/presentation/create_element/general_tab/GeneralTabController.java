@@ -18,19 +18,22 @@ import javafx.scene.layout.HBox;
 
 public class GeneralTabController {
 
-    @FXML
-    private ToggleButton tgbClass;
+    @FXML private ToggleButton tgbClass;
     @FXML private ToggleButton tgbInterface;
+
     @FXML private TextField txbElementName;
     @FXML private ComboBox<Connectable> cbbElementExtends;
+    @FXML private HBox pnlElementExtends;
+
     @FXML private CheckBox ckbElementAbstract;
+    @FXML private Separator sprElementAbstract;
+    @FXML private HBox pnlElementAbstract;
+
+    @FXML private Label lblImplementsTitle;
+
     @FXML private ListView<InterfaceModel> lstImplements;
     @FXML private ComboBox<InterfaceModel> cbbElementImplements;
     @FXML private Button btnAddImplements;
-    @FXML private Label lblImplementsTitle;
-    @FXML private HBox pnlElementExtends;
-    @FXML private HBox pnlElementAbstract;
-    @FXML private Separator sprElementAbstract;
 
     public void initialize(GeneralTabViewModel viewModel, TabPane tabPane, Tab tabAttributes, boolean isEditMode) {
         if (isEditMode) {

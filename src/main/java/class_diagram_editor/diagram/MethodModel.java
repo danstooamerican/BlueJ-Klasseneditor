@@ -13,10 +13,10 @@ public class MethodModel {
     private boolean isStatic;
     private boolean isAbstract;
 
-    private List<AttributeModel> attributes;
+    private List<AttributeModel> parameters;
 
     public MethodModel() {
-        this.attributes = new ArrayList<>();
+        this.parameters = new ArrayList<>();
     }
 
     public String getName() {
@@ -27,8 +27,8 @@ public class MethodModel {
         return returnType;
     }
 
-    public List<AttributeModel> getAttributes() {
-        return attributes;
+    public List<AttributeModel> getParameters() {
+        return parameters;
     }
 
     public Visibility getVisibility() {
@@ -43,7 +43,7 @@ public class MethodModel {
         return isAbstract;
     }
 
-    public void addAttribute(AttributeModel attributeModel) {
-        attributes.add(attributeModel);
+    public void addParameter(AttributeModel attributeModel) {
+        parameters.add(attributeModel);
     }
 }

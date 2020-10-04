@@ -5,6 +5,7 @@ import class_diagram_editor.diagram.ClassDiagram;
 import class_diagram_editor.diagram.ClassModel;
 import class_diagram_editor.diagram.Connectable;
 import class_diagram_editor.diagram.InterfaceModel;
+import class_diagram_editor.diagram.MethodModel;
 import class_diagram_editor.presentation.graph_editor.GraphController;
 
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class CreateElementModel {
     private Collection<InterfaceModel> implementedInterfaces;
     private final Map<String, Connectable> associations;
     private List<AttributeModel> attributes;
+    private List<MethodModel> methods;
 
     private CreateElementModel(String id, Connectable connectable, boolean isClass) {
         this.classDiagram = ClassDiagram.getInstance();
@@ -51,6 +53,7 @@ public class CreateElementModel {
         this.implementedInterfaces = new ArrayList<>();
 
         this.attributes = new ArrayList<>();
+        this.methods = new ArrayList<>();
 
         this.isAbstract = false;
         this.isClass = isClass;
@@ -67,6 +70,7 @@ public class CreateElementModel {
         this.isAbstract = classModel.isAbstract();
         this.extendsElement = classModel.getExtendsClass();
         this.attributes = classModel.getAttributes();
+        this.methods = classModel.getMethods();
     }
 
     public CreateElementModel(String id, InterfaceModel interfaceModel) {
@@ -76,6 +80,8 @@ public class CreateElementModel {
                 .stream()
                 .map(connectable -> (InterfaceModel) connectable)
                 .collect(Collectors.toList());
+
+        this.methods = interfaceModel.getMethods();
     }
 
     public boolean addClass(ClassModel classModel) {
@@ -195,5 +201,9 @@ public class CreateElementModel {
 
     public List<AttributeModel> getAttributes() {
         return attributes;
+    }
+
+    public List<MethodModel> getMethods() {
+        return methods;
     }
 }

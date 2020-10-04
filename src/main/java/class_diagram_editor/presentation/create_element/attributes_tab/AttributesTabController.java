@@ -2,6 +2,7 @@ package class_diagram_editor.presentation.create_element.attributes_tab;
 
 import class_diagram_editor.diagram.AttributeModel;
 import class_diagram_editor.diagram.Visibility;
+import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -53,21 +54,27 @@ public class AttributesTabController {
         }));
         lstAttributes.itemsProperty().bindBidirectional(viewModel.attributesProperty());
         lstAttributes.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            viewModel.selectAttribute(newValue);
 
-            switch (newValue.getVisibility()) {
-                case PRIVATE:
-                    attributeVisibility.selectToggle(rbnPrivate);
-                    break;
-                case PUBLIC:
-                    attributeVisibility.selectToggle(rbnPublic);
-                    break;
-                case PACKAGE_PRIVATE:
-                    attributeVisibility.selectToggle(rbnPackage);
-                    break;
-                case PROTECTED:
-                    attributeVisibility.selectToggle(rbnProtected);
-                    break;
+
+            if (newValue != null) {
+                viewModel.selectAttribute(newValue);
+
+                switch (newValue.getVisibility()) {
+                    case PRIVATE:
+                        attributeVisibility.selectToggle(rbnPrivate);
+                        break;
+                    case PUBLIC:
+                        attributeVisibility.selectToggle(rbnPublic);
+                        break;
+                    case PACKAGE_PRIVATE:
+                        attributeVisibility.selectToggle(rbnPackage);
+                        break;
+                    case PROTECTED:
+                        attributeVisibility.selectToggle(rbnProtected);
+                        break;
+                }
+
+                Platform.runLater(() -> lstAttributes.getSelectionModel().clearSelection());
             }
         });
     }
@@ -105,14 +112,14 @@ public class AttributesTabController {
         btnAddAttribute.disableProperty().bind(nameOrTypeEmpty.or(attributeAlreadyExists));
         btnEditAttribute.disableProperty().bind(nameOrTypeEmpty);
 
-        btnEditAttribute.visibleProperty().bind(lstAttributes.getSelectionModel().selectedIndexProperty().greaterThan(-1));
+        btnEditAttribute.visibleProperty().bind(viewModel.isAttributeSelected());
 
         btnAddAttribute.setOnAction(event -> {
             viewModel.addAttribute();
         });
 
         btnEditAttribute.setOnAction(event -> {
-            viewModel.editAttribute(lstAttributes.getSelectionModel().getSelectedItem());
+            viewModel.editAttribute();
             lstAttributes.refresh();
         });
     }

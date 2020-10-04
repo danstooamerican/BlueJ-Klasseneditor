@@ -6,7 +6,8 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<BorderPane prefHeight="600.0" prefWidth="820.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+
+<BorderPane prefHeight="635.0" prefWidth="820.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <bottom>
       <HBox alignment="CENTER_RIGHT" spacing="16.0" style="-fx-background-color: #DFDFDF;" BorderPane.alignment="CENTER">
          <children>
@@ -40,7 +41,7 @@
              <fx:include fx:id="attributesTab" source="attributes_tab/AttributesTab.fxml" />
           </Tab>
           <Tab text="Methoden">
-             <fx:include fx:id="methodsTab" source="MethodsTab.fxml" />
+             <fx:include fx:id="methodsTab" source="methods_tab/MethodsTab.fxml" />
           </Tab>
         </tabs>
       </TabPane>
