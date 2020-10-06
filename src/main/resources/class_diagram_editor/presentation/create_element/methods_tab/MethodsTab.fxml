@@ -28,7 +28,7 @@
                             <ToggleGroup fx:id="methodType" />
                         </toggleGroup>
                     </RadioButton>
-                    <RadioButton mnemonicParsing="false" text="Konstruktor" toggleGroup="$methodType" />
+                    <RadioButton fx:id="rbnTypeConstructor" mnemonicParsing="false" text="Konstruktor" toggleGroup="$methodType" />
                 </children>
                 <padding>
                     <Insets bottom="16.0" top="16.0" />
@@ -88,7 +88,7 @@
                     <Insets left="16.0" right="16.0" />
                 </padding>
             </Separator>
-            <HBox alignment="CENTER_LEFT" spacing="20.0">
+            <HBox fx:id="pnlName" alignment="CENTER_LEFT" spacing="20.0">
                 <padding>
                     <Insets bottom="8.0" left="16.0" right="16.0" top="16.0" />
                 </padding>
@@ -106,7 +106,7 @@
                     <TextField fx:id="txbReturnType" HBox.hgrow="ALWAYS" />
                 </children>
             </HBox>
-            <Separator prefWidth="200.0">
+            <Separator fx:id="sprNameType" prefWidth="200.0">
                 <VBox.margin>
                     <Insets left="16.0" right="16.0" top="8.0" />
                 </VBox.margin>

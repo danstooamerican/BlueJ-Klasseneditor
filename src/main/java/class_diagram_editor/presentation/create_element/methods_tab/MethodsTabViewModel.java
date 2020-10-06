@@ -3,6 +3,7 @@ package class_diagram_editor.presentation.create_element.methods_tab;
 import class_diagram_editor.diagram.AttributeModel;
 import class_diagram_editor.diagram.MethodModel;
 import class_diagram_editor.diagram.Visibility;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -16,8 +17,10 @@ import java.util.List;
 
 public class MethodsTabViewModel {
 
-    private boolean isMethod = true;
+    private boolean isConstructor = false;
     private Visibility visibility = Visibility.PUBLIC;
+
+    private final StringProperty className;
 
     private final BooleanProperty isStatic = new SimpleBooleanProperty();
     private final BooleanProperty isAbstract = new SimpleBooleanProperty();
@@ -37,8 +40,9 @@ public class MethodsTabViewModel {
     private AttributeModel selectedParameter = null;
     private final BooleanProperty parameterSelected = new SimpleBooleanProperty();
 
-    public MethodsTabViewModel(List<MethodModel> methods) {
+    public MethodsTabViewModel(List<MethodModel> methods, StringProperty className) {
         this.methods = new SimpleListProperty<>(FXCollections.observableArrayList(methods));
+        this.className = className;
     }
 
     public void selectParameter(AttributeModel attributeModel) {
@@ -89,6 +93,7 @@ public class MethodsTabViewModel {
 
     public void selectMethod(MethodModel methodModel) {
         if (methodModel != null) {
+            isConstructor = methodModel.isConstructor();
             name.set(methodModel.getName());
             returnType.set(methodModel.getReturnType());
             visibility = methodModel.getVisibility();
@@ -122,7 +127,14 @@ public class MethodsTabViewModel {
     }
 
     private void setMethodValues(MethodModel methodModel) {
-        methodModel.setName(name.get());
+        methodModel.setConstructor(isConstructor);
+
+        if (isConstructor) {
+            methodModel.setName(className.get());
+        } else {
+            methodModel.setName(name.get());
+        }
+
         methodModel.setReturnType(returnType.get());
         methodModel.setVisibility(visibility);
         methodModel.setStatic(isStatic.get());
@@ -131,13 +143,15 @@ public class MethodsTabViewModel {
     }
 
     private void clearMethodValues() {
-        name.set("");
         returnType.set("");
         isAbstract.set(false);
         isStatic.set(false);
         parameters.clear();
         parameterName.set("");
         parameterType.set("");
+
+        // call this last to avoid methodExist call before all values are cleared
+        name.set("");
 
         selectedMethod = null;
         methodSelected.set(false);
@@ -148,8 +162,8 @@ public class MethodsTabViewModel {
         this.visibility = visibility;
     }
 
-    public void setIsMethod(boolean isMethod) {
-        this.isMethod = isMethod;
+    public void setIsConstructor(boolean isConstructor) {
+        this.isConstructor = isConstructor;
     }
 
     public BooleanProperty isStaticProperty() {
@@ -187,6 +201,11 @@ public class MethodsTabViewModel {
     public List<MethodModel> getMethods() {
         return methods.get();
     }
+
+    public StringProperty classNameProperty() {
+        return className;
+    }
+
     public BooleanProperty methodSelectedProperty() {
         return methodSelected;
     }
@@ -207,7 +226,11 @@ public class MethodsTabViewModel {
 
     public boolean methodExists(String methodName) {
         for (MethodModel methodModel : methods) {
-            if (methodModel.getName().equals(methodName)) {
+            if (methodModel.isConstructor() && isConstructor) {
+                if (methodParameterEqual(methodModel)) {
+                    return true;
+                }
+            } else if (methodModel.getName().equals(methodName)) {
                 if (methodParameterEqual(methodModel)) {
                     return true;
                 }

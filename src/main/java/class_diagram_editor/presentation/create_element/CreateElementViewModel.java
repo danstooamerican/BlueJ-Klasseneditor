@@ -26,7 +26,7 @@ public class CreateElementViewModel implements ViewModel {
 
         this.generalTabViewModel = new GeneralTabViewModel(createElementModel, classDiagram.getInterfaces(), classDiagram.getClasses());
         this.attributesTabViewModel = new AttributesTabViewModel(createElementModel.getAttributes());
-        this.methodsTabViewModel = new MethodsTabViewModel(createElementModel.getMethods());
+        this.methodsTabViewModel = new MethodsTabViewModel(createElementModel.getMethods(), generalTabViewModel.nameProperty());
     }
 
     public boolean isEditMode() {

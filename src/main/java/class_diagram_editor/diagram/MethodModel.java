@@ -7,6 +7,7 @@ import java.util.List;
 
 @Setter
 public class MethodModel {
+    private boolean isConstructor;
     private String name;
     private String returnType;
     private Visibility visibility;
@@ -43,7 +44,15 @@ public class MethodModel {
         return isAbstract;
     }
 
+    public boolean isConstructor() {
+        return isConstructor;
+    }
+
     public void addParameter(AttributeModel attributeModel) {
         parameters.add(attributeModel);
+    }
+
+    public boolean hasReturnType() {
+        return !isConstructor && returnType != null && !returnType.isEmpty();
     }
 }

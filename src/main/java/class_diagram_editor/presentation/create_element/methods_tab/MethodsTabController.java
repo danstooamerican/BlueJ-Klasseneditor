@@ -8,6 +8,7 @@ import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -21,6 +22,8 @@ public class MethodsTabController {
 
     @FXML private ListView<MethodModel> lstMethods;
 
+    @FXML private ToggleGroup methodType;
+    @FXML private RadioButton rbnTypeConstructor;
     @FXML private RadioButton rbnTypeMethod;
 
     @FXML private ToggleGroup methodVisibility;
@@ -38,6 +41,8 @@ public class MethodsTabController {
     @FXML private TextField txbName;
     @FXML private TextField txbReturnType;
     @FXML private HBox pnlReturnType;
+    @FXML private HBox pnlName;
+    @FXML private Separator sprNameType;
 
     @FXML private ListView<AttributeModel> lstParameters;
     @FXML private TextField txbParameterName;
@@ -48,6 +53,7 @@ public class MethodsTabController {
     @FXML private Button btnAddMethod;
     @FXML private Button btnEditMethod;
 
+    private final BooleanProperty isConstructor = new SimpleBooleanProperty();
     private final BooleanProperty methodAlreadyExists = new SimpleBooleanProperty();
     private final BooleanProperty parameterAlreadyExists = new SimpleBooleanProperty();
 
@@ -70,11 +76,19 @@ public class MethodsTabController {
             sprModifiers.visibleProperty().set(newValue);
             sprModifiers.managedProperty().set(newValue);
 
+            pnlName.visibleProperty().set(newValue);
+            pnlName.managedProperty().set(newValue);
+
             pnlReturnType.visibleProperty().set(newValue);
             pnlReturnType.managedProperty().set(newValue);
 
-            viewModel.setIsMethod(newValue);
+            sprNameType.visibleProperty().set(newValue);
+            sprNameType.managedProperty().set(newValue);
+
+            viewModel.setIsConstructor(!newValue);
         });
+
+        rbnTypeConstructor.selectedProperty().bindBidirectional(isConstructor);
     }
 
     private void initVisibility(MethodsTabViewModel viewModel) {
@@ -127,6 +141,12 @@ public class MethodsTabController {
                     case PROTECTED:
                         methodVisibility.selectToggle(rbnProtected);
                         break;
+                }
+
+                if (newValue.isConstructor()) {
+                    methodType.selectToggle(rbnTypeConstructor);
+                } else {
+                    methodType.selectToggle(rbnTypeMethod);
                 }
 
                 Platform.runLater(() -> lstMethods.getSelectionModel().clearSelection());
@@ -185,9 +205,8 @@ public class MethodsTabController {
     private void initMethodControls(MethodsTabViewModel viewModel) {
         btnEditMethod.visibleProperty().bind(viewModel.methodSelectedProperty());
 
-        BooleanBinding nameOrTypeEmpty = viewModel.nameProperty().isEmpty().or(viewModel.returnTypeProperty().isEmpty());
-        btnAddMethod.disableProperty().bind(nameOrTypeEmpty.or(methodAlreadyExists));
-        btnEditParameter.disableProperty().bind(nameOrTypeEmpty);
+        btnAddMethod.disableProperty().bind(viewModel.nameProperty().isEmpty().and(isConstructor.not()).or(methodAlreadyExists).or(isConstructor.and(viewModel.classNameProperty().isEmpty())));
+        btnEditMethod.disableProperty().bind(viewModel.nameProperty().isEmpty());
 
         btnAddMethod.setOnAction(event -> {
             viewModel.addMethod();
