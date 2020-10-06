@@ -31,6 +31,22 @@ class ClassGenerator extends Generator<ClassModel> {
 
                 }«ENDIF»
             «ENDFOR»
+
+            «FOR AttributeModel attributeModel : c.getAttributes() SEPARATOR '\n'»
+                «IF attributeModel.hasGetter()»
+                    «generateMethodSignature(attributeModel.getGetter()).trim()» {
+                        return this.«attributeModel.getName()»;
+                    }
+                «ENDIF»
+                «IF attributeModel.hasGetter() && attributeModel.hasSetter()»
+
+                «ENDIF»
+                «IF attributeModel.hasSetter()»
+                    «generateMethodSignature(attributeModel.getSetter()).trim()» {
+                        this.«attributeModel.getName()» = «attributeModel.getName()»;
+                    }
+                «ENDIF»
+            «ENDFOR»
         }
     '''
 

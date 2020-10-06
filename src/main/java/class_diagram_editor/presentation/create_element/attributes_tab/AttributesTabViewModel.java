@@ -38,6 +38,8 @@ public class AttributesTabViewModel {
             visibility = attributeModel.getVisibility();
             isStatic.set(attributeModel.isStatic());
             isFinal.set(attributeModel.isFinal());
+            hasGetter.set(attributeModel.hasGetter());
+            hasSetter.set(attributeModel.hasSetter());
         }
 
         selectedAttribute = attributeModel;
@@ -80,6 +82,8 @@ public class AttributesTabViewModel {
         attributeModel.setVisibility(visibility);
         attributeModel.setStatic(isStatic.get());
         attributeModel.setFinal(isFinal.get());
+        attributeModel.setHasGetter(hasGetter.get());
+        attributeModel.setHasSetter(hasSetter.get());
     }
 
     private void clearAttributeValues() {
