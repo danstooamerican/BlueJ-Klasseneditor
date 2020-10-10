@@ -71,6 +71,14 @@ public class UMLConnectorValidator implements GConnectorValidator {
             }
         }
 
+        if (sourceConnectable instanceof ClassModel && targetConnectable instanceof ClassModel) {
+            ClassModel sourceClass = (ClassModel) sourceConnectable;
+
+            if (sourceClass.isExtending()) {
+                return false;
+            }
+        }
+
         return true;
     }
 
