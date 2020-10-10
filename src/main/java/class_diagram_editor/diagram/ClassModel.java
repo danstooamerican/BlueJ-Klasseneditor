@@ -3,8 +3,6 @@ package class_diagram_editor.diagram;
 import class_diagram_editor.code_generation.CodeElement;
 import class_diagram_editor.code_generation.CodeGenerator;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import lombok.Setter;
 
 import java.util.ArrayList;

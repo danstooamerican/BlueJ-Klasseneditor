@@ -50,7 +50,7 @@ public class InterfaceModel implements CodeElement, Connectable {
     }
 
     /**
-     * Add a new method to the interface. Adding the same object multiple times will be ignored.
+     * Add a new method to the interface. Adding the same object multiple times is ignored.
      *
      * @param methodModel the {@link MethodModel method} to add.
      */
