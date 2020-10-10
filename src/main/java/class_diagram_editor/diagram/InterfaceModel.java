@@ -178,9 +178,7 @@ public class InterfaceModel implements CodeElement, Connectable {
     }
 
 
-    /**
-     * @return the name of the {@link InterfaceModel interface}.
-     */
+    @Override
     public String getName() {
         return name;
     }
