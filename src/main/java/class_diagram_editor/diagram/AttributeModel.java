@@ -2,6 +2,10 @@ package class_diagram_editor.diagram;
 
 import lombok.Setter;
 
+/**
+ * Represents an UML representation of a {@link ClassModel class} attribute or a {@link MethodModel parameter}.
+ * TODO: create separate ParameterModel class.
+ */
 @Setter
 public class AttributeModel {
     private String name;
@@ -13,34 +17,60 @@ public class AttributeModel {
     private boolean hasGetter;
     private boolean hasSetter;
 
+    /**
+     * @return the name of the {@link AttributeModel attribute}.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * @return the data type of the {@link AttributeModel attribute}.
+     */
     public String getType() {
         return type;
     }
 
+    /**
+     * @return whether the {@link AttributeModel attribute} is static.
+     */
     public boolean isStatic() {
         return isStatic;
     }
 
+    /**
+     * @return whether the {@link AttributeModel attribute} is final.
+     */
     public boolean isFinal() {
         return isFinal;
     }
 
+    /**
+     * @return the {@link Visibility visibility} of the {@link AttributeModel attribute}.
+     */
     public Visibility getVisibility() {
         return visibility;
     }
 
+    /**
+     * @return whether the {@link AttributeModel attribute} has a getter-method associated.
+     */
     public boolean hasGetter() {
         return hasGetter;
     }
 
+    /**
+     * @return whether the {@link AttributeModel attribute} has a setter-method associated.
+     */
     public boolean hasSetter() {
         return hasSetter;
     }
 
+    /**
+     * Creates a new {@link MethodModel method} which represents the associated setter-method of the {@link AttributeModel attribute}.
+     *
+     * @return the setter method of the {@link AttributeModel attribute}.
+     */
     public MethodModel getSetter() {
         MethodModel setter = null;
 
@@ -63,6 +93,11 @@ public class AttributeModel {
         return setter;
     }
 
+    /**
+     * Creates a new {@link MethodModel method} which represents the associated getter-method of the {@link AttributeModel attribute}.
+     *
+     * @return the getter method of the {@link AttributeModel attribute}.
+     */
     public MethodModel getGetter() {
         MethodModel getter = null;
 
