@@ -48,9 +48,13 @@ public class CodeRepository {
             methodCode = methodCode.replaceAll("java.lang.", "");
 
             String methodBody = methodCode.substring(methodCode.indexOf("{") + 1, methodCode.lastIndexOf("}"));
+            methodBody = methodBody.replaceAll(System.lineSeparator(), "");
             methodBody = methodBody.replaceAll("\n", "");
-            methodBody = methodBody.replaceAll(";", ";\n");
-            methodBody = methodBody.substring(0, methodBody.lastIndexOf("\n"));
+            methodBody = methodBody.replaceAll("\r", "");
+            methodBody = methodBody.replaceAll(";", ";" + System.lineSeparator());
+            methodBody = methodBody.substring(0, methodBody.lastIndexOf(System.lineSeparator()));
+            methodBody = methodBody.trim();
+            methodBody = methodBody.replaceAll("    ", "");
 
             methodImplementations.put(methodSignature, methodBody);
         }

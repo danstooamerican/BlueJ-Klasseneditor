@@ -24,7 +24,7 @@ public class ClassModel implements CodeElement, Connectable {
     private Set<InterfaceModel> implementsInterfaces;
     private Map<String, Connectable> associations;
 
-    private Set<AttributeModel> attributes;
+    private List<AttributeModel> attributes;
     private Set<MethodModel> methods;
 
     private SimpleBooleanProperty hasUpdated = new SimpleBooleanProperty();
@@ -32,7 +32,7 @@ public class ClassModel implements CodeElement, Connectable {
     public ClassModel() {
         this.implementsInterfaces = new HashSet<>();
         this.associations = new HashMap<>();
-        this.attributes = new HashSet<>();
+        this.attributes = new ArrayList<>();
         this.methods = new HashSet<>();
     }
 

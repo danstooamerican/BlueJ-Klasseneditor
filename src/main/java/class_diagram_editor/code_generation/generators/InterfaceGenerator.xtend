@@ -14,7 +14,7 @@ class InterfaceGenerator extends Generator {
                 ENDFOR»«
             ENDIF» {
             «FOR MethodModel methodModel : interfaceModel.getMethods() SEPARATOR '\n'»
-                «generateMethodSignature(methodModel).trim()»;
+                «generateInterfaceMethodSignature(methodModel).trim()»;
             «ENDFOR»
         }
     '''

@@ -6,14 +6,14 @@ import class_diagram_editor.diagram.InterfaceModel;
 import class_diagram_editor.diagram.code_generation.ClassGenerator;
 import lombok.Getter;
 
-@Getter
-public class CodeGenerator {
 
+public class CodeGenerator {
     private static final InterfaceGenerator interfaceGenerator = new InterfaceGenerator();
     private static final ClassGenerator classGenerator = new ClassGenerator();
 
     private final CodeRepository codeRepository;
 
+    @Getter
     private String lastGeneratedCode;
 
     public CodeGenerator() {

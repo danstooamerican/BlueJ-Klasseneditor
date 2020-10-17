@@ -60,7 +60,7 @@ public class CreateElementViewModel implements ViewModel {
         classModel.setExtendsType(generalTabViewModel.getExtendsElement());
         classModel.setImplementsInterfaces(new HashSet<>(generalTabViewModel.implementedInterfacesProperty().get()));
         classModel.setAssociations(new HashMap<>(createElementModel.getAssociations()));
-        classModel.setAttributes(new HashSet<>(attributesTabViewModel.getAttributes()));
+        classModel.setAttributes(new ArrayList<>(attributesTabViewModel.getAttributes()));
         classModel.setMethods(new HashSet<>(methodsTabViewModel.getMethods()));
 
         return classModel;
