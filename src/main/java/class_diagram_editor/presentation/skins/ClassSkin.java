@@ -23,6 +23,8 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 public class ClassSkin extends DefaultNodeSkin {
 
     public static final String TYPE = "class";
@@ -57,7 +59,11 @@ public class ClassSkin extends DefaultNodeSkin {
 
         getRoot().setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
-                CreateElementView.showCreateElementDialog(new CreateElementModel(getItem().getId(), classModel));
+                try {
+                    CreateElementView.showCreateElementDialog(new CreateElementModel(getItem().getId(), classModel));
+                } catch (IOException e) {
+                    System.err.println(e.getMessage());
+                }
             }
         });
     }

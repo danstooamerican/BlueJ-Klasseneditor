@@ -13,6 +13,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -83,7 +84,11 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
         });
 
         btnCreateElement.setOnAction(e -> {
-            CreateElementView.showCreateElementDialog(new CreateElementModel());
+            try {
+                CreateElementView.showCreateElementDialog(new CreateElementModel());
+            } catch (IOException ioException) {
+                System.err.println(ioException.getMessage());
+            }
         });
     }
 

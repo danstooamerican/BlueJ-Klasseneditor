@@ -1,5 +1,6 @@
 package class_diagram_editor.presentation.create_element;
 
+import class_diagram_editor.ClassEditorApplication;
 import class_diagram_editor.presentation.create_element.attributes_tab.AttributesTabController;
 import class_diagram_editor.presentation.create_element.general_tab.GeneralTabController;
 import class_diagram_editor.presentation.create_element.methods_tab.MethodsTabController;
@@ -8,6 +9,7 @@ import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
 import de.saxsys.mvvmfx.ViewTuple;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -17,12 +19,13 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class CreateElementView implements FxmlView<CreateElementViewModel>, Initializable {
+public class CreateElementView implements Initializable {
 
-    public static void showCreateElementDialog(CreateElementModel createElementModel) {
+    public static void showCreateElementDialog(CreateElementModel createElementModel) throws IOException {
         Stage stage = new Stage();
 
         if (createElementModel.isEditMode()) {
@@ -31,15 +34,15 @@ public class CreateElementView implements FxmlView<CreateElementViewModel>, Init
             stage.setTitle("Element hinzufügen");
         }
 
-        ViewTuple<CreateElementView, CreateElementViewModel> viewTuple = FluentViewLoader.fxmlView(CreateElementView.class)
-                .codeBehind(new CreateElementView(stage))
-                .viewModel(new CreateElementViewModel(createElementModel))
-                .load();
+        FXMLLoader loader = new FXMLLoader(CreateElementView.class.getResource("CreateElementView.fxml"));
+        loader.setClassLoader(CreateElementView.class.getClassLoader());
+        loader.setController(new CreateElementView(stage, new CreateElementViewModel(createElementModel)));
 
-        Parent root = viewTuple.getView();
+        Parent root = loader.load();
 
         Scene scene = new Scene(root);
-        scene.getStylesheets().add(CreateElementView.class.getResource("../../skins.css").toExternalForm());
+        System.out.println(ClassEditorApplication.class.getResource("skins.css"));
+        scene.getStylesheets().add(ClassEditorApplication.class.getResource("skins.css").toExternalForm());
 
         stage.setScene(scene);
         stage.show();
@@ -47,7 +50,7 @@ public class CreateElementView implements FxmlView<CreateElementViewModel>, Init
 
     private final Stage stage;
 
-    @InjectViewModel private CreateElementViewModel viewModel;
+    private final CreateElementViewModel viewModel;
 
     @FXML private GeneralTabController generalTabController;
     @FXML private AttributesTabController attributesTabController;
@@ -60,8 +63,9 @@ public class CreateElementView implements FxmlView<CreateElementViewModel>, Init
     @FXML private TabPane tabPane;
     @FXML private Tab tabAttributes;
 
-    public CreateElementView(Stage stage) {
+    public CreateElementView(Stage stage, CreateElementViewModel viewModel) {
         this.stage = stage;
+        this.viewModel = viewModel;
     }
 
     @Override

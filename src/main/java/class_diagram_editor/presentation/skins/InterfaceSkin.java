@@ -21,6 +21,8 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 public class InterfaceSkin extends DefaultNodeSkin {
 
     public static final String TYPE = "interface";
@@ -49,7 +51,11 @@ public class InterfaceSkin extends DefaultNodeSkin {
 
         getRoot().setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
-                CreateElementView.showCreateElementDialog(new CreateElementModel(getItem().getId(), interfaceModel));
+                try {
+                    CreateElementView.showCreateElementDialog(new CreateElementModel(getItem().getId(), interfaceModel));
+                } catch (IOException e) {
+                    System.err.println(e.getMessage());
+                }
             }
         });
     }
