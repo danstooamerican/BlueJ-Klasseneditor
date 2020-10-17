@@ -3,9 +3,7 @@ package class_diagram_editor.code_generation.generators
 import class_diagram_editor.diagram.AttributeModel;
 import class_diagram_editor.diagram.MethodModel;
 
-abstract class Generator<T> {
-
-    def String generate(T type);
+abstract class Generator {
 
     def String generateAttribute(AttributeModel attributeModel) '''
         «attributeModel.getVisibility().getCode()»«IF attributeModel.isStatic()» static«ENDIF»«IF attributeModel.isFinal()» final«ENDIF» «attributeModel.getType()» «attributeModel.getName()»;

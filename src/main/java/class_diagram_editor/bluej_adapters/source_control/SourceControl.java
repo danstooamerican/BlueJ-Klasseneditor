@@ -21,11 +21,9 @@ public class SourceControl implements SourceCodeControl {
     private static final TextLocation START_LOCATION = new TextLocation(0, 0);
 
     private final BProject project;
-    private final CodeGenerator codeGenerator;
 
     public SourceControl(BProject project) {
         this.project = project;
-        this.codeGenerator = new CodeGenerator();
     }
 
     @Override
@@ -77,10 +75,13 @@ public class SourceControl implements SourceCodeControl {
         // line index is zero indexed
         int lastLine = editor.getLineCount() - 1;
         int lastColumn = editor.getLineLength(lastLine);
+        final TextLocation endLocation = new TextLocation(lastLine, lastColumn);
+
+        final CodeGenerator codeGenerator = new CodeGenerator(codeElement.getName(), editor.getText(START_LOCATION, endLocation));
 
         codeElement.accept(codeGenerator);
 
-        editor.setText(START_LOCATION, new TextLocation(lastLine, lastColumn), codeGenerator.getLastGeneratedCode());
+        editor.setText(START_LOCATION, endLocation, codeGenerator.getLastGeneratedCode());
 
         editor.saveFile();
 

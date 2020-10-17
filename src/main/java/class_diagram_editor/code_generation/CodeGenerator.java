@@ -12,18 +12,32 @@ public class CodeGenerator {
     private static final InterfaceGenerator interfaceGenerator = new InterfaceGenerator();
     private static final ClassGenerator classGenerator = new ClassGenerator();
 
+    private final CodeRepository codeRepository;
+
     private String lastGeneratedCode;
+
+    public CodeGenerator() {
+        this.codeRepository = new CodeRepository();
+    }
+
+    public CodeGenerator(String elementName, String sourceCode) {
+        this.codeRepository = new CodeRepository(elementName, sourceCode);
+    }
 
     private void generate(String code) {
         lastGeneratedCode = code;
     }
 
     public void visitClass(ClassModel classModel) {
-        generate(classGenerator.generate(classModel));
+        final String sourceCode = classGenerator.generate(classModel, codeRepository);
+
+        generate(sourceCode);
     }
 
     public void visitInterface(InterfaceModel interfaceModel) {
-        generate(interfaceGenerator.generate(interfaceModel));
+        final String sourceCode = interfaceGenerator.generate(interfaceModel);
+
+        generate(sourceCode);
     }
 
 }
