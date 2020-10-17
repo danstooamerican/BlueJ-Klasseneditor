@@ -131,6 +131,17 @@ public class InterfaceModelTest {
     }
 
     @Test
+    void isExtending_returnsTrueForTransitiveExtends() {
+        Connectable connectable = new InterfaceModel();
+        Connectable extendingConnectable = new InterfaceModel();
+
+        extendingConnectable.addExtendsRelation(connectable);
+        interfaceModel.addExtendsRelation(extendingConnectable);
+
+        assertTrue(interfaceModel.isExtending(connectable));
+    }
+
+    @Test
     void addExtendsRelation_addsRelation() {
         Connectable connectable = new InterfaceModel();
 
