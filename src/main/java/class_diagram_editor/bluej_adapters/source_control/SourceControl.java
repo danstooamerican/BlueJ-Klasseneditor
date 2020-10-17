@@ -8,7 +8,7 @@ import bluej.extensions.ProjectNotOpenException;
 import bluej.extensions.editor.Editor;
 import bluej.extensions.editor.TextLocation;
 import class_diagram_editor.code_generation.CodeElement;
-import class_diagram_editor.code_generation.CodeGenerator;
+import class_diagram_editor.code_generation.JavaCodeGenerator;
 import class_diagram_editor.code_generation.SourceCodeControl;
 import class_diagram_editor.diagram.ClassDiagram;
 
@@ -16,12 +16,20 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 
+/**
+ * Encapsulates the BlueJ Editor and contains methods to edit source code.
+ */
 public class SourceControl implements SourceCodeControl {
 
     private static final TextLocation START_LOCATION = new TextLocation(0, 0);
 
     private final BProject project;
 
+    /**
+     * Creates a new {@link SourceControl}.
+     *
+     * @param project the BlueJ project which is edited.
+     */
     public SourceControl(BProject project) {
         this.project = project;
     }
@@ -77,7 +85,7 @@ public class SourceControl implements SourceCodeControl {
         int lastColumn = editor.getLineLength(lastLine);
         final TextLocation endLocation = new TextLocation(lastLine, lastColumn);
 
-        final CodeGenerator codeGenerator = new CodeGenerator(codeElement.getName(), editor.getText(START_LOCATION, endLocation));
+        final JavaCodeGenerator codeGenerator = new JavaCodeGenerator(codeElement.getName(), editor.getText(START_LOCATION, endLocation));
 
         codeElement.accept(codeGenerator);
 

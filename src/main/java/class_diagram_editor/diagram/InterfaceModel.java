@@ -1,7 +1,7 @@
 package class_diagram_editor.diagram;
 
 import class_diagram_editor.code_generation.CodeElement;
-import class_diagram_editor.code_generation.CodeGenerator;
+import class_diagram_editor.code_generation.JavaCodeGenerator;
 import lombok.NonNull;
 import lombok.Setter;
 
@@ -36,7 +36,7 @@ public class InterfaceModel implements CodeElement, Connectable {
     }
 
     @Override
-    public void accept(@NonNull CodeGenerator codeGenerator) {
+    public void accept(@NonNull JavaCodeGenerator codeGenerator) {
         Objects.requireNonNull(codeGenerator, "codeGenerator cannot be null");
 
         codeGenerator.visitInterface(this);

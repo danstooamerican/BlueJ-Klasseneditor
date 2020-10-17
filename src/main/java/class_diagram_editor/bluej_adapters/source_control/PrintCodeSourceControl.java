@@ -1,12 +1,15 @@
 package class_diagram_editor.bluej_adapters.source_control;
 
 import class_diagram_editor.code_generation.CodeElement;
-import class_diagram_editor.code_generation.CodeGenerator;
+import class_diagram_editor.code_generation.JavaCodeGenerator;
 import class_diagram_editor.code_generation.SourceCodeControl;
 import class_diagram_editor.diagram.ClassDiagram;
 
 import java.util.Iterator;
 
+/**
+ * Test implementation which prints the generated source code to the console.
+ */
 public class PrintCodeSourceControl implements SourceCodeControl {
     @Override
     public void generate(ClassDiagram classDiagram) {
@@ -15,7 +18,7 @@ public class PrintCodeSourceControl implements SourceCodeControl {
         while (iterator.hasNext()) {
             CodeElement codeElement = iterator.next();
 
-            final CodeGenerator codeGenerator = new CodeGenerator();
+            final JavaCodeGenerator codeGenerator = new JavaCodeGenerator();
 
             codeElement.accept(codeGenerator);
 

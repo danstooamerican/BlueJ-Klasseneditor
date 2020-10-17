@@ -1,6 +1,6 @@
 package class_diagram_editor.diagram;
 
-import class_diagram_editor.code_generation.CodeGenerator;
+import class_diagram_editor.code_generation.JavaCodeGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -25,7 +25,7 @@ public class InterfaceModelTest {
     private InterfaceModel interfaceModel;
 
     @Mock
-    private CodeGenerator codeGenerator;
+    private JavaCodeGenerator codeGenerator;
 
     @BeforeEach
     void setUp() {

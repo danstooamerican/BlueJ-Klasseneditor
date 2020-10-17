@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class CodeGeneratorTest {
+public class JavaCodeGeneratorTest {
 
     private static final String ELEMENT_NAME = "TestClass";
     private static final String METHOD_SIGNATURE = "public void testMethod(String name, boolean test, AddClass addClass)";
@@ -39,16 +39,16 @@ public class CodeGeneratorTest {
             "    void testMethod(String name, boolean test, AddClass addClass);" + System.lineSeparator() +
             "}" + System.lineSeparator();
 
-    private CodeGenerator codeGenerator;
-    private CodeGenerator codeGeneratorWithCode;
+    private JavaCodeGenerator codeGenerator;
+    private JavaCodeGenerator codeGeneratorWithCode;
 
     private ClassModel classModel;
     private InterfaceModel interfaceModel;
 
     @BeforeEach
     void setUp() {
-        this.codeGenerator = new CodeGenerator();
-        this.codeGeneratorWithCode = new CodeGenerator(ELEMENT_NAME, CLASS_SOURCE_CODE_WITH_BODY);
+        this.codeGenerator = new JavaCodeGenerator();
+        this.codeGeneratorWithCode = new JavaCodeGenerator(ELEMENT_NAME, CLASS_SOURCE_CODE_WITH_BODY);
 
         initClassModel();
         initInterfaceModel();

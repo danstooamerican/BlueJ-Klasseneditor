@@ -12,6 +12,9 @@ import javax.swing.AbstractAction;
 import javax.swing.JMenuItem;
 import java.awt.event.ActionEvent;
 
+/**
+ * Adds extra JMenu entries which belong to the {@link class_diagram_editor.bluej_adapters.BlueJExtension extension}.
+ */
 public class BlueJMenuGenerator extends MenuGenerator {
 
     @Override

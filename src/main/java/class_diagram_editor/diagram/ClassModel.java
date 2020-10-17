@@ -1,7 +1,7 @@
 package class_diagram_editor.diagram;
 
 import class_diagram_editor.code_generation.CodeElement;
-import class_diagram_editor.code_generation.CodeGenerator;
+import class_diagram_editor.code_generation.JavaCodeGenerator;
 import javafx.beans.property.SimpleBooleanProperty;
 import lombok.Setter;
 
@@ -46,7 +46,7 @@ public class ClassModel implements CodeElement, Connectable {
     }
 
     @Override
-    public void accept(CodeGenerator codeGenerator) {
+    public void accept(JavaCodeGenerator codeGenerator) {
         codeGenerator.visitClass(this);
     }
 

@@ -10,20 +10,40 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * The JavaFX entry point which is called when
+ * opening the extension in {@link class_diagram_editor.bluej_adapters.menu.BlueJMenuGenerator}.
+ */
 public class ClassEditorApplication extends Application implements Runnable {
     private final String title;
     private final SourceCodeControl sourceCodeControl;
 
+    /**
+     * Creates a new {@link ClassEditorApplication} with the given title and {@link SourceCodeControl}.
+     *
+     * @param projectTitle the title of the application.
+     * @param sourceCodeControl the {@link SourceCodeControl} which is used to create source code.
+     */
     public ClassEditorApplication(String projectTitle, SourceCodeControl sourceCodeControl) {
         this.title = "Klasseneditor: " + projectTitle;
         this.sourceCodeControl = sourceCodeControl;
     }
 
+    /**
+     * Creates a new {@link ClassEditorApplication} with a default title and the given {@link SourceCodeControl}.
+     *
+     * @param sourceCodeControl the {@link SourceCodeControl} which is used to create source code.
+     */
     public ClassEditorApplication(SourceCodeControl sourceCodeControl) {
         this.title = "Klasseneditor";
         this.sourceCodeControl = sourceCodeControl;
     }
 
+    /**
+     * JavaFX starter main.
+     *
+     * @param args the application arguments.
+     */
     public static void main(String[] args) {
         launch(args);
     }
