@@ -50,6 +50,7 @@ public class CodeRepository {
                 extractMethodBodies(javaClass);
             }
         } catch (Exception ex) { // ParseException is thrown but not declared to be thrown.
+            ex.printStackTrace();
             this.methodImplementations.clear();
         }
     }
@@ -63,18 +64,22 @@ public class CodeRepository {
             methodCode = methodCode.replaceAll("java.lang.", "");
 
             // the method code includes the method signature and we just want the method body
-            String methodBody = methodCode.substring(methodCode.indexOf("{") + 1, methodCode.lastIndexOf("}"));
+            final int startIndex = methodCode.indexOf("{") + 1;
+            final int endIndex = methodCode.lastIndexOf("}");
 
-            // remove symbols which might impact the formatting in the code generation
-            methodBody = methodBody.replaceAll(System.lineSeparator(), "");
-            methodBody = methodBody.replaceAll("\n", "");
-            methodBody = methodBody.replaceAll("\r", "");
-            methodBody = methodBody.replaceAll(";", ";" + System.lineSeparator());
-            methodBody = methodBody.substring(0, methodBody.lastIndexOf(System.lineSeparator()));
-            methodBody = methodBody.trim();
-            methodBody = methodBody.replaceAll(FOUR_SPACE_INDENT, "");
+            if (startIndex != -1 && startIndex < methodCode.length() && endIndex != -1 && endIndex < methodCode.length()) {
+                String methodBody = methodCode.substring(startIndex, endIndex);
 
-            methodImplementations.put(methodSignature, methodBody);
+                // remove symbols which might impact the formatting in the code generation
+                methodBody = methodBody.replaceAll(System.lineSeparator(), "");
+                methodBody = methodBody.replaceAll("\n", "");
+                methodBody = methodBody.replaceAll("\r", "");
+                methodBody = methodBody.replaceAll(";", ";" + System.lineSeparator());
+                methodBody = methodBody.trim();
+                methodBody = methodBody.replaceAll(FOUR_SPACE_INDENT, "");
+
+                methodImplementations.put(methodSignature, methodBody);
+            }
         }
     }
 

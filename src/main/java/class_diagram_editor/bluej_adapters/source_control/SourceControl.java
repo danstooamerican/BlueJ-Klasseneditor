@@ -1,7 +1,9 @@
 package class_diagram_editor.bluej_adapters.source_control;
 
+import bluej.extensions.BClass;
 import bluej.extensions.BPackage;
 import bluej.extensions.BProject;
+import bluej.extensions.ClassNotFoundException;
 import bluej.extensions.MissingJavaFileException;
 import bluej.extensions.PackageNotFoundException;
 import bluej.extensions.ProjectNotOpenException;
@@ -14,6 +16,10 @@ import class_diagram_editor.diagram.ClassDiagram;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Iterator;
 
 /**
@@ -61,20 +67,48 @@ public class SourceControl implements SourceCodeControl {
         Editor editor = null;
 
         try {
-            File javaFile = new File(bPackage.getDir(), codeElement.getName() + ".java");
+            File javaFile = new File(bPackage.getDir(), codeElement.getLastGeneratedName() + ".java");
 
-            if (javaFile.exists()) {
+            boolean elementRenamed = !codeElement.getName().equals(codeElement.getLastGeneratedName());
+            if (elementRenamed) {
+                javaFile = renameOldClassWithNew(bPackage, javaFile, codeElement);
+            }
+
+            if (javaFile.exists() && !elementRenamed) {
                 editor = bPackage.getBClass(codeElement.getName()).getEditor();
             } else {
-                if (javaFile.createNewFile()) {
+                if (javaFile.createNewFile() || javaFile.exists()) {
                     editor = bPackage.newClass(codeElement.getName()).getEditor();
                 }
             }
-        } catch (ProjectNotOpenException | PackageNotFoundException | MissingJavaFileException | IOException e) {
+        } catch (ProjectNotOpenException | PackageNotFoundException | MissingJavaFileException
+                | IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
         return editor;
+    }
+
+    private File renameOldClassWithNew(BPackage bPackage, File javaFile, CodeElement codeElement)
+            throws ProjectNotOpenException, PackageNotFoundException, ClassNotFoundException, IOException {
+        File newJavaFile = new File(bPackage.getDir(), codeElement.getName() + ".java");
+
+        if (javaFile.exists()) {
+            Files.copy(Paths.get(javaFile.toURI()), Paths.get(newJavaFile.toURI()),
+                    StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
+        }
+
+        BClass bClass = bPackage.getBClass(codeElement.getLastGeneratedName());
+
+        if (bClass != null) {
+            bClass.remove();
+        }
+
+        if (javaFile.exists()) {
+            javaFile.delete();
+        }
+
+        return newJavaFile;
     }
 
     private void generateElement(Editor editor, CodeElement codeElement) {
@@ -85,7 +119,8 @@ public class SourceControl implements SourceCodeControl {
         int lastColumn = editor.getLineLength(lastLine);
         final TextLocation endLocation = new TextLocation(lastLine, lastColumn);
 
-        final JavaCodeGenerator codeGenerator = new JavaCodeGenerator(codeElement.getName(), editor.getText(START_LOCATION, endLocation));
+        final JavaCodeGenerator codeGenerator = new JavaCodeGenerator(
+                codeElement.getLastGeneratedName(), editor.getText(START_LOCATION, endLocation));
 
         codeElement.accept(codeGenerator);
 

@@ -16,6 +16,7 @@ import java.util.Set;
 @Setter
 public class ClassModel implements CodeElement, Connectable {
 
+    private String lastGeneratedName;
     private String name;
 
     private boolean isAbstract;
@@ -30,6 +31,7 @@ public class ClassModel implements CodeElement, Connectable {
     private SimpleBooleanProperty hasUpdated = new SimpleBooleanProperty();
 
     public ClassModel() {
+        this.lastGeneratedName = null;
         this.implementsInterfaces = new HashSet<>();
         this.associations = new HashMap<>();
         this.attributes = new ArrayList<>();
@@ -37,6 +39,7 @@ public class ClassModel implements CodeElement, Connectable {
     }
 
     public void edit(ClassModel classModel) {
+        this.name = classModel.getName();
         this.isAbstract = classModel.isAbstract;
         this.extendsType = classModel.extendsType;
         this.implementsInterfaces = classModel.implementsInterfaces;
@@ -48,6 +51,7 @@ public class ClassModel implements CodeElement, Connectable {
     @Override
     public void accept(JavaCodeGenerator codeGenerator) {
         codeGenerator.visitClass(this);
+        this.lastGeneratedName = name;
     }
 
     public boolean isAbstract() {
@@ -61,6 +65,15 @@ public class ClassModel implements CodeElement, Connectable {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String getLastGeneratedName() {
+        if (lastGeneratedName == null) {
+            return getName();
+        }
+
+        return lastGeneratedName;
     }
 
     public void setName(String name) {

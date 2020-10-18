@@ -50,6 +50,15 @@ public class InterfaceModelTest {
     }
 
     @Test
+    void accept_updatesLastGeneratedName() {
+        interfaceModel.accept(codeGenerator);
+
+        interfaceModel.setName(interfaceName + 1);
+
+        assertEquals(interfaceName, interfaceModel.getLastGeneratedName());
+    }
+
+    @Test
     void hasMethods_returnsFalseWithNoMethods() {
         assertFalse(interfaceModel.hasMethods());
     }

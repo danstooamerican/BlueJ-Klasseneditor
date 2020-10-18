@@ -20,6 +20,7 @@ import java.util.Set;
 @Setter
 public class InterfaceModel implements CodeElement, Connectable {
 
+    private String lastGeneratedName;
     private String name;
 
     private Map<String, Connectable> associations;
@@ -30,6 +31,7 @@ public class InterfaceModel implements CodeElement, Connectable {
      * Creates a new {@link InterfaceModel}.
      */
     public InterfaceModel() {
+        this.lastGeneratedName = null;
         this.methods = new ArrayList<>();
         this.extendsInterfaces = new HashSet<>();
         this.associations = new HashMap<>();
@@ -40,6 +42,7 @@ public class InterfaceModel implements CodeElement, Connectable {
         Objects.requireNonNull(codeGenerator, "codeGenerator cannot be null");
 
         codeGenerator.visitInterface(this);
+        this.lastGeneratedName = name;
     }
 
     /**
@@ -172,6 +175,7 @@ public class InterfaceModel implements CodeElement, Connectable {
     public void edit(@NonNull InterfaceModel interfaceModel) {
         Objects.requireNonNull(interfaceModel, "interfaceModel cannot be null");
 
+        this.name = interfaceModel.getName();
         this.associations = new HashMap<>(interfaceModel.associations);
         this.extendsInterfaces = new HashSet<>(interfaceModel.extendsInterfaces);
         this.methods = new ArrayList<>(interfaceModel.methods);
@@ -181,6 +185,15 @@ public class InterfaceModel implements CodeElement, Connectable {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String getLastGeneratedName() {
+        if (lastGeneratedName == null) {
+            return getName();
+        }
+
+        return lastGeneratedName;
     }
 
 

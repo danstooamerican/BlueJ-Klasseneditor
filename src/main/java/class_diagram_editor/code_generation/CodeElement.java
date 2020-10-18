@@ -11,6 +11,13 @@ public interface CodeElement {
     String getName();
 
     /**
+     * @return the name of the element when it was generated the last time.
+ *             The last generated name is equal to {@code getName()}
+     *         if the element did not accept a {@link JavaCodeGenerator} before.
+     */
+    String getLastGeneratedName();
+
+    /**
      * Calls the appropriate method on the
      * {@link JavaCodeGenerator code generator} to generate the source code for this element.
      *

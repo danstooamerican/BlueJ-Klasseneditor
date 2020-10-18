@@ -49,7 +49,6 @@ public class GeneralTabController {
     private void initEditMode() {
         tgbClass.setDisable(true);
         tgbInterface.setDisable(true);
-        txbElementName.setDisable(true);
     }
 
     private void initElementType(GeneralTabViewModel viewModel, TabPane tabPane, Tab tabAttributes) {

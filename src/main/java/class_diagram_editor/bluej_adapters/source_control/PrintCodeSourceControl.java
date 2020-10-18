@@ -20,6 +20,10 @@ public class PrintCodeSourceControl implements SourceCodeControl {
 
             final JavaCodeGenerator codeGenerator = new JavaCodeGenerator();
 
+            if (!codeElement.getName().equals(codeElement.getLastGeneratedName())) {
+                System.out.println("This element was renamed from " + codeElement.getLastGeneratedName());
+            }
+
             codeElement.accept(codeGenerator);
 
             System.out.println(codeGenerator.getLastGeneratedCode());
