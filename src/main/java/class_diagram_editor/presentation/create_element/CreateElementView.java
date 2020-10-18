@@ -99,9 +99,13 @@ public class CreateElementView implements Initializable {
             }
         });
 
+        btnCreateElement.disableProperty().bind(viewModel.canSubmitProperty().not());
+
         btnEditElement.setOnAction(event -> {
             viewModel.editElement();
             stage.close();
         });
+
+        btnEditElement.disableProperty().bind(viewModel.canSubmitProperty().not());
     }
 }

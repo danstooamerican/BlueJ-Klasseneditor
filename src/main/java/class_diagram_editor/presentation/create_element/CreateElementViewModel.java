@@ -7,6 +7,8 @@ import class_diagram_editor.presentation.create_element.attributes_tab.Attribute
 import class_diagram_editor.presentation.create_element.general_tab.GeneralTabViewModel;
 import class_diagram_editor.presentation.create_element.methods_tab.MethodsTabViewModel;
 import de.saxsys.mvvmfx.ViewModel;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +22,8 @@ public class CreateElementViewModel implements ViewModel {
     private final AttributesTabViewModel attributesTabViewModel;
     private final MethodsTabViewModel methodsTabViewModel;
 
+    private final BooleanProperty canSubmit = new SimpleBooleanProperty();
+
     public CreateElementViewModel(CreateElementModel createElementModel) {
         this.createElementModel = createElementModel;
         ClassDiagram classDiagram = ClassDiagram.getInstance();
@@ -27,6 +31,8 @@ public class CreateElementViewModel implements ViewModel {
         this.generalTabViewModel = new GeneralTabViewModel(createElementModel, classDiagram.getInterfaces(), classDiagram.getClasses());
         this.attributesTabViewModel = new AttributesTabViewModel(createElementModel.getAttributes());
         this.methodsTabViewModel = new MethodsTabViewModel(createElementModel.getMethods(), generalTabViewModel.nameProperty());
+
+        this.canSubmit.bind(generalTabViewModel.nameProperty().isNotEmpty());
     }
 
     public boolean isEditMode() {
@@ -86,5 +92,9 @@ public class CreateElementViewModel implements ViewModel {
 
     public MethodsTabViewModel getMethodsTabViewModel() {
         return methodsTabViewModel;
+    }
+
+    public BooleanProperty canSubmitProperty() {
+        return canSubmit;
     }
 }
