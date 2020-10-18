@@ -42,7 +42,7 @@
                     <Insets left="16.0" right="16.0" />
                 </VBox.margin>
             </Separator>
-            <HBox alignment="CENTER_LEFT" spacing="20.0">
+            <HBox fx:id="pnlVisibilityTitle" alignment="CENTER_LEFT" spacing="20.0">
                 <children>
                     <Label text="Zugriff" />
                 </children>
@@ -50,7 +50,7 @@
                     <Insets left="16.0" right="16.0" top="16.0" />
                 </padding>
             </HBox>
-            <FlowPane alignment="CENTER_LEFT" hgap="16.0" vgap="16.0">
+            <FlowPane fx:id="pnlVisibility" alignment="CENTER_LEFT" hgap="16.0" vgap="16.0">
                 <children>
                     <RadioButton fx:id="rbnPublic" mnemonicParsing="false" selected="true" text="public">
                      <toggleGroup>
@@ -65,7 +65,7 @@
                     <Insets bottom="16.0" left="16.0" right="16.0" top="8.0" />
                 </padding>
             </FlowPane>
-            <Separator prefWidth="200.0">
+            <Separator fx:id="sprVisibility" prefWidth="200.0">
                 <padding>
                     <Insets left="16.0" right="16.0" />
                 </padding>
@@ -75,11 +75,12 @@
                     <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
                 </padding>
                 <children>
-                  <RadioButton fx:id="rbnStatic" mnemonicParsing="false" text="static">
+                  <RadioButton fx:id="rbnNoModifier" mnemonicParsing="false" selected="true" text="none">
                      <toggleGroup>
                         <ToggleGroup fx:id="methodModifier" />
                      </toggleGroup>
                   </RadioButton>
+                  <RadioButton fx:id="rbnStatic" mnemonicParsing="false" text="static" toggleGroup="$methodModifier" />
                   <RadioButton fx:id="rbnAbstract" mnemonicParsing="false" text="abstrakt" toggleGroup="$methodModifier" />
                 </children>
             </HBox>

@@ -87,7 +87,7 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
             try {
                 CreateElementView.showCreateElementDialog(new CreateElementModel());
             } catch (IOException ioException) {
-                System.err.println(ioException.getMessage());
+                ioException.printStackTrace();
             }
         });
     }

@@ -8,7 +8,6 @@ import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -16,6 +15,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 
 public class MethodsTabController {
@@ -31,7 +31,12 @@ public class MethodsTabController {
     @FXML private RadioButton rbnPrivate;
     @FXML private RadioButton rbnPackage;
     @FXML private RadioButton rbnProtected;
+    @FXML private HBox pnlVisibilityTitle;
+    @FXML private FlowPane pnlVisibility;
+    @FXML private Separator sprVisibility;
 
+    @FXML private ToggleGroup methodModifier;
+    @FXML private RadioButton rbnNoModifier;
     @FXML private RadioButton rbnStatic;
     @FXML private RadioButton rbnAbstract;
 
@@ -57,10 +62,10 @@ public class MethodsTabController {
     private final BooleanProperty methodAlreadyExists = new SimpleBooleanProperty();
     private final BooleanProperty parameterAlreadyExists = new SimpleBooleanProperty();
 
-    public void initialize(MethodsTabViewModel viewModel) {
+    public void initialize(MethodsTabViewModel viewModel, BooleanProperty isClass) {
         initMethodType(viewModel);
-        initVisibility(viewModel);
-        initModifiers(viewModel);
+        initVisibility(viewModel, isClass);
+        initModifiers(viewModel, isClass);
         initNameAndReturnType(viewModel);
         initMethodsList(viewModel);
         initParameterList(viewModel);
@@ -91,7 +96,7 @@ public class MethodsTabController {
         rbnTypeConstructor.selectedProperty().bindBidirectional(isConstructor);
     }
 
-    private void initVisibility(MethodsTabViewModel viewModel) {
+    private void initVisibility(MethodsTabViewModel viewModel, BooleanProperty isClass) {
         rbnPrivate.setUserData(Visibility.PRIVATE);
         rbnPublic.setUserData(Visibility.PUBLIC);
         rbnPackage.setUserData(Visibility.PACKAGE_PRIVATE);
@@ -100,11 +105,41 @@ public class MethodsTabController {
         methodVisibility.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
             viewModel.setVisibility((Visibility) newValue.getUserData());
         });
+
+        isClass.addListener((observable, oldValue, newValue) -> {
+            // if Interface is selected
+            if (!newValue) {
+                viewModel.setVisibility(Visibility.PUBLIC);
+                methodVisibility.selectToggle(rbnPublic);
+            }
+        });
+
+        pnlVisibilityTitle.visibleProperty().bind(isClass);
+        pnlVisibilityTitle.managedProperty().bind(isClass);
+
+        pnlVisibility.visibleProperty().bind(isClass);
+        pnlVisibility.managedProperty().bind(isClass);
+
+        sprVisibility.visibleProperty().bind(isClass);
+        sprVisibility.managedProperty().bind(isClass);
     }
 
-    private void initModifiers(MethodsTabViewModel viewModel) {
+    private void initModifiers(MethodsTabViewModel viewModel, BooleanProperty isClass) {
         rbnAbstract.selectedProperty().bindBidirectional(viewModel.isAbstractProperty());
         rbnStatic.selectedProperty().bindBidirectional(viewModel.isStaticProperty());
+
+        isClass.addListener((observable, oldValue, newValue) -> {
+            // if Interface is selected
+            if (!newValue) {
+                methodModifier.selectToggle(rbnNoModifier);
+            }
+        });
+
+        pnlModifiers.visibleProperty().bind(isClass);
+        pnlModifiers.managedProperty().bind(isClass);
+
+        sprModifiers.visibleProperty().bind(isClass);
+        sprModifiers.managedProperty().bind(isClass);
     }
 
     private void initNameAndReturnType(MethodsTabViewModel viewModel) {

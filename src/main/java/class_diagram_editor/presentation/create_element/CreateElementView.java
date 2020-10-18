@@ -4,10 +4,6 @@ import class_diagram_editor.ClassEditorApplication;
 import class_diagram_editor.presentation.create_element.attributes_tab.AttributesTabController;
 import class_diagram_editor.presentation.create_element.general_tab.GeneralTabController;
 import class_diagram_editor.presentation.create_element.methods_tab.MethodsTabController;
-import de.saxsys.mvvmfx.FluentViewLoader;
-import de.saxsys.mvvmfx.FxmlView;
-import de.saxsys.mvvmfx.InjectViewModel;
-import de.saxsys.mvvmfx.ViewTuple;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -41,7 +37,6 @@ public class CreateElementView implements Initializable {
         Parent root = loader.load();
 
         Scene scene = new Scene(root);
-        System.out.println(ClassEditorApplication.class.getResource("skins.css"));
         scene.getStylesheets().add(ClassEditorApplication.class.getResource("skins.css").toExternalForm());
 
         stage.setScene(scene);
@@ -72,7 +67,7 @@ public class CreateElementView implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         generalTabController.initialize(viewModel.getGeneralTabViewModel(), tabPane, tabAttributes, viewModel.isEditMode());
         attributesTabController.initialize(viewModel.getAttributesTabViewModel());
-        methodsTabController.initialize(viewModel.getMethodsTabViewModel());
+        methodsTabController.initialize(viewModel.getMethodsTabViewModel(), viewModel.getGeneralTabViewModel().isClassProperty());
 
         if (viewModel.isEditMode()) {
             btnCreateElement.setVisible(false);
