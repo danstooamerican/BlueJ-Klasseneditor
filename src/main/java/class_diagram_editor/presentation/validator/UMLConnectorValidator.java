@@ -41,6 +41,10 @@ public class UMLConnectorValidator implements GConnectorValidator {
         GNode sourceNode = source.getParent();
         GNode targetNode = target.getParent();
 
+        if (drawAssociation) {
+            return true;
+        }
+
         if (sourceNode.equals(targetNode)) {
             return false;
         }
