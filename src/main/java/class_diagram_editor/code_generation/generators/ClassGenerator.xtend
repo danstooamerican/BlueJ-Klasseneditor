@@ -25,39 +25,39 @@ class ClassGenerator extends Generator {
             ENDIF» {
             «FOR AttributeModel attributeModel : c.getAttributes()»
                 «generateAttribute(attributeModel).trim()»
-            «ENDFOR»
-            «IF c.hasAssociations()»
+            «ENDFOR»«
+            IF c.hasAssociations()»
                 «IF c.hasAttributes()»
 
                 «ENDIF»
                 «FOR Map.Entry<String, Connectable> connectable : c.getAssociations().entrySet()»
-                    private «connectable.getValue().getName()» «connectable.getKey()»;
+                private «connectable.getValue().getName()» «connectable.getKey()»;
                 «ENDFOR»
-            «ENDIF»
-            «IF (c.hasAttributes() || c.hasAssociations()) && c.hasMethods()»
-
-            «ENDIF»
-            «FOR MethodModel methodModel : c.getMethods() SEPARATOR '\n'»
-                «generateMethodSignature(methodModel).trim()»«IF methodModel.isAbstract()»;«ELSE» {
-                    «codeRepository.getMethodBody(generateMethodSignature(methodModel).trim())»
-                }«ENDIF»
-            «ENDFOR»
-
-            «FOR AttributeModel attributeModel : c.getAttributes() SEPARATOR '\n'»
-                «IF attributeModel.hasGetter()»
+            «ENDIF»«
+            FOR MethodModel methodModel : c.getMethods() BEFORE '\n' SEPARATOR '\n\n'»«
+                generateMethodSignature(methodModel).trim()»«IF methodModel.isAbstract()»;«ELSE» {
+                «codeRepository.getMethodBody(generateMethodSignature(methodModel).trim())»
+            }«ENDIF»«
+            ENDFOR»«
+            FOR InterfaceModel interfaceModel : c.getImplementsInterfaces() BEFORE '\n\n'»«
+                FOR MethodModel methodModel : interfaceModel.getMethodsWithExtending() SEPARATOR '\n\n'»@Override
+            «generateMethodSignature(methodModel).trim()» {
+                «codeRepository.getMethodBody(generateMethodSignature(methodModel).trim())»
+            }«
+                ENDFOR»«
+            ENDFOR»«
+            FOR AttributeModel attributeModel : c.getAttributes() BEFORE '\n\n' SEPARATOR '\n\n'»«
+                IF attributeModel.hasGetter()»
                     «generateMethodSignature(attributeModel.getGetter()).trim()» {
                         return this.«attributeModel.getName()»;
-                    }
-                «ENDIF»
-                «IF attributeModel.hasGetter() && attributeModel.hasSetter()»
-
-                «ENDIF»
-                «IF attributeModel.hasSetter()»
+                    }«
+                ENDIF»«
+                IF attributeModel.hasSetter()»
                     «generateMethodSignature(attributeModel.getSetter()).trim()» {
                         this.«attributeModel.getName()» = «attributeModel.getName()»;
-                    }
-                «ENDIF»
-            «ENDFOR»
+                    }«
+                ENDIF»«
+            ENDFOR»
         }
     '''
 

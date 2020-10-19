@@ -5,7 +5,6 @@ import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
 
 import java.io.StringReader;
-import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 

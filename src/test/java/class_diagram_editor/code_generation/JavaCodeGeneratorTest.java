@@ -22,7 +22,7 @@ public class JavaCodeGeneratorTest {
 
                 "    " + METHOD_SIGNATURE + " {" + System.lineSeparator() +
                 "        " + METHOD_BODY +
-                "    }" + System.lineSeparator() + "    " + System.lineSeparator() + System.lineSeparator() +
+                "    }" + System.lineSeparator() + "    " +  System.lineSeparator() + "    " + System.lineSeparator() + "    "  + System.lineSeparator() +
             "}" + System.lineSeparator();
 
     private static final String CLASS_SOURCE_CODE_NO_BODY =
@@ -31,7 +31,7 @@ public class JavaCodeGeneratorTest {
             "    private boolean test;" + System.lineSeparator() + System.lineSeparator() +
 
             "    " + METHOD_SIGNATURE + " {" + System.lineSeparator() +
-            "    }" + System.lineSeparator() + "    " + System.lineSeparator() + System.lineSeparator() +
+            "    }" + System.lineSeparator() + "    " +  System.lineSeparator() + "    " + System.lineSeparator() + "    " + System.lineSeparator() +
             "}" + System.lineSeparator();
 
     private static final String INTERFACE_SOURCE_CODE =

@@ -75,21 +75,6 @@ public class MethodsTabController {
 
     private void initMethodType(MethodsTabViewModel viewModel) {
         rbnTypeMethod.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            pnlModifiers.visibleProperty().set(newValue);
-            pnlModifiers.managedProperty().set(newValue);
-
-            sprModifiers.visibleProperty().set(newValue);
-            sprModifiers.managedProperty().set(newValue);
-
-            pnlName.visibleProperty().set(newValue);
-            pnlName.managedProperty().set(newValue);
-
-            pnlReturnType.visibleProperty().set(newValue);
-            pnlReturnType.managedProperty().set(newValue);
-
-            sprNameType.visibleProperty().set(newValue);
-            sprNameType.managedProperty().set(newValue);
-
             viewModel.setIsConstructor(!newValue);
         });
 
@@ -135,11 +120,11 @@ public class MethodsTabController {
             }
         });
 
-        pnlModifiers.visibleProperty().bind(isClass);
-        pnlModifiers.managedProperty().bind(isClass);
+        pnlModifiers.visibleProperty().bind(isClass.and(rbnTypeMethod.selectedProperty()));
+        pnlModifiers.managedProperty().bind(isClass.and(rbnTypeMethod.selectedProperty()));
 
-        sprModifiers.visibleProperty().bind(isClass);
-        sprModifiers.managedProperty().bind(isClass);
+        sprModifiers.visibleProperty().bind(isClass.and(rbnTypeMethod.selectedProperty()));
+        sprModifiers.managedProperty().bind(isClass.and(rbnTypeMethod.selectedProperty()));
     }
 
     private void initNameAndReturnType(MethodsTabViewModel viewModel) {
@@ -150,6 +135,15 @@ public class MethodsTabController {
         });
 
         txbReturnType.textProperty().bindBidirectional(viewModel.returnTypeProperty());
+
+        pnlName.visibleProperty().bind(rbnTypeMethod.selectedProperty());
+        pnlName.managedProperty().bind(rbnTypeMethod.selectedProperty());
+
+        pnlReturnType.visibleProperty().bind(rbnTypeMethod.selectedProperty());
+        pnlReturnType.managedProperty().bind(rbnTypeMethod.selectedProperty());
+
+        sprNameType.visibleProperty().bind(rbnTypeMethod.selectedProperty());
+        sprNameType.managedProperty().bind(rbnTypeMethod.selectedProperty());
     }
 
     private void initMethodsList(MethodsTabViewModel viewModel) {

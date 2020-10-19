@@ -70,6 +70,20 @@ public class InterfaceModel implements CodeElement, Connectable {
         return new ArrayList<>(methods);
     }
 
+    /**
+     * @return all added {@link MethodModel methods} of this {@link InterfaceModel interface} including the
+     *         {@link MethodModel methods} of extended {@link InterfaceModel interfaces}.
+     */
+    public List<MethodModel> getMethodsWithExtending() {
+        List<MethodModel> allMethods = new ArrayList<>(methods);
+
+        for (Connectable interfaceModel : extendsInterfaces) {
+            allMethods.addAll(((InterfaceModel) interfaceModel).getMethodsWithExtending());
+        }
+
+        return allMethods;
+    }
+
 
     @Override
     public boolean isExtending() {
