@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Represents an UML representation of a Java class.
+ */
 @Setter
 public class ClassModel extends Editable<ClassModel> implements CodeElement, Connectable {
     private String lastGeneratedName;
@@ -26,6 +29,9 @@ public class ClassModel extends Editable<ClassModel> implements CodeElement, Con
     private List<AttributeModel> attributes;
     private Set<MethodModel> methods;
 
+    /**
+     * Creates a new {@link ClassModel}.
+     */
     public ClassModel() {
         super();
 
@@ -37,28 +43,9 @@ public class ClassModel extends Editable<ClassModel> implements CodeElement, Con
     }
 
     @Override
-    protected void performEdit(ClassModel classModel) {
-        this.name = classModel.getName();
-        this.isAbstract = classModel.isAbstract;
-        this.extendsType = classModel.extendsType;
-        this.implementsInterfaces = classModel.implementsInterfaces;
-        this.associations = classModel.associations;
-        this.attributes = classModel.attributes;
-        this.methods = classModel.methods;
-    }
-
-    @Override
     public void accept(JavaCodeGenerator codeGenerator) {
         codeGenerator.visitClass(this);
         this.lastGeneratedName = name;
-    }
-
-    public boolean isAbstract() {
-        return isAbstract;
-    }
-
-    public void setAbstract(boolean isAbstract) {
-        this.isAbstract = isAbstract;
     }
 
     @Override
@@ -73,22 +60,6 @@ public class ClassModel extends Editable<ClassModel> implements CodeElement, Con
         }
 
         return lastGeneratedName;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Collection<InterfaceModel> getImplementsInterfaces() {
-        return implementsInterfaces;
-    }
-
-    public boolean isImplementingInterfaces() {
-        return !implementsInterfaces.isEmpty();
-    }
-
-    public void addInterface(InterfaceModel interfaceModel) {
-        implementsInterfaces.add(interfaceModel);
     }
 
 
@@ -135,47 +106,6 @@ public class ClassModel extends Editable<ClassModel> implements CodeElement, Con
         return extendsRelations;
     }
 
-    public Connectable getExtendsClass() {
-        return extendsType;
-    }
-
-    @Override
-    public void removeReferencesTo(Connectable removedElement) {
-        if (extendsType != null && extendsType.getName().equals(removedElement.getName())) {
-            extendsType = null;
-        }
-
-        implementsInterfaces.removeIf(interfaceModel -> interfaceModel.getName().equals(removedElement.getName()));
-
-        associations.entrySet().removeIf(pair -> pair.getValue().getName().equals(removedElement.getName()));
-    }
-
-
-    public List<MethodModel> getMethods() {
-        return new ArrayList<>(methods);
-    }
-
-    public boolean hasMethods() {
-        return !methods.isEmpty();
-    }
-
-    public void addMethod(MethodModel methodModel) {
-        methods.add(methodModel);
-    }
-
-
-    public List<AttributeModel> getAttributes() {
-        return new ArrayList<>(attributes);
-    }
-
-    public boolean hasAttributes() {
-        return !attributes.isEmpty();
-    }
-
-    public void addAttribute(AttributeModel attributeModel) {
-        attributes.add(attributeModel);
-    }
-
     @Override
     public boolean hasAssociations() {
         return !getAssociations().isEmpty();
@@ -206,6 +136,117 @@ public class ClassModel extends Editable<ClassModel> implements CodeElement, Con
         }
 
         return allAssociations;
+    }
+
+    @Override
+    public void removeReferencesTo(Connectable removedElement) {
+        if (extendsType != null && extendsType.getName().equals(removedElement.getName())) {
+            extendsType = null;
+        }
+
+        implementsInterfaces.removeIf(interfaceModel -> interfaceModel.getName().equals(removedElement.getName()));
+
+        associations.entrySet().removeIf(pair -> pair.getValue().getName().equals(removedElement.getName()));
+    }
+
+
+    /**
+     * @return whether the class is implementing any {@link InterfaceModel interfaces}.
+     */
+    public boolean isImplementingInterfaces() {
+        return !implementsInterfaces.isEmpty();
+    }
+
+    /**
+     * Adds the given {@link InterfaceModel interface} to the list of implemented interfaces of this class.
+     *
+     * @param interfaceModel the {@link InterfaceModel interface} which is implemented.
+     */
+    public void addInterface(InterfaceModel interfaceModel) {
+        implementsInterfaces.add(interfaceModel);
+    }
+
+    /**
+     * @return all implemented {@link InterfaceModel interfaces} of this class.
+     */
+    public Collection<InterfaceModel> getImplementsInterfaces() {
+        return implementsInterfaces;
+    }
+
+
+    /**
+     * @return whether this {@link ClassModel class} has any {@link MethodModel methods}.
+     */
+    public boolean hasMethods() {
+        return !methods.isEmpty();
+    }
+
+    /**
+     * Adds a new {@link MethodModel method} to this {@link ClassModel class}.
+     *
+     * @param methodModel the {@link MethodModel method} to add.
+     */
+    public void addMethod(MethodModel methodModel) {
+        methods.add(methodModel);
+    }
+
+    /**
+     * @return all {@link MethodModel methods} of this {@link ClassModel class}.
+     */
+    public List<MethodModel> getMethods() {
+        return new ArrayList<>(methods);
+    }
+
+
+    /**
+     * @return whether the class has any {@link AttributeModel attributes}.
+     */
+    public boolean hasAttributes() {
+        return !attributes.isEmpty();
+    }
+
+    /**
+     * Adds the given {@link AttributeModel attribute} to the {@link ClassModel class}.
+     *
+     * @param attributeModel the {@link AttributeModel attribute} to add.
+     */
+    public void addAttribute(AttributeModel attributeModel) {
+        attributes.add(attributeModel);
+    }
+
+    /**
+     * @return all {@link AttributeModel attributes} of this {@link ClassModel class}.
+     */
+    public List<AttributeModel> getAttributes() {
+        return new ArrayList<>(attributes);
+    }
+
+    /**
+     * @return the last {@link Connectable element} which was
+     *         added to the extends relation of this {@link ClassModel class}.
+     */
+    public Connectable getExtendsClass() {
+        return extendsType;
+    }
+
+
+    /**
+     * @return whether the class is marked as abstract.
+     */
+    public boolean isAbstract() {
+        return isAbstract;
+    }
+
+
+    @Override
+    protected void performEdit(ClassModel classModel) {
+        this.name = classModel.getName();
+        this.isAbstract = classModel.isAbstract;
+        this.extendsType = classModel.extendsType;
+        this.implementsInterfaces = classModel.implementsInterfaces;
+        this.associations = classModel.associations;
+        this.attributes = classModel.attributes;
+        this.methods = classModel.methods;
     }
 
     @Override
