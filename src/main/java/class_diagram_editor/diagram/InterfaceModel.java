@@ -39,14 +39,6 @@ public class InterfaceModel extends Editable<InterfaceModel> implements CodeElem
         this.associations = new HashMap<>();
     }
 
-    @Override
-    public void accept(@NonNull JavaCodeGenerator codeGenerator) {
-        Objects.requireNonNull(codeGenerator, "codeGenerator cannot be null");
-
-        codeGenerator.visitInterface(this);
-        this.lastGeneratedName = name;
-    }
-
     /**
      * @return whether the interface has any methods added.
      */
@@ -84,6 +76,29 @@ public class InterfaceModel extends Editable<InterfaceModel> implements CodeElem
         }
 
         return allMethods;
+    }
+
+
+    @Override
+    public void accept(@NonNull JavaCodeGenerator codeGenerator) {
+        Objects.requireNonNull(codeGenerator, "codeGenerator cannot be null");
+
+        codeGenerator.visitInterface(this);
+        this.lastGeneratedName = name;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String getLastGeneratedName() {
+        if (lastGeneratedName == null) {
+            return getName();
+        }
+
+        return lastGeneratedName;
     }
 
 
@@ -133,7 +148,6 @@ public class InterfaceModel extends Editable<InterfaceModel> implements CodeElem
     public Collection<Connectable> getExtendsRelations() {
         return new ArrayList<>(extendsInterfaces);
     }
-
 
     @Override
     public boolean hasAssociations() {
@@ -190,21 +204,6 @@ public class InterfaceModel extends Editable<InterfaceModel> implements CodeElem
         this.associations = new HashMap<>(interfaceModel.associations);
         this.extendsInterfaces = new HashSet<>(interfaceModel.extendsInterfaces);
         this.methods = new ArrayList<>(interfaceModel.methods);
-    }
-
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public String getLastGeneratedName() {
-        if (lastGeneratedName == null) {
-            return getName();
-        }
-
-        return lastGeneratedName;
     }
 
 

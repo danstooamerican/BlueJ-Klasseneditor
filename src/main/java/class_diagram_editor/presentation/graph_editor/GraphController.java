@@ -138,10 +138,10 @@ public class GraphController {
 
             switch (ConnectionType.valueOf(connection.getType())) {
                 case EXTENDS:
-                    viewModel.addExtendsRelation(targetId, sourceId);
+                    viewModel.addExtendsRelation(sourceId, targetId);
                     break;
                 case IMPLEMENTS:
-                    viewModel.addImplementsRelation(targetId, sourceId);
+                    viewModel.addImplementsRelation(sourceId, targetId);
                     break;
                 case ASSOCIATION:
                     final String identifier = getAssociationIdentifier(sourceId);

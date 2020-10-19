@@ -85,12 +85,12 @@ public class MainScreenViewModel implements ViewModel {
     }
 
 
-    public void addExtendsRelation(String superTypeId, String extendingTypeId) {
+    public void addExtendsRelation(String extendingTypeId, String superTypeId) {
         classDiagram.addExtendsRelation(superTypeId, extendingTypeId);
     }
 
-    public void addImplementsRelation(String interfaceId, String classId) {
-        classDiagram.addImplementsRelation(interfaceId, classId);
+    public void addImplementsRelation(String classId, String interfaceId) {
+        classDiagram.addImplementsRelation(classId, interfaceId);
     }
 
     public boolean addOneWayAssociationRelation(String startId, String endId, String identifier) {
