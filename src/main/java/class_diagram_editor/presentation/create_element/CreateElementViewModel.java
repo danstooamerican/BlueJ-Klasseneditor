@@ -28,9 +28,17 @@ public class CreateElementViewModel implements ViewModel {
         this.createElementModel = createElementModel;
         ClassDiagram classDiagram = ClassDiagram.getInstance();
 
-        this.generalTabViewModel = new GeneralTabViewModel(createElementModel, classDiagram.getInterfaces(), classDiagram.getClasses());
+        this.generalTabViewModel = new GeneralTabViewModel(
+                createElementModel,
+                classDiagram.getInterfaces(),
+                classDiagram.getClasses());
+
         this.attributesTabViewModel = new AttributesTabViewModel(createElementModel.getAttributes());
-        this.methodsTabViewModel = new MethodsTabViewModel(createElementModel.getMethods(), generalTabViewModel.nameProperty());
+
+        this.methodsTabViewModel = new MethodsTabViewModel(
+                createElementModel.getMethods(),
+                generalTabViewModel.nameProperty(),
+                generalTabViewModel.implementedInterfacesProperty());
 
         this.canSubmit.bind(generalTabViewModel.nameProperty().isNotEmpty());
     }

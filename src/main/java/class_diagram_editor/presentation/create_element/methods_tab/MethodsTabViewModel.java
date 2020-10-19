@@ -1,6 +1,7 @@
 package class_diagram_editor.presentation.create_element.methods_tab;
 
 import class_diagram_editor.diagram.AttributeModel;
+import class_diagram_editor.diagram.InterfaceModel;
 import class_diagram_editor.diagram.MethodModel;
 import class_diagram_editor.diagram.Visibility;
 import javafx.beans.binding.BooleanBinding;
@@ -13,6 +14,7 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class MethodsTabViewModel {
@@ -21,6 +23,7 @@ public class MethodsTabViewModel {
     private Visibility visibility = Visibility.PUBLIC;
 
     private final StringProperty className;
+    private final ListProperty<InterfaceModel> implementedInterfaces;
 
     private final BooleanProperty isStatic = new SimpleBooleanProperty();
     private final BooleanProperty isAbstract = new SimpleBooleanProperty();
@@ -28,7 +31,7 @@ public class MethodsTabViewModel {
     private final StringProperty name = new SimpleStringProperty();
     private final StringProperty returnType = new SimpleStringProperty();
 
-    private final ListProperty<AttributeModel> parameters = new SimpleListProperty<>(FXCollections.observableArrayList(new ArrayList<AttributeModel>()));
+    private final ListProperty<AttributeModel> parameters = new SimpleListProperty<>(FXCollections.observableArrayList(new ArrayList<>()));
     private final StringProperty parameterName = new SimpleStringProperty();
     private final StringProperty parameterType = new SimpleStringProperty();
 
@@ -40,9 +43,10 @@ public class MethodsTabViewModel {
     private AttributeModel selectedParameter = null;
     private final BooleanProperty parameterSelected = new SimpleBooleanProperty();
 
-    public MethodsTabViewModel(List<MethodModel> methods, StringProperty className) {
+    public MethodsTabViewModel(List<MethodModel> methods, StringProperty className, ListProperty<InterfaceModel> implementedInterfaces) {
         this.methods = new SimpleListProperty<>(FXCollections.observableArrayList(methods));
         this.className = className;
+        this.implementedInterfaces = implementedInterfaces;
     }
 
     public void selectParameter(AttributeModel attributeModel) {
@@ -158,6 +162,57 @@ public class MethodsTabViewModel {
     }
 
 
+    public boolean parameterExists(String parameterName) {
+        for (AttributeModel attributeModel : parameters) {
+            if (attributeModel.getName().equals(parameterName)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean methodExists(String methodName) {
+        Collection<MethodModel> allMethods = new ArrayList<>(methods);
+
+        for (InterfaceModel interfaceModel : implementedInterfaces) {
+            allMethods.addAll(interfaceModel.getMethodsWithExtending());
+        }
+
+        for (MethodModel methodModel : allMethods) {
+            if (methodModel.getName().equals(methodName) || (methodModel.isConstructor() && isConstructor)) {
+                if (methodParameterEqual(methodModel)) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
+
+    private boolean methodParameterEqual(MethodModel methodModel) {
+        if (methodModel.getParameters().size() != parameters.size()) {
+            return false;
+        }
+
+        List<AttributeModel> testParameters = methodModel.getParameters();
+        for (int i = 0; i < parameters.size(); i++) {
+            AttributeModel testParameter = testParameters.get(i);
+            AttributeModel parameter = parameters.get(i);
+
+            if (!testParameter.getType().equals(parameter.getType())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public boolean methodExists() {
+        return methodExists(name.get());
+    }
+
+
     public void setVisibility(Visibility visibility) {
         this.visibility = visibility;
     }
@@ -212,53 +267,5 @@ public class MethodsTabViewModel {
 
     public BooleanProperty parameterSelectedProperty() {
         return parameterSelected;
-    }
-
-    public boolean parameterExists(String parameterName) {
-        for (AttributeModel attributeModel : parameters) {
-            if (attributeModel.getName().equals(parameterName)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public boolean methodExists(String methodName) {
-        for (MethodModel methodModel : methods) {
-            if (methodModel.isConstructor() && isConstructor) {
-                if (methodParameterEqual(methodModel)) {
-                    return true;
-                }
-            } else if (methodModel.getName().equals(methodName)) {
-                if (methodParameterEqual(methodModel)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    private boolean methodParameterEqual(MethodModel methodModel) {
-        if (methodModel.getParameters().size() != parameters.size()) {
-            return false;
-        }
-
-        List<AttributeModel> testParameters = methodModel.getParameters();
-        for (int i = 0; i < parameters.size(); i++) {
-            AttributeModel testParameter = testParameters.get(i);
-            AttributeModel parameter = parameters.get(i);
-
-            if (!testParameter.getType().equals(parameter.getType())) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public boolean methodExists() {
-        return methodExists(name.get());
     }
 }

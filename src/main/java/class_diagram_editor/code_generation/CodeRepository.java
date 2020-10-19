@@ -48,8 +48,7 @@ public class CodeRepository {
             if (javaClass != null) {
                 extractMethodBodies(javaClass);
             }
-        } catch (Exception ex) { // ParseException is thrown but not declared to be thrown.
-            ex.printStackTrace();
+        } catch (Exception ex) { // ParseException is thrown but not declared to be thrown
             this.methodImplementations.clear();
         }
     }
