@@ -2,6 +2,7 @@ package class_diagram_editor.diagram;
 
 import class_diagram_editor.code_generation.CodeElement;
 import class_diagram_editor.code_generation.JavaCodeGenerator;
+import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.Setter;
 
@@ -20,6 +21,7 @@ import java.util.Set;
 @Setter
 public class InterfaceModel extends Editable<InterfaceModel> implements CodeElement, Connectable {
 
+    @Setter(AccessLevel.NONE)
     private String lastGeneratedName;
     private String name;
 

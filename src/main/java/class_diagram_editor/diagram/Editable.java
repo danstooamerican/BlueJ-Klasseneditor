@@ -4,6 +4,7 @@ import lombok.NonNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * Represents objects which can be updated and notifies listeners whenever the object is edited.
@@ -35,6 +36,8 @@ public abstract class Editable<T> {
      * @param callback the callback to be called on edit.
      */
     public void registerForUpdates(Runnable callback) {
+        Objects.requireNonNull(callback, "callback cannot be null");
+
         if (!callbacks.contains(callback)) {
             callbacks.add(callback);
         }
@@ -47,6 +50,8 @@ public abstract class Editable<T> {
      * @param editable the {@link T editable} containing the edit information.
      */
     public final void edit(@NonNull T editable) {
+        Objects.requireNonNull(editable, "editable cannot be null");
+
         performEdit(editable);
         notifyChange();
     }

@@ -4,7 +4,6 @@ import class_diagram_editor.code_generation.JavaCodeGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.Collection;
@@ -18,28 +17,35 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 public class InterfaceModelTest {
 
-    private final String interfaceName = "interfaceName";
+    private static final String INTERFACE_NAME = "interfaceName";
+    private static final String EDITED_INTERFACE_NAME = "editedInterfaceName";
+
     private InterfaceModel interfaceModel;
 
     @Mock
     private JavaCodeGenerator codeGenerator;
+
+    @Mock
+    private Runnable callback;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
 
         this.interfaceModel = new InterfaceModel();
-        this.interfaceModel.setName(interfaceName);
+        this.interfaceModel.setName(INTERFACE_NAME);
     }
 
     @Test
     void accept_callsVisitInterface() {
         interfaceModel.accept(codeGenerator);
 
-        Mockito.verify(codeGenerator).visitInterface(interfaceModel);
+        verify(codeGenerator).visitInterface(interfaceModel);
     }
 
     @Test
@@ -53,9 +59,9 @@ public class InterfaceModelTest {
     void accept_updatesLastGeneratedName() {
         interfaceModel.accept(codeGenerator);
 
-        interfaceModel.setName(interfaceName + 1);
+        interfaceModel.setName(INTERFACE_NAME + 1);
 
-        assertEquals(interfaceName, interfaceModel.getLastGeneratedName());
+        assertEquals(INTERFACE_NAME, interfaceModel.getLastGeneratedName());
     }
 
     @Test
@@ -330,22 +336,31 @@ public class InterfaceModelTest {
     }
 
     @Test
-    void edit_replacesAssociationsAndExtendsAndMethods() {
+    void edit_replacesNameAndAssociationsAndExtendsAndMethods() {
         String identifier = "id";
         Connectable association = new InterfaceModel();
         Connectable extendsRelation = new InterfaceModel();
         MethodModel methodModel = new MethodModel();
 
         InterfaceModel editModel = new InterfaceModel();
+        editModel.setName(EDITED_INTERFACE_NAME);
         editModel.setExtendsInterfaces(Set.of(extendsRelation));
         editModel.setAssociations(Map.of(identifier, association));
         editModel.setMethods(List.of(methodModel));
 
         interfaceModel.edit(editModel);
 
+        assertEquals(EDITED_INTERFACE_NAME, interfaceModel.getName());
         assertEquals(association, interfaceModel.getAssociations().get(identifier));
         assertTrue(interfaceModel.getMethods().contains(methodModel));
         assertTrue(interfaceModel.getExtendsRelations().contains(extendsRelation));
+    }
+
+    @Test
+    void edit_throwsNullPointerExceptionForNull() {
+        assertThrows(NullPointerException.class, () -> {
+            interfaceModel.edit(null);
+        });
     }
 
     @Test
@@ -363,6 +378,74 @@ public class InterfaceModelTest {
         assertNotNull(associations);
         assertEquals(1, associations.size());
         assertEquals(association, associations.get(identifier));
+    }
+
+    @Test
+    void registerForUpdates_notifiesOnEdit() {
+        interfaceModel.registerForUpdates(callback);
+
+        interfaceModel.edit(interfaceModel);
+
+        verify(callback, times(1)).run();
+    }
+
+    @Test
+    void registerForUpdates_ignoresAddingSameObjectMultipleTimes() {
+        interfaceModel.registerForUpdates(callback);
+        interfaceModel.registerForUpdates(callback);
+
+        interfaceModel.edit(interfaceModel);
+
+        verify(callback, times(1)).run();
+    }
+
+    @Test
+    void registerForUpdates_throwsNullPointerExceptionForNull() {
+        assertThrows(NullPointerException.class, () -> {
+            interfaceModel.registerForUpdates(null);
+        });
+    }
+
+    @Test
+    void getLastGeneratedName_returnsInterfaceNameWithoutAccept() {
+        final String lastGeneratedName = interfaceModel.getLastGeneratedName();
+
+        assertEquals(INTERFACE_NAME, lastGeneratedName);
+    }
+
+    @Test
+    void getLastGeneratedName_returnsInterfaceNameAfterAcceptAndNameChange() {
+        interfaceModel.accept(codeGenerator);
+        interfaceModel.setName(EDITED_INTERFACE_NAME);
+
+        final String lastGeneratedName = interfaceModel.getLastGeneratedName();
+
+        assertEquals(INTERFACE_NAME, lastGeneratedName);
+    }
+
+    @Test
+    void getMethodsWithExtending_containsTransitiveMethods() {
+        MethodModel methodModel = new MethodModel();
+        interfaceModel.addMethod(methodModel);
+
+        InterfaceModel interfaceModel1 = new InterfaceModel();
+        MethodModel methodModel1 = new MethodModel();
+        interfaceModel1.addMethod(methodModel1);
+
+        InterfaceModel interfaceModel2 = new InterfaceModel();
+        MethodModel methodModel2 = new MethodModel();
+        interfaceModel2.addMethod(methodModel2);
+
+        interfaceModel.addExtendsRelation(interfaceModel1);
+        interfaceModel1.addExtendsRelation(interfaceModel2);
+
+        Collection<MethodModel> allMethods = interfaceModel.getMethodsWithExtending();
+
+        assertNotNull(allMethods);
+        assertEquals(3, allMethods.size());
+        assertTrue(allMethods.contains(methodModel));
+        assertTrue(allMethods.contains(methodModel1));
+        assertTrue(allMethods.contains(methodModel2));
     }
 
     @Test
