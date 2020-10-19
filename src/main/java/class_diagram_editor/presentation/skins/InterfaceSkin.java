@@ -4,22 +4,16 @@ import class_diagram_editor.diagram.InterfaceModel;
 import class_diagram_editor.diagram.MethodModel;
 import class_diagram_editor.presentation.create_element.CreateElementModel;
 import class_diagram_editor.presentation.create_element.CreateElementView;
-import class_diagram_editor.presentation.create_element.CreateElementViewModel;
 import class_diagram_editor.presentation.main_screen.skins.generators.UMLMethodGenerator;
-import de.saxsys.mvvmfx.FluentViewLoader;
-import de.saxsys.mvvmfx.ViewTuple;
 import de.tesis.dynaware.grapheditor.core.skins.defaults.DefaultNodeSkin;
 import de.tesis.dynaware.grapheditor.model.GNode;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -29,6 +23,8 @@ public class InterfaceSkin extends DefaultNodeSkin {
 
     private static final String SEPARATOR_CLASS = "diagram-separator";
 
+    private final VBox layout;
+
     private final InterfaceModel interfaceModel;
 
     public InterfaceSkin(final GNode node, InterfaceModel interfaceModel) {
@@ -36,16 +32,11 @@ public class InterfaceSkin extends DefaultNodeSkin {
 
         this.interfaceModel = interfaceModel;
 
-        VBox layout = new VBox();
+        layout = new VBox();
         layout.setAlignment(Pos.TOP_CENTER);
+        buildUI();
 
-        Node header = getHeader();
-        Node methods = getMethods();
-
-        Separator methodsSeparator = new Separator();
-        methodsSeparator.getStyleClass().add(SEPARATOR_CLASS);
-
-        layout.getChildren().addAll(header, methodsSeparator, methods);
+        interfaceModel.registerForUpdates(this::buildUI);
 
         getRoot().getChildren().add(layout);
 
@@ -58,6 +49,17 @@ public class InterfaceSkin extends DefaultNodeSkin {
                 }
             }
         });
+    }
+
+    private void buildUI() {
+        Node header = getHeader();
+        Node methods = getMethods();
+
+        Separator methodsSeparator = new Separator();
+        methodsSeparator.getStyleClass().add(SEPARATOR_CLASS);
+
+        layout.getChildren().clear();
+        layout.getChildren().addAll(header, methodsSeparator, methods);
     }
 
     private Node getHeader() {

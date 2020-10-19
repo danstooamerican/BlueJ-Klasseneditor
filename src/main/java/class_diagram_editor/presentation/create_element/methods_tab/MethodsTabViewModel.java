@@ -186,7 +186,7 @@ public class MethodsTabViewModel {
                 }
             }
         }
-        
+
         return false;
     }
 

@@ -18,7 +18,7 @@ import java.util.Set;
  * Represents an UML representation of a Java interface.
  */
 @Setter
-public class InterfaceModel implements CodeElement, Connectable {
+public class InterfaceModel extends Editable<InterfaceModel> implements CodeElement, Connectable {
 
     private String lastGeneratedName;
     private String name;
@@ -31,6 +31,8 @@ public class InterfaceModel implements CodeElement, Connectable {
      * Creates a new {@link InterfaceModel}.
      */
     public InterfaceModel() {
+        super();
+
         this.lastGeneratedName = null;
         this.methods = new ArrayList<>();
         this.extendsInterfaces = new HashSet<>();
@@ -180,13 +182,8 @@ public class InterfaceModel implements CodeElement, Connectable {
     }
 
 
-    /**
-     * Replaces the associations, extends relations, and methods with
-     * the corresponding values of the given {@link InterfaceModel interface}.
-     *
-     * @param interfaceModel the {@link InterfaceModel interface} to take the new values from.
-     */
-    public void edit(@NonNull InterfaceModel interfaceModel) {
+    @Override
+    protected void performEdit(@NonNull InterfaceModel interfaceModel) {
         Objects.requireNonNull(interfaceModel, "interfaceModel cannot be null");
 
         this.name = interfaceModel.getName();

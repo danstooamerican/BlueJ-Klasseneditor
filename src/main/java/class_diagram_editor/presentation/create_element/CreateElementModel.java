@@ -117,7 +117,6 @@ public class CreateElementModel {
         addClassConnections(classModel, id);
 
         classDiagram.edit(id, classModel);
-        classModel.notifyChange();
     }
 
     public void editInterface(InterfaceModel interfaceModel) {

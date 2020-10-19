@@ -33,12 +33,7 @@ public class ClassSkin extends DefaultNodeSkin {
     public static final String ABSTRACT_CLASS = "abstract";
     public static final String STATIC_CLASS = "static";
 
-    private VBox layout;
-    private Node header;
-    private Node attributes;
-    private Node methods;
-    private Node attributesSeparator;
-    private Node methodsSeparator;
+    private final VBox layout;
 
     private final ClassModel classModel;
 
@@ -51,9 +46,7 @@ public class ClassSkin extends DefaultNodeSkin {
         layout.setAlignment(Pos.TOP_CENTER);
         buildUI();
 
-        classModel.hasUpdatedProperty().addListener((observable, oldValue, newValue) -> {
-            buildUI();
-        });
+        classModel.registerForUpdates(this::buildUI);
 
         getRoot().getChildren().add(layout);
 
@@ -69,16 +62,14 @@ public class ClassSkin extends DefaultNodeSkin {
     }
 
     private void buildUI() {
-        header = getHeader();
+        Node header = getHeader();
+        Node attributes = getAttributes();
+        Node methods = getMethods();
 
-        attributes = getAttributes();
-
-        methods = getMethods();
-
-        attributesSeparator = new Separator();
+        Node attributesSeparator = new Separator();
         attributesSeparator.getStyleClass().add(SEPARATOR_CLASS);
 
-        methodsSeparator = new Separator();
+        Node methodsSeparator = new Separator();
         methodsSeparator.getStyleClass().add(SEPARATOR_CLASS);
 
         layout.getChildren().clear();

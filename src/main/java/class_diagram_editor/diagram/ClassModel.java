@@ -2,7 +2,6 @@ package class_diagram_editor.diagram;
 
 import class_diagram_editor.code_generation.CodeElement;
 import class_diagram_editor.code_generation.JavaCodeGenerator;
-import javafx.beans.property.SimpleBooleanProperty;
 import lombok.Setter;
 
 import java.util.ArrayList;
@@ -14,8 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Setter
-public class ClassModel implements CodeElement, Connectable {
-
+public class ClassModel extends Editable<ClassModel> implements CodeElement, Connectable {
     private String lastGeneratedName;
     private String name;
 
@@ -28,9 +26,9 @@ public class ClassModel implements CodeElement, Connectable {
     private List<AttributeModel> attributes;
     private Set<MethodModel> methods;
 
-    private SimpleBooleanProperty hasUpdated = new SimpleBooleanProperty();
-
     public ClassModel() {
+        super();
+
         this.lastGeneratedName = null;
         this.implementsInterfaces = new HashSet<>();
         this.associations = new HashMap<>();
@@ -38,7 +36,8 @@ public class ClassModel implements CodeElement, Connectable {
         this.methods = new HashSet<>();
     }
 
-    public void edit(ClassModel classModel) {
+    @Override
+    protected void performEdit(ClassModel classModel) {
         this.name = classModel.getName();
         this.isAbstract = classModel.isAbstract;
         this.extendsType = classModel.extendsType;
@@ -214,11 +213,4 @@ public class ClassModel implements CodeElement, Connectable {
         return name;
     }
 
-    public void notifyChange() {
-        hasUpdated.set(!hasUpdated.get());
-    }
-
-    public SimpleBooleanProperty hasUpdatedProperty() {
-        return hasUpdated;
-    }
 }
