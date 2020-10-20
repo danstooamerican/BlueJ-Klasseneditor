@@ -9,14 +9,13 @@ import bluej.extensions.PackageNotFoundException;
 import bluej.extensions.ProjectNotOpenException;
 import bluej.extensions.editor.Editor;
 import bluej.extensions.editor.TextLocation;
+import class_diagram_editor.code_generation.ClassDiagramGenerator;
 import class_diagram_editor.code_generation.CodeElement;
 import class_diagram_editor.code_generation.JavaCodeGenerator;
-import class_diagram_editor.code_generation.SourceCodeControl;
 import class_diagram_editor.diagram.ClassDiagram;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -62,6 +61,27 @@ public class SourceControl implements SourceCodeControl {
         } catch (ProjectNotOpenException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public ClassDiagram generateDiagram() {
+        final ClassDiagramGenerator classDiagramGenerator = new ClassDiagramGenerator();
+
+        try {
+            BPackage bpackage = project.getPackages()[0];
+
+            for (BClass bClass : bpackage.getClasses()) {
+                final Editor editor = bClass.getEditor();
+
+                final String elementContent = editor.getText(START_LOCATION, getEndLocation(editor));
+
+                classDiagramGenerator.addSource(bClass.getName(), elementContent);
+            }
+        } catch (ProjectNotOpenException | PackageNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return classDiagramGenerator.generate();
     }
 
     private Editor createFile(BPackage bPackage, CodeElement codeElement) {
@@ -116,9 +136,6 @@ public class SourceControl implements SourceCodeControl {
         editor.setReadOnly(true);
 
         final TextLocation endLocation = getEndLocation(editor);
-        int lastLine = editor.getLineCount() - 1;
-        int lastColumn = editor.getLineLength(lastLine);
-        final TextLocation endLocation = new TextLocation(lastLine, lastColumn);
 
         final JavaCodeGenerator codeGenerator = new JavaCodeGenerator(
                 codeElement.getLastGeneratedName(), editor.getText(START_LOCATION, endLocation));

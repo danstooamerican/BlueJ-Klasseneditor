@@ -1,4 +1,4 @@
-package class_diagram_editor.code_generation;
+package class_diagram_editor.bluej_adapters.source_control;
 
 import class_diagram_editor.diagram.ClassDiagram;
 
@@ -12,6 +12,11 @@ public interface SourceCodeControl {
      *
      * @param classDiagram the {@link ClassDiagram class diagram} which is generated.
      */
-    void generate(ClassDiagram classDiagram);
+    void generateCode(ClassDiagram classDiagram);
+
+    /**
+     * Creates a new {@link ClassDiagram class diagram} which is based on the source code.
+     */
+    ClassDiagram generateDiagram();
 
 }
