@@ -6,7 +6,7 @@ import bluej.extensions.MenuGenerator;
 import bluej.extensions.ProjectNotOpenException;
 import class_diagram_editor.ClassEditorApplication;
 import class_diagram_editor.bluej_adapters.source_control.SourceControl;
-import class_diagram_editor.code_generation.SourceCodeControl;
+import class_diagram_editor.bluej_adapters.source_control.SourceCodeControl;
 
 import javax.swing.AbstractAction;
 import javax.swing.JMenuItem;

@@ -27,6 +27,7 @@ import java.util.Iterator;
  */
 public class SourceControl implements SourceCodeControl {
 
+    private static final String JAVA_FILE_EXTENSION = ".java";
     private static final TextLocation START_LOCATION = new TextLocation(0, 0);
 
     private final BProject project;
@@ -41,7 +42,7 @@ public class SourceControl implements SourceCodeControl {
     }
 
     @Override
-    public void generate(ClassDiagram classDiagram) {
+    public void generateCode(ClassDiagram classDiagram) {
         Iterator<CodeElement> iterator = classDiagram.iterator();
 
         try {
@@ -55,7 +56,7 @@ public class SourceControl implements SourceCodeControl {
                 if (editor != null) {
                     generateElement(editor, codeElement);
                 } else {
-                    System.err.println("Error generating code for " + codeElement.getName() + ".java");
+                    System.err.println("Error generating code for " + codeElement.getName() + JAVA_FILE_EXTENSION);
                 }
             }
         } catch (ProjectNotOpenException e) {
@@ -67,7 +68,7 @@ public class SourceControl implements SourceCodeControl {
         Editor editor = null;
 
         try {
-            File javaFile = new File(bPackage.getDir(), codeElement.getLastGeneratedName() + ".java");
+            File javaFile = new File(bPackage.getDir(), codeElement.getLastGeneratedName() + JAVA_FILE_EXTENSION);
 
             boolean elementRenamed = !codeElement.getName().equals(codeElement.getLastGeneratedName());
             if (elementRenamed) {
@@ -91,7 +92,7 @@ public class SourceControl implements SourceCodeControl {
 
     private File renameOldClassWithNew(BPackage bPackage, File javaFile, CodeElement codeElement)
             throws ProjectNotOpenException, PackageNotFoundException, ClassNotFoundException, IOException {
-        File newJavaFile = new File(bPackage.getDir(), codeElement.getName() + ".java");
+        File newJavaFile = new File(bPackage.getDir(), codeElement.getName() + JAVA_FILE_EXTENSION);
 
         if (javaFile.exists()) {
             Files.copy(Paths.get(javaFile.toURI()), Paths.get(newJavaFile.toURI()),
@@ -114,7 +115,7 @@ public class SourceControl implements SourceCodeControl {
     private void generateElement(Editor editor, CodeElement codeElement) {
         editor.setReadOnly(true);
 
-        // line index is zero indexed
+        final TextLocation endLocation = getEndLocation(editor);
         int lastLine = editor.getLineCount() - 1;
         int lastColumn = editor.getLineLength(lastLine);
         final TextLocation endLocation = new TextLocation(lastLine, lastColumn);
@@ -129,5 +130,13 @@ public class SourceControl implements SourceCodeControl {
         editor.saveFile();
 
         editor.setReadOnly(false);
+    }
+
+    private TextLocation getEndLocation(Editor editor) {
+        // line index is zero indexed
+        int lastLine = editor.getLineCount() - 1;
+        int lastColumn = editor.getLineLength(lastLine);
+
+        return new TextLocation(lastLine, lastColumn);
     }
 }

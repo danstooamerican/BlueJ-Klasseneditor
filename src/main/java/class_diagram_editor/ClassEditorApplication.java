@@ -1,6 +1,6 @@
 package class_diagram_editor;
 
-import class_diagram_editor.code_generation.SourceCodeControl;
+import class_diagram_editor.bluej_adapters.source_control.SourceCodeControl;
 import class_diagram_editor.presentation.MainScreenView;
 import class_diagram_editor.presentation.MainScreenViewModel;
 import de.saxsys.mvvmfx.FluentViewLoader;

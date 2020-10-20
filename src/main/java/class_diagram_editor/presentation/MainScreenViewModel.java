@@ -1,6 +1,6 @@
 package class_diagram_editor.presentation;
 
-import class_diagram_editor.code_generation.SourceCodeControl;
+import class_diagram_editor.bluej_adapters.source_control.SourceCodeControl;
 import class_diagram_editor.diagram.AttributeModel;
 import class_diagram_editor.diagram.ClassDiagram;
 import class_diagram_editor.diagram.ClassModel;
@@ -27,7 +27,7 @@ public class MainScreenViewModel implements ViewModel {
 
     public void generateCode() {
         if (sourceCodeControl != null) {
-            sourceCodeControl.generate(classDiagram);
+            sourceCodeControl.generateCode(classDiagram);
         }
     }
 

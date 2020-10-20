@@ -52,7 +52,7 @@ public class DiagramElementService {
      * @param classModel the {@link ClassModel class} to add.
      * @return the id of the added element.
      */
-    public String addClassWithoutConnections(ClassModel classModel) {
+    protected String addClassWithoutConnections(ClassModel classModel) {
         String id = classDiagram.addClass(classModel);
 
         if (id != null) {
@@ -68,7 +68,7 @@ public class DiagramElementService {
      * @param classModel the {@link ClassModel class} to create the connections for.
      * @param id the id of the element in the {@link ClassDiagram class diagram}.
      */
-    public void addClassConnections(ClassModel classModel, String id) {
+    protected void addClassConnections(ClassModel classModel, String id) {
         if (classModel.isExtending()) {
             addConnections(GraphController.ConnectionType.EXTENDS, id, List.of(classModel.getExtendsClass()));
         }
@@ -106,7 +106,7 @@ public class DiagramElementService {
      * @param interfaceModel the {@link InterfaceModel interface} to add.
      * @return the id of the added element.
      */
-    public String addInterfaceWithoutConnections(InterfaceModel interfaceModel) {
+    protected String addInterfaceWithoutConnections(InterfaceModel interfaceModel) {
         String id = classDiagram.addInterface(interfaceModel);
 
         if (id != null) {
@@ -122,7 +122,7 @@ public class DiagramElementService {
      * @param interfaceModel the {@link InterfaceModel interface} to create the connections for.
      * @param id the id of the element in the {@link ClassDiagram class diagram}.
      */
-    public void addInterfaceConnections(InterfaceModel interfaceModel, String id) {
+    protected void addInterfaceConnections(InterfaceModel interfaceModel, String id) {
         addConnections(GraphController.ConnectionType.EXTENDS, id, interfaceModel.getExtendsRelations());
         addConnections(id, interfaceModel.getAssociations());
     }

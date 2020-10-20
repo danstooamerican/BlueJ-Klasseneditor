@@ -58,26 +58,12 @@ public class CodeRepository {
             String methodSignature = javaMethod.getDeclarationSignature(true);
             methodSignature = methodSignature.replaceAll("java.lang.", "");
 
-            String methodCode = javaMethod.getCodeBlock();
+            String methodCode = javaMethod.getSourceCode();
             methodCode = methodCode.replaceAll("java.lang.", "");
+            methodCode = methodCode.trim();
+            methodCode = methodCode.replaceAll(FOUR_SPACE_INDENT, "");
 
-            // the method code includes the method signature and we just want the method body
-            final int startIndex = methodCode.indexOf("{") + 1;
-            final int endIndex = methodCode.lastIndexOf("}");
-
-            if (startIndex != -1 && startIndex < methodCode.length() && endIndex != -1 && endIndex < methodCode.length()) {
-                String methodBody = methodCode.substring(startIndex, endIndex);
-
-                // remove symbols which might impact the formatting in the code generation
-                methodBody = methodBody.replaceAll(System.lineSeparator(), "");
-                methodBody = methodBody.replaceAll("\n", "");
-                methodBody = methodBody.replaceAll("\r", "");
-                methodBody = methodBody.replaceAll(";", ";" + System.lineSeparator());
-                methodBody = methodBody.trim();
-                methodBody = methodBody.replaceAll(FOUR_SPACE_INDENT, "");
-
-                methodImplementations.put(methodSignature, methodBody);
-            }
+            methodImplementations.put(methodSignature, methodCode);
         }
     }
 
