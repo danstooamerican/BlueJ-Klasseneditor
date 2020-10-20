@@ -3,25 +3,19 @@ package class_diagram_editor.presentation.skins;
 import class_diagram_editor.diagram.AttributeModel;
 import class_diagram_editor.diagram.ClassModel;
 import class_diagram_editor.diagram.MethodModel;
-import class_diagram_editor.presentation.create_element.CreateElementModel;
+import class_diagram_editor.presentation.create_element.CreateElementService;
 import class_diagram_editor.presentation.create_element.CreateElementView;
-import class_diagram_editor.presentation.create_element.CreateElementViewModel;
 import class_diagram_editor.presentation.main_screen.skins.generators.UMLAttributeGenerator;
 import class_diagram_editor.presentation.main_screen.skins.generators.UMLMethodGenerator;
-import de.saxsys.mvvmfx.FluentViewLoader;
-import de.saxsys.mvvmfx.ViewTuple;
 import de.tesis.dynaware.grapheditor.core.skins.defaults.DefaultNodeSkin;
 import de.tesis.dynaware.grapheditor.model.GNode;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -53,7 +47,7 @@ public class ClassSkin extends DefaultNodeSkin {
         getRoot().setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
                 try {
-                    CreateElementView.showCreateElementDialog(new CreateElementModel(getItem().getId(), classModel));
+                    CreateElementView.showCreateElementDialog(new CreateElementService(getItem().getId(), classModel));
                 } catch (IOException e) {
                     System.err.println(e.getMessage());
                 }

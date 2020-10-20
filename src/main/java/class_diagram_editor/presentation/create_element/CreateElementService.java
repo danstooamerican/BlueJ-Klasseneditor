@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class CreateElementModel {
+public class CreateElementService {
 
     private final ClassDiagram classDiagram;
 
@@ -27,14 +27,14 @@ public class CreateElementModel {
 
     private String id;
     private final String name;
-    private Connectable extendsElement;
+    private ClassModel extendsElement;
     private boolean isAbstract;
     private Collection<InterfaceModel> implementedInterfaces;
     private final Map<String, Connectable> associations;
     private List<AttributeModel> attributes;
     private List<MethodModel> methods;
 
-    private CreateElementModel(String id, Connectable connectable, boolean isClass) {
+    private CreateElementService(String id, Connectable connectable, boolean isClass) {
         this.classDiagram = ClassDiagram.getInstance();
         this.graphController = GraphController.getInstance();
 
@@ -59,11 +59,11 @@ public class CreateElementModel {
         this.isClass = isClass;
     }
 
-    public CreateElementModel() {
+    public CreateElementService() {
         this(null, null, true);
     }
 
-    public CreateElementModel(String id, ClassModel classModel) {
+    public CreateElementService(String id, ClassModel classModel) {
         this(id, classModel, true);
 
         this.implementedInterfaces = classModel.getImplementsInterfaces();
@@ -73,7 +73,7 @@ public class CreateElementModel {
         this.methods = classModel.getMethods();
     }
 
-    public CreateElementModel(String id, InterfaceModel interfaceModel) {
+    public CreateElementService(String id, InterfaceModel interfaceModel) {
         this(id, interfaceModel, false);
 
         this.implementedInterfaces = interfaceModel.getExtendsRelations()
@@ -182,7 +182,7 @@ public class CreateElementModel {
         return name;
     }
 
-    public Connectable getExtendsElement() {
+    public ClassModel getExtendsElement() {
         return extendsElement;
     }
 

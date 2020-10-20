@@ -2,7 +2,7 @@ package class_diagram_editor.presentation.skins;
 
 import class_diagram_editor.diagram.InterfaceModel;
 import class_diagram_editor.diagram.MethodModel;
-import class_diagram_editor.presentation.create_element.CreateElementModel;
+import class_diagram_editor.presentation.create_element.CreateElementService;
 import class_diagram_editor.presentation.create_element.CreateElementView;
 import class_diagram_editor.presentation.main_screen.skins.generators.UMLMethodGenerator;
 import de.tesis.dynaware.grapheditor.core.skins.defaults.DefaultNodeSkin;
@@ -43,7 +43,7 @@ public class InterfaceSkin extends DefaultNodeSkin {
         getRoot().setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
                 try {
-                    CreateElementView.showCreateElementDialog(new CreateElementModel(getItem().getId(), interfaceModel));
+                    CreateElementView.showCreateElementDialog(new CreateElementService(getItem().getId(), interfaceModel));
                 } catch (IOException e) {
                     System.err.println(e.getMessage());
                 }

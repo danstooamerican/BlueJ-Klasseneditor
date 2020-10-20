@@ -1,12 +1,14 @@
 package class_diagram_editor.presentation.create_element.methods_tab;
 
 import class_diagram_editor.diagram.AttributeModel;
+import class_diagram_editor.diagram.ClassModel;
 import class_diagram_editor.diagram.InterfaceModel;
 import class_diagram_editor.diagram.MethodModel;
 import class_diagram_editor.diagram.Visibility;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -24,6 +26,8 @@ public class MethodsTabViewModel {
 
     private final StringProperty className;
     private final ListProperty<InterfaceModel> implementedInterfaces;
+    private final ObjectProperty<ClassModel> extendsElement;
+    private final BooleanProperty isClassAbstract;
 
     private final BooleanProperty isStatic = new SimpleBooleanProperty();
     private final BooleanProperty isAbstract = new SimpleBooleanProperty();
@@ -43,10 +47,14 @@ public class MethodsTabViewModel {
     private AttributeModel selectedParameter = null;
     private final BooleanProperty parameterSelected = new SimpleBooleanProperty();
 
-    public MethodsTabViewModel(List<MethodModel> methods, StringProperty className, ListProperty<InterfaceModel> implementedInterfaces) {
+    public MethodsTabViewModel(List<MethodModel> methods, StringProperty className,
+                               ListProperty<InterfaceModel> implementedInterfaces, ObjectProperty<ClassModel> extendsElement,
+                               BooleanProperty isClassAbstract) {
         this.methods = new SimpleListProperty<>(FXCollections.observableArrayList(methods));
         this.className = className;
         this.implementedInterfaces = implementedInterfaces;
+        this.extendsElement = extendsElement;
+        this.isClassAbstract = isClassAbstract;
     }
 
     public void selectParameter(AttributeModel attributeModel) {
@@ -179,6 +187,10 @@ public class MethodsTabViewModel {
             allMethods.addAll(interfaceModel.getMethodsWithExtending());
         }
 
+        if (extendsElement.isNotNull().get()) {
+            allMethods.addAll(extendsElement.get().getMethodsWithExtending());
+        }
+
         for (MethodModel methodModel : allMethods) {
             if (methodModel.getName().equals(methodName) || (methodModel.isConstructor() && isConstructor)) {
                 if (methodParameterEqual(methodModel)) {
@@ -267,5 +279,9 @@ public class MethodsTabViewModel {
 
     public BooleanProperty parameterSelectedProperty() {
         return parameterSelected;
+    }
+
+    public BooleanProperty isClassAbstractProperty() {
+        return isClassAbstract;
     }
 }

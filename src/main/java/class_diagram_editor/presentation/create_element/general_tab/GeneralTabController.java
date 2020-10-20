@@ -1,5 +1,6 @@
 package class_diagram_editor.presentation.create_element.general_tab;
 
+import class_diagram_editor.diagram.ClassModel;
 import class_diagram_editor.diagram.Connectable;
 import class_diagram_editor.diagram.InterfaceModel;
 import javafx.fxml.FXML;
@@ -22,7 +23,7 @@ public class GeneralTabController {
     @FXML private ToggleButton tgbInterface;
 
     @FXML private TextField txbElementName;
-    @FXML private ComboBox<Connectable> cbbElementExtends;
+    @FXML private ComboBox<ClassModel> cbbElementExtends;
     @FXML private HBox pnlElementExtends;
 
     @FXML private CheckBox ckbElementAbstract;

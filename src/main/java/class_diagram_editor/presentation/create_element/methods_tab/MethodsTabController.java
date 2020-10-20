@@ -120,6 +120,9 @@ public class MethodsTabController {
             }
         });
 
+        rbnAbstract.visibleProperty().bind(viewModel.isClassAbstractProperty());
+        rbnAbstract.managedProperty().bind(viewModel.isClassAbstractProperty());
+
         pnlModifiers.visibleProperty().bind(isClass.and(rbnTypeMethod.selectedProperty()));
         pnlModifiers.managedProperty().bind(isClass.and(rbnTypeMethod.selectedProperty()));
 

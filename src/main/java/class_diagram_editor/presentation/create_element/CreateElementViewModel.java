@@ -16,7 +16,7 @@ import java.util.HashSet;
 
 public class CreateElementViewModel implements ViewModel {
 
-    private final CreateElementModel createElementModel;
+    private final CreateElementService createElementService;
 
     private final GeneralTabViewModel generalTabViewModel;
     private final AttributesTabViewModel attributesTabViewModel;
@@ -24,36 +24,38 @@ public class CreateElementViewModel implements ViewModel {
 
     private final BooleanProperty canSubmit = new SimpleBooleanProperty();
 
-    public CreateElementViewModel(CreateElementModel createElementModel) {
-        this.createElementModel = createElementModel;
+    public CreateElementViewModel(CreateElementService createElementService) {
+        this.createElementService = createElementService;
         ClassDiagram classDiagram = ClassDiagram.getInstance();
 
         this.generalTabViewModel = new GeneralTabViewModel(
-                createElementModel,
+                createElementService,
                 classDiagram.getInterfaces(),
                 classDiagram.getClasses());
 
-        this.attributesTabViewModel = new AttributesTabViewModel(createElementModel.getAttributes());
+        this.attributesTabViewModel = new AttributesTabViewModel(createElementService.getAttributes());
 
         this.methodsTabViewModel = new MethodsTabViewModel(
-                createElementModel.getMethods(),
+                createElementService.getMethods(),
                 generalTabViewModel.nameProperty(),
-                generalTabViewModel.implementedInterfacesProperty());
+                generalTabViewModel.implementedInterfacesProperty(),
+                generalTabViewModel.extendsElementProperty(),
+                generalTabViewModel.isAbstractProperty());
 
         this.canSubmit.bind(generalTabViewModel.nameProperty().isNotEmpty());
     }
 
     public boolean isEditMode() {
-        return createElementModel.isEditMode();
+        return createElementService.isEditMode();
     }
 
     public boolean createElement() {
         boolean success;
 
         if (generalTabViewModel.isClassProperty().get()) {
-            success = createElementModel.addClass(getClassModel());
+            success = createElementService.addClass(getClassModel());
         } else {
-            success = createElementModel.addInterface(getInterfaceModel());
+            success = createElementService.addInterface(getInterfaceModel());
         }
 
         return success;
@@ -61,9 +63,9 @@ public class CreateElementViewModel implements ViewModel {
 
     public void editElement() {
         if (generalTabViewModel.isClassProperty().get()) {
-            createElementModel.editClass(getClassModel());
+            createElementService.editClass(getClassModel());
         } else {
-            createElementModel.editInterface(getInterfaceModel());
+            createElementService.editInterface(getInterfaceModel());
         }
     }
 
@@ -71,9 +73,9 @@ public class CreateElementViewModel implements ViewModel {
         ClassModel classModel = new ClassModel();
         classModel.setName(generalTabViewModel.nameProperty().get());
         classModel.setAbstract(generalTabViewModel.isAbstractProperty().get());
-        classModel.setExtendsType(generalTabViewModel.getExtendsElement());
+        classModel.addExtendsRelation(generalTabViewModel.getExtendsElement());
         classModel.setImplementsInterfaces(new HashSet<>(generalTabViewModel.implementedInterfacesProperty().get()));
-        classModel.setAssociations(new HashMap<>(createElementModel.getAssociations()));
+        classModel.setAssociations(new HashMap<>(createElementService.getAssociations()));
         classModel.setAttributes(new ArrayList<>(attributesTabViewModel.getAttributes()));
         classModel.setMethods(new HashSet<>(methodsTabViewModel.getMethods()));
 
@@ -84,7 +86,7 @@ public class CreateElementViewModel implements ViewModel {
         InterfaceModel interfaceModel = new InterfaceModel();
         interfaceModel.setName(generalTabViewModel.nameProperty().get());
         interfaceModel.setExtendsInterfaces(new HashSet<>(generalTabViewModel.implementedInterfacesProperty().get()));
-        interfaceModel.setAssociations(new HashMap<>(createElementModel.getAssociations()));
+        interfaceModel.setAssociations(new HashMap<>(createElementService.getAssociations()));
         interfaceModel.setMethods(new ArrayList<>(methodsTabViewModel.getMethods()));
 
         return interfaceModel;

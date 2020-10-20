@@ -21,10 +21,10 @@ import java.util.ResourceBundle;
 
 public class CreateElementView implements Initializable {
 
-    public static void showCreateElementDialog(CreateElementModel createElementModel) throws IOException {
+    public static void showCreateElementDialog(CreateElementService createElementService) throws IOException {
         Stage stage = new Stage();
 
-        if (createElementModel.isEditMode()) {
+        if (createElementService.isEditMode()) {
             stage.setTitle("Element bearbeiten");
         } else {
             stage.setTitle("Element hinzufügen");
@@ -32,7 +32,7 @@ public class CreateElementView implements Initializable {
 
         FXMLLoader loader = new FXMLLoader(CreateElementView.class.getResource("CreateElementView.fxml"));
         loader.setClassLoader(CreateElementView.class.getClassLoader());
-        loader.setController(new CreateElementView(stage, new CreateElementViewModel(createElementModel)));
+        loader.setController(new CreateElementView(stage, new CreateElementViewModel(createElementService)));
 
         Parent root = loader.load();
 

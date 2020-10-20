@@ -1,6 +1,6 @@
 package class_diagram_editor.presentation;
 
-import class_diagram_editor.presentation.create_element.CreateElementModel;
+import class_diagram_editor.presentation.create_element.CreateElementService;
 import class_diagram_editor.presentation.create_element.CreateElementView;
 import class_diagram_editor.presentation.graph_editor.GraphController;
 import de.saxsys.mvvmfx.FxmlView;
@@ -85,7 +85,7 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
 
         btnCreateElement.setOnAction(e -> {
             try {
-                CreateElementView.showCreateElementDialog(new CreateElementModel());
+                CreateElementView.showCreateElementDialog(new CreateElementService());
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }

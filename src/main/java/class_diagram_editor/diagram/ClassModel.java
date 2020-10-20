@@ -2,6 +2,7 @@ package class_diagram_editor.diagram;
 
 import class_diagram_editor.code_generation.CodeElement;
 import class_diagram_editor.code_generation.JavaCodeGenerator;
+import lombok.AccessLevel;
 import lombok.Setter;
 
 import java.util.ArrayList;
@@ -22,7 +23,8 @@ public class ClassModel extends Editable<ClassModel> implements CodeElement, Con
 
     private boolean isAbstract;
 
-    private Connectable extendsType;
+    @Setter(AccessLevel.NONE)
+    private ClassModel extendsType;
     private Set<InterfaceModel> implementsInterfaces;
     private Map<String, Connectable> associations;
 
@@ -85,7 +87,9 @@ public class ClassModel extends Editable<ClassModel> implements CodeElement, Con
 
     @Override
     public void addExtendsRelation(Connectable extendable) {
-        extendsType = extendable;
+        if (extendable instanceof ClassModel){
+            extendsType = (ClassModel) extendable;
+        }
     }
 
     @Override
@@ -197,6 +201,20 @@ public class ClassModel extends Editable<ClassModel> implements CodeElement, Con
         return new ArrayList<>(methods);
     }
 
+    /**
+     * @return all added {@link MethodModel methods} of this {@link ClassModel class} including the
+     *         {@link MethodModel methods} of the extended {@link ClassModel class}.
+     */
+    public Collection<MethodModel> getMethodsWithExtending() {
+        Collection<MethodModel> allMethods = new ArrayList<>(methods);
+
+        if (extendsType != null) {
+            allMethods.addAll(extendsType.getMethodsWithExtending());
+        }
+
+        return allMethods;
+    }
+
 
     /**
      * @return whether the class has any {@link AttributeModel attributes}.
@@ -222,10 +240,10 @@ public class ClassModel extends Editable<ClassModel> implements CodeElement, Con
     }
 
     /**
-     * @return the last {@link Connectable element} which was
-     *         added to the extends relation of this {@link ClassModel class}.
+     * @return the last {@link ClassModel class} which is extended by this {@link ClassModel class}.
+     *         This is equal to the last added extends relation to a {@link ClassModel}.
      */
-    public Connectable getExtendsClass() {
+    public ClassModel getExtendsClass() {
         return extendsType;
     }
 

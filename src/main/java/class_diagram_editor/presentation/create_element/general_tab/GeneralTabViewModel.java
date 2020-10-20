@@ -3,11 +3,13 @@ package class_diagram_editor.presentation.create_element.general_tab;
 import class_diagram_editor.diagram.ClassModel;
 import class_diagram_editor.diagram.Connectable;
 import class_diagram_editor.diagram.InterfaceModel;
-import class_diagram_editor.presentation.create_element.CreateElementModel;
+import class_diagram_editor.presentation.create_element.CreateElementService;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -21,26 +23,26 @@ public class GeneralTabViewModel {
     private final BooleanProperty isClass;
 
     private final StringProperty name;
-    private Connectable extendsElement;
+    private final ObjectProperty<ClassModel> extendsElement;
     private final BooleanProperty isAbstract;
 
-    private final ListProperty<Connectable> classModels;
+    private final ListProperty<ClassModel> classModels;
 
     private final ListProperty<InterfaceModel> implementedInterfaces;
     private final ListProperty<InterfaceModel> unimplementedInterfaces;
 
-    public GeneralTabViewModel(CreateElementModel createElementModel, Collection<InterfaceModel> interfaceModels, Collection<ClassModel> classModels) {
-        this.editedElement = createElementModel.getEditedElement();
+    public GeneralTabViewModel(CreateElementService createElementService, Collection<InterfaceModel> interfaceModels, Collection<ClassModel> classModels) {
+        this.editedElement = createElementService.getEditedElement();
 
-        this.isClass = new SimpleBooleanProperty(createElementModel.isClass());
-        this.isAbstract = new SimpleBooleanProperty(createElementModel.isAbstract());
+        this.isClass = new SimpleBooleanProperty(createElementService.isClass());
+        this.isAbstract = new SimpleBooleanProperty(createElementService.isAbstract());
 
-        this.name = new SimpleStringProperty(createElementModel.getName());
-        this.extendsElement = createElementModel.getExtendsElement();
+        this.name = new SimpleStringProperty(createElementService.getName());
+        this.extendsElement = new SimpleObjectProperty<>(createElementService.getExtendsElement());
 
-        this.implementedInterfaces = new SimpleListProperty<>(FXCollections.observableArrayList(createElementModel.getImplementedInterfaces()));
+        this.implementedInterfaces = new SimpleListProperty<>(FXCollections.observableArrayList(createElementService.getImplementedInterfaces()));
         Collection<InterfaceModel> unimplementedInterfaces = new ArrayList<>(interfaceModels);
-        unimplementedInterfaces.removeAll(createElementModel.getImplementedInterfaces());
+        unimplementedInterfaces.removeAll(createElementService.getImplementedInterfaces());
         unimplementedInterfaces.removeIf(this::filterWithSameNameOrCycle);
 
         this.unimplementedInterfaces = new SimpleListProperty<>(FXCollections.observableArrayList(unimplementedInterfaces));
@@ -70,13 +72,13 @@ public class GeneralTabViewModel {
     }
 
 
-    public boolean setExtendsElement(Connectable connectable) {
-        if (connectable == null) {
+    public boolean setExtendsElement(ClassModel classModel) {
+        if (classModel == null) {
             throw new IllegalArgumentException();
         }
 
-        if (!connectable.isExtending(editedElement)) {
-            extendsElement = connectable;
+        if (!classModel.isExtending(editedElement)) {
+            extendsElement.set(classModel);
 
             return true;
         }
@@ -84,7 +86,11 @@ public class GeneralTabViewModel {
         return false;
     }
 
-    public Connectable getExtendsElement() {
+    public ClassModel getExtendsElement() {
+        return extendsElement.get();
+    }
+
+    public ObjectProperty<ClassModel> extendsElementProperty() {
         return extendsElement;
     }
 
@@ -108,7 +114,7 @@ public class GeneralTabViewModel {
         return unimplementedInterfaces;
     }
 
-    public ListProperty<Connectable> classesProperty() {
+    public ListProperty<ClassModel> classesProperty() {
         return classModels;
     }
 }
