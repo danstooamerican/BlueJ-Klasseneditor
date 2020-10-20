@@ -308,6 +308,10 @@ public class GraphController {
         graphEditor.getSelectionManager().selectAll();
     }
 
+    public void reload(ClassDiagram classDiagram) {
+        Commands.clear(graphModel);
+    }
+
     public enum NodeType {
         CLASS(ClassSkin.TYPE),
         INTERFACE(InterfaceSkin.TYPE);

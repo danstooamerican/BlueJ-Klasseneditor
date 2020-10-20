@@ -149,4 +149,9 @@ public class DiagramElementService {
         }
     }
 
+    public void replaceClassDiagram(ClassDiagram generatedDiagram) {
+        classDiagram.replaceWith(generatedDiagram);
+
+        graphController.reload(classDiagram);
+    }
 }

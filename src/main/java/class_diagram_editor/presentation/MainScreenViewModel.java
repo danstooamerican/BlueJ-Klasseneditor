@@ -7,6 +7,7 @@ import class_diagram_editor.diagram.ClassModel;
 import class_diagram_editor.diagram.InterfaceModel;
 import class_diagram_editor.diagram.MethodModel;
 import class_diagram_editor.diagram.Visibility;
+import class_diagram_editor.presentation.graph_editor.DiagramElementService;
 import de.saxsys.mvvmfx.ViewModel;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -28,6 +29,16 @@ public class MainScreenViewModel implements ViewModel {
     public void generateCode() {
         if (sourceCodeControl != null) {
             sourceCodeControl.generateCode(classDiagram);
+        }
+    }
+
+    public void generateClassDiagram() {
+        if (sourceCodeControl != null) {
+            final ClassDiagram generatedDiagram = sourceCodeControl.generateDiagram();
+
+            DiagramElementService diagramElementService = new DiagramElementService();
+
+            diagramElementService.replaceClassDiagram(generatedDiagram);
         }
     }
 

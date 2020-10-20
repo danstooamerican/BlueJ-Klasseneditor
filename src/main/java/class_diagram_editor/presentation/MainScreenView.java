@@ -22,23 +22,13 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
     @InjectViewModel
     private MainScreenViewModel viewModel;
 
-    @FXML
-    private Button btnGenerateCode;
-
-    @FXML
-    private Button btnAddRandomClass;
-
-    @FXML
-    private Button btnAddRandomInterface;
-
-    @FXML
-    private Button btnCreateElement;
-
-    @FXML
-    private CheckBox ckbAssociation;
-
-    @FXML
-    private BorderPane bdpRoot;
+    @FXML private Button btnGenerateCode;
+    @FXML private Button btnGenerateDiagram;
+    @FXML private Button btnAddRandomClass;
+    @FXML private Button btnAddRandomInterface;
+    @FXML private Button btnCreateElement;
+    @FXML private CheckBox ckbAssociation;
+    @FXML private BorderPane bdpRoot;
 
     private GraphController graphController;
 
@@ -65,6 +55,10 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
     private void addControlHandlers() {
         btnGenerateCode.setOnAction(e -> {
             viewModel.generateCode();
+        });
+
+        btnGenerateDiagram.setOnAction(e -> {
+            viewModel.generateClassDiagram();
         });
 
         btnAddRandomClass.setOnAction(e -> {

@@ -33,10 +33,20 @@ public class ClassDiagram implements Iterable<CodeElement> {
 
     /**
      * Creates a new {@link ClassDiagram}.
+     * The constructor is marked public because class diagrams can be generated. The Singleton instance
+     * represents the single source of truth for the drawn diagram.
      */
-    private ClassDiagram() {
+    public ClassDiagram() {
         this.classes = new HashMap<>();
         this.interfaces = new HashMap<>();
+    }
+
+    public void replaceWith(ClassDiagram classDiagram) {
+        classes.clear();
+        classes.putAll(classDiagram.classes);
+
+        interfaces.clear();
+        interfaces.putAll(classDiagram.interfaces);
     }
 
     /**

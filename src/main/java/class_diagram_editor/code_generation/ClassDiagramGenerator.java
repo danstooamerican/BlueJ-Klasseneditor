@@ -43,6 +43,6 @@ public class ClassDiagramGenerator {
      * were added with {@code addSource(String name, String elementContent)}.
      */
     public ClassDiagram generate() {
-        return null;
+        return new ClassDiagram();
     }
 }

@@ -1,5 +1,6 @@
 package class_diagram_editor.bluej_adapters.source_control;
 
+import class_diagram_editor.code_generation.ClassDiagramGenerator;
 import class_diagram_editor.code_generation.CodeElement;
 import class_diagram_editor.code_generation.JavaCodeGenerator;
 import class_diagram_editor.diagram.ClassDiagram;
@@ -32,6 +33,8 @@ public class PrintCodeSourceControl implements SourceCodeControl {
 
     @Override
     public ClassDiagram generateDiagram() {
-        return ClassDiagram.getInstance();
+        ClassDiagramGenerator classDiagramGenerator = new ClassDiagramGenerator();
+
+        return classDiagramGenerator.generate();
     }
 }
