@@ -34,10 +34,16 @@ import java.util.Set;
 
 import static java.util.stream.Collectors.toList;
 
+/**
+ * Handles all updates to the diagram.
+ */
 public class GraphController {
 
     private static GraphController instance;
 
+    /**
+     * @return the current {@link GraphController} instance.
+     */
     public static GraphController getInstance() {
         if (instance == null) {
             instance = new GraphController();
@@ -55,10 +61,13 @@ public class GraphController {
     private GraphEditor graphEditor;
     private GraphSkinFactory skinFactory;
 
-    private GraphController() {
-
-    }
-
+    /**
+     * Sets up the visual representation of the
+     * {@link ClassDiagram class diagram} of the {@link MainScreenViewModel view model}.
+     *
+     * @param viewModel the view model which handles the diagram
+     * @return the {@link Node} which holds the diagram and can be added to the view.
+     */
     public Node initialize(MainScreenViewModel viewModel) {
         this.viewModel = viewModel;
 
@@ -81,12 +90,15 @@ public class GraphController {
         return graphEditorContainer;
     }
 
+    /**
+     * Removes all selected elements from the diagram.
+     */
     public void deleteSelectedElements() {
-        deleteNodes();
+        deleteSelectedNodes();
         deleteSelectedConnections();
     }
 
-    private void deleteNodes() {
+    private void deleteSelectedNodes() {
         classDiagram.deleteElements(graphEditor.getSelectionManager().getSelectedNodes()
                 .stream()
                 .map(GNode::getId)
@@ -195,6 +207,12 @@ public class GraphController {
         domain = AdapterFactoryEditingDomain.getEditingDomainFor(graphModel);
     }
 
+    /**
+     * Adds a node of the given {@link NodeType type} to the diagram.
+     *
+     * @param type the {@link NodeType type} of the element.
+     * @param id the id of the element.
+     */
     public void addNode(NodeType type, String id) {
         GNode node = GraphFactory.eINSTANCE.createGNode();
 
@@ -228,10 +246,26 @@ public class GraphController {
         }
     }
 
+    /**
+     * Adds a connection between the start node and end node which has the given {@link ConnectionType type}.
+     *
+     * @param type the {@link ConnectionType type} of the connection.
+     * @param startId the id of the start node.
+     * @param endId the id of the end node.
+     */
     public void addConnection(ConnectionType type, String startId, String endId) {
         addConnection(type, startId, endId, null);
     }
 
+    /**
+     * Adds a connection between the start node and end node which has the given {@link ConnectionType type} and
+     * name.
+     *
+     * @param type the {@link ConnectionType type} of the connection
+     * @param startId the id of the start node.
+     * @param endId the id of the end node.
+     * @param name the name of the connection.
+     */
     public void addConnection(ConnectionType type, String startId, String endId, String name) {
         GNode start = null;
         GNode end = null;
@@ -253,6 +287,11 @@ public class GraphController {
         }
     }
 
+    /**
+     * Clears all connections which are outgoing from the element with the given id.
+     *
+     * @param id the id of the element.
+     */
     public void clearConnections(String id) {
         GNode toClear = null;
 
@@ -304,25 +343,44 @@ public class GraphController {
         }
     }
 
+    /**
+     * Selects all nodes in the diagram.
+     */
     public void selectAllNodes() {
         graphEditor.getSelectionManager().selectAll();
     }
 
+    /**
+     * Clears the diagram and adds all elements in the {@link ClassDiagram class diagram} to the diagram.
+     *
+     * @param classDiagram the {@link ClassDiagram class diagram} to be added to the view.
+     */
     public void reload(ClassDiagram classDiagram) {
         Commands.clear(graphModel);
     }
 
+    /**
+     * The type of a diagram element.
+     */
     public enum NodeType {
         CLASS(ClassSkin.TYPE),
         INTERFACE(InterfaceSkin.TYPE);
 
         private final String value;
 
+        /**
+         * Creates a new {@link NodeType}.
+         *
+         * @param value the internal identifier of the type.
+         */
         NodeType(String value) {
             this.value = value;
         }
     }
 
+    /**
+     * The type of a diagram conn
+     */
     public enum ConnectionType {
         EXTENDS,
         IMPLEMENTS,
