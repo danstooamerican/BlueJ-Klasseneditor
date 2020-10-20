@@ -6,6 +6,7 @@ import class_diagram_editor.diagram.ClassModel;
 import class_diagram_editor.diagram.Connectable;
 import class_diagram_editor.diagram.InterfaceModel;
 import class_diagram_editor.diagram.MethodModel;
+import class_diagram_editor.presentation.graph_editor.DiagramElementService;
 import class_diagram_editor.presentation.graph_editor.GraphController;
 
 import java.util.ArrayList;
@@ -15,17 +16,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class CreateElementService {
-
-    private final ClassDiagram classDiagram;
-
-    private final GraphController graphController;
-
+/**
+ * Extends the {@link DiagramElementService} to also allow editing of existing elements.
+ */
+public class CreateElementService extends DiagramElementService {
     private final Connectable editedElement;
 
     private final boolean isClass;
 
-    private String id;
+    private final String id;
     private final String name;
     private ClassModel extendsElement;
     private boolean isAbstract;
@@ -34,9 +33,15 @@ public class CreateElementService {
     private List<AttributeModel> attributes;
     private List<MethodModel> methods;
 
+    /**
+     * Creates the base of the {@link CreateElementService} and must be called inside every constructor.
+     *
+     * @param id the id of the edited element or null.
+     * @param connectable the edited element or null.
+     * @param isClass whether the edited element is a {@link ClassModel}. False is interpreted as {@link InterfaceModel}.
+     */
     private CreateElementService(String id, Connectable connectable, boolean isClass) {
-        this.classDiagram = ClassDiagram.getInstance();
-        this.graphController = GraphController.getInstance();
+        super();
 
         this.editedElement = connectable;
 
@@ -59,10 +64,19 @@ public class CreateElementService {
         this.isClass = isClass;
     }
 
+    /**
+     * Creates a basic {@link CreateElementService} without any prefilled values.
+     */
     public CreateElementService() {
         this(null, null, true);
     }
 
+    /**
+     * Creates a new {@link CreateElementService} to edit a {@link ClassModel class}.
+     *
+     * @param id the id of the {@link ClassModel class} in the {@link ClassDiagram class diagram}.
+     * @param classModel the {@link ClassModel class} to edit.
+     */
     public CreateElementService(String id, ClassModel classModel) {
         this(id, classModel, true);
 
@@ -73,6 +87,12 @@ public class CreateElementService {
         this.methods = classModel.getMethods();
     }
 
+    /**
+     * Creates a new {@link CreateElementService} to edit an {@link InterfaceModel interface}.
+     *
+     * @param id the id of the {@link InterfaceModel interface} in the {@link ClassDiagram class diagram}.
+     * @param interfaceModel the {@link InterfaceModel interface} to edit.
+     */
     public CreateElementService(String id, InterfaceModel interfaceModel) {
         this(id, interfaceModel, false);
 
@@ -84,34 +104,11 @@ public class CreateElementService {
         this.methods = interfaceModel.getMethods();
     }
 
-    public boolean addClass(ClassModel classModel) {
-        String id = classDiagram.addClass(classModel);
-
-        if (id != null) {
-            graphController.addNode(GraphController.NodeType.CLASS, id);
-
-            addClassConnections(classModel, id);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    public boolean addInterface(InterfaceModel interfaceModel) {
-        String id = classDiagram.addInterface(interfaceModel);
-
-        if (id != null) {
-            graphController.addNode(GraphController.NodeType.INTERFACE, id);
-
-            addInterfaceConnections(interfaceModel, id);
-
-            return true;
-        }
-
-        return false;
-    }
-
+    /**
+     * Edits the given {@link ClassModel class} in the model and updates the diagram.
+     *
+     * @param classModel a {@link ClassModel class} who's values are used to update the edited {@link ClassModel class}.
+     */
     public void editClass(ClassModel classModel) {
         graphController.clearConnections(id);
         addClassConnections(classModel, id);
@@ -119,6 +116,12 @@ public class CreateElementService {
         classDiagram.edit(id, classModel);
     }
 
+    /**
+     * Edits the given {@link InterfaceModel interface} in the model and updates the diagram.
+     *
+     * @param interfaceModel a {@link InterfaceModel interface} who's
+     *                   values are used to update the edited {@link InterfaceModel interface}.
+     */
     public void editInterface(InterfaceModel interfaceModel) {
         graphController.clearConnections(id);
         addInterfaceConnections(interfaceModel, id);
@@ -126,82 +129,72 @@ public class CreateElementService {
         classDiagram.edit(id, interfaceModel);
     }
 
-    private void addClassConnections(ClassModel classModel, String id) {
-        if (classModel.getExtendsClass() != null) {
-            addConnections(GraphController.ConnectionType.EXTENDS, id, List.of(classModel.getExtendsClass()));
-        }
-
-        addConnections(GraphController.ConnectionType.IMPLEMENTS, id, classModel.getImplementsInterfaces()
-                .stream()
-                .map(interfaceModel -> (Connectable) interfaceModel)
-                .collect(Collectors.toList()));
-
-        addConnections(id, classModel.getAssociations());
-    }
-
-    private void addInterfaceConnections(InterfaceModel interfaceModel, String id) {
-        addConnections(GraphController.ConnectionType.EXTENDS, id, interfaceModel.getExtendsRelations());
-        addConnections(id, interfaceModel.getAssociations());
-    }
-
-    private void addConnections(GraphController.ConnectionType type, String id, Collection<Connectable> connections) {
-        for (Connectable connectable : connections) {
-            String endId = classDiagram.getIdOf(connectable);
-
-            if (endId != null) {
-                graphController.addConnection(type, id, endId);
-            }
-        }
-    }
-
-    private void addConnections(String id, Map<String, Connectable> connections) {
-        for (String connectionName : connections.keySet()) {
-            Connectable connectable = connections.get(connectionName);
-
-            String endId = classDiagram.getIdOf(connectable);
-
-            if (endId != null) {
-                graphController.addConnection(GraphController.ConnectionType.ASSOCIATION, id, endId, connectionName);
-            }
-        }
-    }
-
+    /**
+     * @return the currently edited element.
+     */
     public Connectable getEditedElement() {
         return editedElement;
     }
 
+    /**
+     * @return whether the {@link CreateElementService} was initialized with an element to edit.
+     */
     public boolean isEditMode() {
         return editedElement != null;
     }
 
+    /**
+     * @return whether the edited element is a {@link ClassModel}.
+     */
     public boolean isClass() {
         return isClass;
     }
 
+    /**
+     * @return the name of the edited element.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * @return the extends element if the edited element is a {@link ClassModel} or null if not.
+     */
     public ClassModel getExtendsElement() {
         return extendsElement;
     }
 
+    /**
+     * @return whether the edited element is abstract.
+     */
     public boolean isAbstract() {
         return isAbstract;
     }
 
+    /**
+     * @return the implemented {@link InterfaceModel interfaces} of the edited element.
+     */
     public Collection<InterfaceModel> getImplementedInterfaces() {
         return implementedInterfaces;
     }
 
+    /**
+     * @return the associations of the edited element.
+     */
     public Map<String, Connectable> getAssociations() {
         return associations;
     }
 
+    /**
+     * @return the {@link AttributeModel attributes} of the edited element.
+     */
     public List<AttributeModel> getAttributes() {
         return attributes;
     }
 
+    /**
+     * @return the {@link MethodModel methods} of the edited element.
+     */
     public List<MethodModel> getMethods() {
         return methods;
     }
