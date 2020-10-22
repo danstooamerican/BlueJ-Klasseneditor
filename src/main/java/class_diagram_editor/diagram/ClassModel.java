@@ -29,7 +29,7 @@ public class ClassModel extends Editable<ClassModel> implements CodeElement, Con
     private Map<String, Connectable> associations;
 
     private List<AttributeModel> attributes;
-    private Set<MethodModel> methods;
+    private List<MethodModel> methods;
 
     /**
      * Creates a new {@link ClassModel}.
@@ -41,7 +41,7 @@ public class ClassModel extends Editable<ClassModel> implements CodeElement, Con
         this.implementsInterfaces = new HashSet<>();
         this.associations = new HashMap<>();
         this.attributes = new ArrayList<>();
-        this.methods = new HashSet<>();
+        this.methods = new ArrayList<>();
     }
 
     @Override

@@ -77,7 +77,7 @@ public class CreateElementViewModel implements ViewModel {
         classModel.setImplementsInterfaces(new HashSet<>(generalTabViewModel.implementedInterfacesProperty().get()));
         classModel.setAssociations(new HashMap<>(createElementService.getAssociations()));
         classModel.setAttributes(new ArrayList<>(attributesTabViewModel.getAttributes()));
-        classModel.setMethods(new HashSet<>(methodsTabViewModel.getMethods()));
+        classModel.setMethods(new ArrayList<>(methodsTabViewModel.getMethods()));
 
         return classModel;
     }

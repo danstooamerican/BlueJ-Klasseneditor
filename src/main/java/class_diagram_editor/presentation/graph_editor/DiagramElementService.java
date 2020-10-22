@@ -6,6 +6,7 @@ import class_diagram_editor.diagram.Connectable;
 import class_diagram_editor.diagram.InterfaceModel;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -149,9 +150,36 @@ public class DiagramElementService {
         }
     }
 
+    /**
+     * Replaces the current {@link ClassDiagram class diagram} with the given one and triggers the diagram to update.
+     *
+     * @param generatedDiagram the new {@link ClassDiagram class diagram}.
+     */
     public void replaceClassDiagram(ClassDiagram generatedDiagram) {
         classDiagram.replaceWith(generatedDiagram);
 
-        graphController.reload(classDiagram);
+        graphController.clearDiagram();
+
+        // add all elements without connections first
+        for (ClassModel classModel : classDiagram.getClasses()) {
+            final String id = generatedDiagram.getIdOf(classModel);
+
+            graphController.addNode(GraphController.NodeType.CLASS, id);
+        }
+
+        for (InterfaceModel interfaceModel : classDiagram.getInterfaces()) {
+            final String id = generatedDiagram.getIdOf(interfaceModel);
+
+            graphController.addNode(GraphController.NodeType.INTERFACE, id);
+        }
+
+        // now add the connections so all elements can be connected
+        for (ClassModel classModel : classDiagram.getClasses()) {
+            addClassConnections(classModel, generatedDiagram.getIdOf(classModel));
+        }
+
+        for (InterfaceModel interfaceModel : classDiagram.getInterfaces()) {
+            addInterfaceConnections(interfaceModel, generatedDiagram.getIdOf(interfaceModel));
+        }
     }
 }

@@ -1,6 +1,7 @@
 package class_diagram_editor.diagram;
 
 import class_diagram_editor.code_generation.CodeElement;
+import lombok.NonNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,6 +42,11 @@ public class ClassDiagram implements Iterable<CodeElement> {
         this.interfaces = new HashMap<>();
     }
 
+    /**
+     * Replaces the current instance with the given {@link ClassDiagram class diagram}.
+     *
+     * @param classDiagram the new {@link ClassDiagram class diagram}.
+     */
     public void replaceWith(ClassDiagram classDiagram) {
         classes.clear();
         classes.putAll(classDiagram.classes);
@@ -169,10 +175,10 @@ public class ClassDiagram implements Iterable<CodeElement> {
     /**
      * Creates an extends relation from the start node to the end node.
      *
-     * @param superTypeId the id of the start node.
-     * @param extendingTypeId the id of the end node.
+     * @param extendingTypeId the id of the start node.
+     * @param superTypeId the id of the end node.
      */
-    public void addExtendsRelation(String superTypeId, String extendingTypeId) {
+    public void addExtendsRelation(String extendingTypeId, String superTypeId) {
         Connectable superType = findElement(superTypeId);
         Connectable extendingType = findElement(extendingTypeId);
 

@@ -1,7 +1,9 @@
 package class_diagram_editor.presentation.graph_editor;
 
 import class_diagram_editor.diagram.ClassDiagram;
+import class_diagram_editor.diagram.ClassModel;
 import class_diagram_editor.diagram.Connectable;
+import class_diagram_editor.diagram.InterfaceModel;
 import class_diagram_editor.presentation.MainScreenViewModel;
 import class_diagram_editor.presentation.skins.ClassSkin;
 import class_diagram_editor.presentation.skins.InterfaceSkin;
@@ -351,11 +353,9 @@ public class GraphController {
     }
 
     /**
-     * Clears the diagram and adds all elements in the {@link ClassDiagram class diagram} to the diagram.
-     *
-     * @param classDiagram the {@link ClassDiagram class diagram} to be added to the view.
+     * Clears the diagram.
      */
-    public void reload(ClassDiagram classDiagram) {
+    public void clearDiagram() {
         Commands.clear(graphModel);
     }
 
