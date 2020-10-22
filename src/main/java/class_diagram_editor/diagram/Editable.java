@@ -23,7 +23,7 @@ public abstract class Editable<T> {
     /**
      * Notifies all listeners of the {@code hasUpdatedProperty} that the element has changed.
      */
-    private void notifyChange() {
+    public void notifyChange() {
         for (Runnable runnable : callbacks) {
             runnable.run();
         }

@@ -110,10 +110,28 @@ public class CreateElementService extends DiagramElementService {
      * @param classModel a {@link ClassModel class} who's values are used to update the edited {@link ClassModel class}.
      */
     public void editClass(ClassModel classModel) {
-        graphController.clearConnections(id);
-        addClassConnections(classModel, id);
-
         classDiagram.edit(id, classModel);
+        final Collection<String> affectedIds = classDiagram.extractAttributesToAssociations();
+
+        updateConnections(affectedIds);
+    }
+
+    @Override
+    public boolean addClass(ClassModel classModel) {
+        final boolean result = super.addClass(classModel);
+
+        final Collection<String> affectedIds = classDiagram.extractAttributesToAssociations();
+
+        updateConnections(affectedIds);
+
+        return result;
+    }
+
+    private void updateConnections(Collection<String> ids) {
+        for (String id : ids) {
+            graphController.clearConnections(id);
+            addClassConnections(classDiagram.findElement(id), id);
+        }
     }
 
     /**

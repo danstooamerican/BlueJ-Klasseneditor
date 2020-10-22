@@ -344,27 +344,22 @@ public class ClassDiagram implements Iterable<CodeElement> {
     /**
      * Looks if attributes in added {@link ClassModel classes} can be represented by associations and
      * creates the corresponding changes. This does not trigger a diagram update.
+     *
+     * @return a list of all element ids which were affected.
      */
-    public void extractAttributesToAssociations() {
+    public Collection<String> extractAttributesToAssociations() {
         final Map<String, Connectable> diagramElements = buildElementLookup();
+        final Collection<String> affectedElements = new ArrayList<>();
 
         for (ClassModel classModel : classes.values()) {
-            extract(classModel, diagramElements);
-        }
-    }
+            final String id = extract(classModel, diagramElements);
 
-    /**
-     * Looks if attributes in the given {@link ClassModel class} can be represented by associations and
-     * creates the corresponding changes. This does not trigger a diagram update.
-     *
-     * @param id the id of the {@link ClassModel class}.
-     */
-    public void extractAttributesToAssociations(String id) {
-        final ClassModel classModel = findElement(id);
-
-        if (classModel != null) {
-            extract(classModel, buildElementLookup());
+            if (id != null) {
+                affectedElements.add(id);
+            }
         }
+
+        return affectedElements;
     }
 
     private Map<String, Connectable> buildElementLookup() {
@@ -381,7 +376,7 @@ public class ClassDiagram implements Iterable<CodeElement> {
         return diagramElements;
     }
 
-    private void extract(ClassModel classModel, Map<String, Connectable> diagramElements) {
+    private String extract(ClassModel classModel, Map<String, Connectable> diagramElements) {
         Collection<AttributeModel> attributeModelsToRemove = new ArrayList<>();
 
         for (AttributeModel attributeModel : classModel.getAttributes()) {
@@ -395,6 +390,14 @@ public class ClassDiagram implements Iterable<CodeElement> {
         for (AttributeModel toRemove : attributeModelsToRemove) {
             classModel.removeAttribute(toRemove);
         }
+
+        String id = null;
+        if (!attributeModelsToRemove.isEmpty()) {
+            id = getIdOf(classModel);
+            classModel.notifyChange();
+        }
+
+        return id;
     }
 
     /**
