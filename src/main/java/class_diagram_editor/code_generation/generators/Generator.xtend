@@ -23,6 +23,17 @@ abstract class Generator {
         ENDFOR»)
     '''
 
+    def String generateOverrideMethodSignature(MethodModel methodModel) '''
+        «methodModel.getVisibility().getCode()»«
+    IF methodModel.isStatic()» static«ENDIF»«
+    IF methodModel.hasReturnType()» «methodModel.getReturnType()»«
+    ELSEIF !methodModel.isConstructor()» void«
+    ENDIF» «methodModel.getName()»(«
+    FOR AttributeModel attribute : methodModel.getParameters() SEPARATOR ', '»«
+    attribute.getType()» «attribute.getName()»«
+    ENDFOR»)
+    '''
+
     def String generateInterfaceMethodSignature(MethodModel methodModel) '''
         «IF methodModel.isStatic()» static«ENDIF»«
         IF methodModel.isAbstract()» abstract«ENDIF»«
