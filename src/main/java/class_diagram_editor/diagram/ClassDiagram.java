@@ -1,7 +1,6 @@
 package class_diagram_editor.diagram;
 
 import class_diagram_editor.code_generation.CodeElement;
-import lombok.NonNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -340,6 +339,62 @@ public class ClassDiagram implements Iterable<CodeElement> {
         codeElements.addAll(interfaces.values());
 
         return new ClassModelIterator(codeElements);
+    }
+
+    /**
+     * Looks if attributes in added {@link ClassModel classes} can be represented by associations and
+     * creates the corresponding changes. This does not trigger a diagram update.
+     */
+    public void extractAttributesToAssociations() {
+        final Map<String, Connectable> diagramElements = buildElementLookup();
+
+        for (ClassModel classModel : classes.values()) {
+            extract(classModel, diagramElements);
+        }
+    }
+
+    /**
+     * Looks if attributes in the given {@link ClassModel class} can be represented by associations and
+     * creates the corresponding changes. This does not trigger a diagram update.
+     *
+     * @param id the id of the {@link ClassModel class}.
+     */
+    public void extractAttributesToAssociations(String id) {
+        final ClassModel classModel = findElement(id);
+
+        if (classModel != null) {
+            extract(classModel, buildElementLookup());
+        }
+    }
+
+    private Map<String, Connectable> buildElementLookup() {
+        final Map<String, Connectable> diagramElements = new HashMap<>();
+
+        for (ClassModel classModel : classes.values()) {
+            diagramElements.put(classModel.getName(), classModel);
+        }
+
+        for (InterfaceModel interfaceModel : interfaces.values()) {
+            diagramElements.put(interfaceModel.getName(), interfaceModel);
+        }
+
+        return diagramElements;
+    }
+
+    private void extract(ClassModel classModel, Map<String, Connectable> diagramElements) {
+        Collection<AttributeModel> attributeModelsToRemove = new ArrayList<>();
+
+        for (AttributeModel attributeModel : classModel.getAttributes()) {
+            if (diagramElements.containsKey(attributeModel.getType())) {
+                attributeModelsToRemove.add(attributeModel);
+
+                classModel.addAssociation(attributeModel.getName(), diagramElements.get(attributeModel.getType()));
+            }
+        }
+
+        for (AttributeModel toRemove : attributeModelsToRemove) {
+            classModel.removeAttribute(toRemove);
+        }
     }
 
     /**

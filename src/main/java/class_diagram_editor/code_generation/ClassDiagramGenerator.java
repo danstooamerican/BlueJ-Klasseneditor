@@ -13,6 +13,7 @@ import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.JavaType;
+import org.w3c.dom.Attr;
 
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -57,13 +58,15 @@ public class ClassDiagramGenerator {
     /**
      * Creates a new {@link class_diagram_editor.diagram.ClassDiagram class diagram} which contains the elements which
      * were added with {@code addSource(String name, String elementContent)}.
-     */ //TODO: implement
+     */
     public ClassDiagram generate() {
         final ClassDiagram classDiagram = new ClassDiagram();
 
         final Map<String, String> generatedElements = generateElements(classDiagram);
 
         addConnections(classDiagram, generatedElements);
+
+        classDiagram.extractAttributesToAssociations();
 
         return classDiagram;
     }
@@ -95,7 +98,6 @@ public class ClassDiagramGenerator {
 
         classModel.setMethods(generateMethods(javaClass.getMethods()));
         classModel.setAttributes(generateAttributes(javaClass.getFields()));
-
 
         return classModel;
     }

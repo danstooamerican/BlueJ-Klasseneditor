@@ -224,12 +224,21 @@ public class ClassModel extends Editable<ClassModel> implements CodeElement, Con
     }
 
     /**
-     * Adds the given {@link AttributeModel attribute} to the {@link ClassModel class}.
+     * Adds the given {@link AttributeModel attribute} to this {@link ClassModel class}.
      *
      * @param attributeModel the {@link AttributeModel attribute} to add.
      */
     public void addAttribute(AttributeModel attributeModel) {
         attributes.add(attributeModel);
+    }
+
+    /**
+     * Removes the given {@link AttributeModel attribute} from this {@link ClassModel class}.
+     *
+     * @param attributeModel the {@link AttributeModel attribute} to remove.
+     */
+    public void removeAttribute(AttributeModel attributeModel) {
+        attributes.remove(attributeModel);
     }
 
     /**
