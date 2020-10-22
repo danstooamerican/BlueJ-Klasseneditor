@@ -99,6 +99,35 @@ public class ClassDiagramGenerator {
         classModel.setMethods(generateMethods(javaClass.getMethods()));
         classModel.setAttributes(generateAttributes(javaClass.getFields()));
 
+        final Collection<MethodModel> methodsToRemove = new ArrayList<>();
+        for (MethodModel methodModel : classModel.getMethods()) {
+            if (methodModel.getName().startsWith("get")) {
+                final String attributeName = methodModel.getName().replace("get", "").toUpperCase();
+
+                for (AttributeModel attributeModel : classModel.getAttributes()) {
+                    if (attributeModel.getName().toUpperCase().equals(attributeName)) {
+                        attributeModel.setHasGetter(true);
+                        methodsToRemove.add(methodModel);
+                        break;
+                    }
+                }
+            } else if (methodModel.getName().startsWith("set")) {
+                final String attributeName = methodModel.getName().replace("set", "").toUpperCase();
+
+                for (AttributeModel attributeModel : classModel.getAttributes()) {
+                    if (attributeModel.getName().toUpperCase().equals(attributeName)) {
+                        attributeModel.setHasSetter(true);
+                        methodsToRemove.add(methodModel);
+                        break;
+                    }
+                }
+            }
+        }
+
+        for (MethodModel toRemove : methodsToRemove) {
+            classModel.removeMethod(toRemove);
+        }
+
         return classModel;
     }
 

@@ -186,12 +186,21 @@ public class ClassModel extends Editable<ClassModel> implements CodeElement, Con
     }
 
     /**
-     * Adds a new {@link MethodModel method} to this {@link ClassModel class}.
+     * Adds the given {@link MethodModel method} to this {@link ClassModel class}.
      *
      * @param methodModel the {@link MethodModel method} to add.
      */
     public void addMethod(MethodModel methodModel) {
         methods.add(methodModel);
+    }
+
+    /**
+     * Removes the given {@link MethodModel method} from this {@link ClassModel class}.
+     *
+     * @param methodModel the {@link MethodModel method} to remove.
+     */
+    public void removeMethod(MethodModel methodModel) {
+        methods.remove(methodModel);
     }
 
     /**
