@@ -23,6 +23,7 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
     private MainScreenViewModel viewModel;
 
     @FXML private Button btnGenerateCode;
+    @FXML private Button btnGenerateCodeSelected;
     @FXML private Button btnGenerateDiagram;
     @FXML private Button btnCreateElement;
     @FXML private CheckBox ckbAssociation;
@@ -53,6 +54,10 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
     private void addControlHandlers() {
         btnGenerateCode.setOnAction(e -> {
             viewModel.generateCode();
+        });
+
+        btnGenerateCodeSelected.setOnAction(e -> {
+            viewModel.generateCode(graphController.getSelectedElementIds());
         });
 
         btnGenerateDiagram.setOnAction(e -> {

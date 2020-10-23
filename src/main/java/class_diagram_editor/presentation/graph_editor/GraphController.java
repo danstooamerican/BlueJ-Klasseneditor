@@ -93,6 +93,16 @@ public class GraphController {
     }
 
     /**
+     * @return the ids of all currently selected diagram elements.
+     */
+    public Collection<String> getSelectedElementIds() {
+        return graphEditor.getSelectionManager().getSelectedNodes()
+                .stream()
+                .map(GNode::getId)
+                .collect(toList());
+    }
+
+    /**
      * Removes all selected elements from the diagram.
      */
     public void deleteSelectedElements() {
@@ -101,11 +111,7 @@ public class GraphController {
     }
 
     private void deleteSelectedNodes() {
-        classDiagram.deleteElements(graphEditor.getSelectionManager().getSelectedNodes()
-                .stream()
-                .map(GNode::getId)
-                .collect(toList())
-        );
+        classDiagram.deleteElements(getSelectedElementIds());
 
         graphEditor.getSelectionManager().getSelectedNodes().forEach(gNode -> {
             Commands.removeNode(graphModel, gNode);

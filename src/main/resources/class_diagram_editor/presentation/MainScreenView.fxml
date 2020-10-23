@@ -31,7 +31,7 @@
          <center>
             <HBox alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="btnGenerateCode" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Code generieren">
+                  <Button fx:id="btnGenerateCodeSelected" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Code für Auswahl generieren">
                      <padding>
                         <Insets bottom="8.0" left="16.0" right="16.0" top="8.0" />
                      </padding>
@@ -39,7 +39,15 @@
                         <Insets right="16.0" />
                      </HBox.margin>
                   </Button>
-                  <Button fx:id="btnGenerateDiagram" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Diagramm generieren">
+                  <Button fx:id="btnGenerateCode" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Code für Diagramm generieren">
+                     <padding>
+                        <Insets bottom="8.0" left="16.0" right="16.0" top="8.0" />
+                     </padding>
+                     <HBox.margin>
+                        <Insets right="16.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="btnGenerateDiagram" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Diagramm aus Code generieren">
                      <padding>
                         <Insets bottom="8.0" left="16.0" right="16.0" top="8.0" />
                      </padding>

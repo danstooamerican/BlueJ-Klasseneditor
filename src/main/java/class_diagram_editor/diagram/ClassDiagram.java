@@ -401,6 +401,29 @@ public class ClassDiagram implements Iterable<CodeElement> {
     }
 
     /**
+     * Creates a new {@link ClassDiagram class diagram} which only contains the elements which belong to the given ids.
+     *
+     * @param ids the ids of the included elements.
+     * @return a new {@link ClassDiagram class diagram} which
+     *         only includes a subset of this {@link ClassDiagram class diagram}
+     */
+    public ClassDiagram getSubDiagram(Collection<String> ids) {
+        final ClassDiagram classDiagram = new ClassDiagram();
+
+        for (String id : ids) {
+            final Connectable connectable = findElement(id);
+
+            if (connectable instanceof ClassModel) {
+                classDiagram.addClass((ClassModel) connectable);
+            } else if (connectable instanceof InterfaceModel) {
+                classDiagram.addInterface((InterfaceModel) connectable);
+            }
+        }
+
+        return classDiagram;
+    }
+
+    /**
      * Iterator which just iterates over all given {@link CodeElement code elements}.
      */
     private static class ClassModelIterator implements Iterator<CodeElement> {

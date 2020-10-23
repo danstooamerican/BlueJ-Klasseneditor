@@ -12,6 +12,8 @@ import de.saxsys.mvvmfx.ViewModel;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 
+import java.util.Collection;
+
 public class MainScreenViewModel implements ViewModel {
     private final SourceCodeControl sourceCodeControl;
 
@@ -29,6 +31,12 @@ public class MainScreenViewModel implements ViewModel {
     public void generateCode() {
         if (sourceCodeControl != null) {
             sourceCodeControl.generateCode(classDiagram);
+        }
+    }
+
+    public void generateCode(Collection<String> selectedElementIds) {
+        if (sourceCodeControl != null) {
+            sourceCodeControl.generateCode(classDiagram.getSubDiagram(selectedElementIds));
         }
     }
 
@@ -65,4 +73,5 @@ public class MainScreenViewModel implements ViewModel {
     public void setDrawAssociation(boolean value) {
         drawAssociation.set(value);
     }
+
 }
