@@ -24,8 +24,6 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
 
     @FXML private Button btnGenerateCode;
     @FXML private Button btnGenerateDiagram;
-    @FXML private Button btnAddRandomClass;
-    @FXML private Button btnAddRandomInterface;
     @FXML private Button btnCreateElement;
     @FXML private CheckBox ckbAssociation;
     @FXML private BorderPane bdpRoot;
@@ -59,18 +57,6 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
 
         btnGenerateDiagram.setOnAction(e -> {
             viewModel.generateClassDiagram();
-        });
-
-        btnAddRandomClass.setOnAction(e -> {
-            String id = viewModel.addRandomClass();
-
-            graphController.addNode(GraphController.NodeType.CLASS, id);
-        });
-
-        btnAddRandomInterface.setOnAction(e -> {
-            String id = viewModel.addRandomInterface();
-
-            graphController.addNode(GraphController.NodeType.INTERFACE, id);
         });
 
         ckbAssociation.setOnAction(e -> {
