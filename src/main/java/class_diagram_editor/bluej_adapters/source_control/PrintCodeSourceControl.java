@@ -11,8 +11,18 @@ import java.util.Iterator;
  * Test implementation which prints the generated source code to the console.
  */
 public class PrintCodeSourceControl implements SourceCodeControl {
+
+    /**
+     * Generates the Java source code for all elements in the given {@link ClassDiagram class diagram}
+     * and prints out the result.
+     *
+     * This implementation ignores the {@code performBackup} flag and never performs a backup.
+     *
+     * @param classDiagram the {@link ClassDiagram class diagram} which is generated.
+     * @param generationType additional settings for the code generation (ignored).
+     */
     @Override
-    public void generateCode(ClassDiagram classDiagram) {
+    public void generateCode(ClassDiagram classDiagram, GenerationType generationType) {
         Iterator<CodeElement> iterator = classDiagram.iterator();
 
         while (iterator.hasNext()) {

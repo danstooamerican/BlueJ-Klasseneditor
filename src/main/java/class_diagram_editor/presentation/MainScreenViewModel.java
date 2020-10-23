@@ -1,5 +1,6 @@
 package class_diagram_editor.presentation;
 
+import class_diagram_editor.bluej_adapters.source_control.GenerationType;
 import class_diagram_editor.bluej_adapters.source_control.SourceCodeControl;
 import class_diagram_editor.diagram.AttributeModel;
 import class_diagram_editor.diagram.ClassDiagram;
@@ -28,15 +29,15 @@ public class MainScreenViewModel implements ViewModel {
         this.drawAssociation = new SimpleBooleanProperty();
     }
 
-    public void generateCode() {
+    public void generateCode(GenerationType generationType) {
         if (sourceCodeControl != null) {
-            sourceCodeControl.generateCode(classDiagram);
+            sourceCodeControl.generateCode(classDiagram, generationType);
         }
     }
 
-    public void generateCode(Collection<String> selectedElementIds) {
+    public void generateCode(Collection<String> selectedElementIds, GenerationType generationType) {
         if (sourceCodeControl != null) {
-            sourceCodeControl.generateCode(classDiagram.getSubDiagram(selectedElementIds));
+            sourceCodeControl.generateCode(classDiagram.getSubDiagram(selectedElementIds), generationType);
         }
     }
 

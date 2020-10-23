@@ -13,9 +13,11 @@ import class_diagram_editor.code_generation.ClassDiagramGenerator;
 import class_diagram_editor.code_generation.CodeElement;
 import class_diagram_editor.code_generation.JavaCodeGenerator;
 import class_diagram_editor.diagram.ClassDiagram;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -41,11 +43,20 @@ public class SourceControl implements SourceCodeControl {
     }
 
     @Override
-    public void generateCode(ClassDiagram classDiagram) {
+    public void generateCode(ClassDiagram classDiagram, GenerationType generationType) {
+        if (generationType == null || generationType.equals(GenerationType.NO_GENERATION)) {
+            return;
+        }
+
         Iterator<CodeElement> iterator = classDiagram.iterator();
 
         try {
             BPackage bpackage = project.getPackages()[0];
+
+
+            if (generationType.equals(GenerationType.WITH_BACKUP)) {
+                createBackup(bpackage.getDir());
+            }
 
             while (iterator.hasNext()) {
                 CodeElement codeElement = iterator.next();
@@ -58,7 +69,7 @@ public class SourceControl implements SourceCodeControl {
                     System.err.println("Error generating code for " + codeElement.getName() + JAVA_FILE_EXTENSION);
                 }
             }
-        } catch (ProjectNotOpenException e) {
+        } catch (ProjectNotOpenException | PackageNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -82,6 +93,23 @@ public class SourceControl implements SourceCodeControl {
         }
 
         return classDiagramGenerator.generate();
+    }
+
+    private void createBackup(File directory) {
+        if (directory == null) {
+            return;
+        }
+
+        final File backupDir = new File(directory.getParentFile(), directory.getName() + "-backup");
+        backupDir.mkdirs();
+
+        try {
+            FileUtils.cleanDirectory(backupDir);
+            FileUtils.copyDirectory(directory, backupDir);
+        } catch (IOException e) {
+            System.err.println("Backup failed");
+            e.printStackTrace();
+        }
     }
 
     private Editor createFile(BPackage bPackage, CodeElement codeElement) {

@@ -23,19 +23,11 @@
 
 ## Mögliche Erweiterungen - bis 08.11.2020
 - Klassendiagramm aus bestehenden Code generieren
-- Umsetzung zusätzlicher UML-Klassendiagramm-Elemente
+- Umsetzung zusätzlicher UML-Klassendiagramm-Elemente (optional)
 	- Aggregation
 	- Komposition
-	- Assoziation (mit Kardinalitäten)
-	- Assoziationsklasse (optional)
-	- Enum (optional)
 - Syntaxüberprüfung während das Klassendiagramm erstellt wird
-- Konfigurationsmöglichkeit von verfügbaren Elementen (optional)
-- Darstellung von Beziehungen verbessern (nicht nur geradlinig) (optional)
-- Möglichkeit Klassen zu Paketen zuzuordnen (optional)
-
+- Darstellung von Beziehungen verbessern (optional)
 - Warnung bei Veränderungen
-- Klassen ausblenden
 - Selektive Codegenerierung
 - Backup vor Codegenerierung
-- Exportieren als Bild (SVG)
