@@ -111,7 +111,12 @@ public class CreateElementService extends DiagramElementService {
      */
     public void editClass(ClassModel classModel) {
         classDiagram.edit(id, classModel);
+
         final Collection<String> affectedIds = classDiagram.extractAttributesToAssociations();
+
+        if (!affectedIds.contains(id)) {
+            affectedIds.add(id);
+        }
 
         updateConnections(affectedIds);
     }
