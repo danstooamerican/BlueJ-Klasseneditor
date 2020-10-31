@@ -22,7 +22,11 @@ public class MainScreenViewModel implements ViewModel {
 
     private final BooleanProperty drawAssociation;
 
+    private final DiagramElementService diagramElementService;
+
     public MainScreenViewModel(SourceCodeControl sourceCodeControl) {
+        this.diagramElementService = new DiagramElementService();
+
         this.sourceCodeControl = sourceCodeControl;
         this.classDiagram = ClassDiagram.getInstance();
 
@@ -44,8 +48,6 @@ public class MainScreenViewModel implements ViewModel {
     public void generateClassDiagram() {
         if (sourceCodeControl != null) {
             final ClassDiagram generatedDiagram = sourceCodeControl.generateDiagram();
-
-            DiagramElementService diagramElementService = new DiagramElementService();
 
             diagramElementService.replaceClassDiagram(generatedDiagram);
         }
@@ -75,4 +77,7 @@ public class MainScreenViewModel implements ViewModel {
         drawAssociation.set(value);
     }
 
+    public void reconnectElements() {
+        this.diagramElementService.reconnectElements();
+    }
 }

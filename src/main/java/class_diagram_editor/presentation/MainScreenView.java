@@ -14,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 
@@ -23,7 +24,6 @@ import java.util.Collection;
 import java.util.ResourceBundle;
 
 import static javafx.scene.control.ButtonType.OK;
-import static javafx.scene.control.ButtonType.YES;
 
 public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializable {
 
@@ -34,6 +34,7 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
     @FXML private Button btnGenerateCodeSelected;
     @FXML private Button btnGenerateDiagram;
     @FXML private Button btnCreateElement;
+    @FXML private Button btnReconnect;
     @FXML private CheckBox ckbAssociation;
     @FXML private BorderPane bdpRoot;
 
@@ -96,6 +97,11 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
+        });
+
+        btnReconnect.setTooltip(new Tooltip("Zeichnet alle Verbindungen neu"));
+        btnReconnect.setOnAction(e -> {
+            viewModel.reconnectElements();
         });
     }
 

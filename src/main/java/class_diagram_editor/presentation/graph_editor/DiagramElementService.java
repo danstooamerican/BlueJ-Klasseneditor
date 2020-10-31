@@ -182,4 +182,24 @@ public class DiagramElementService {
             addInterfaceConnections(interfaceModel, generatedDiagram.getIdOf(interfaceModel));
         }
     }
+
+    /**
+     * Removes all connections in the diagram and adds them again. This causes the "layout algorithm" to run and
+     * results in nicer connections.
+     */
+    public void reconnectElements() {
+        for (ClassModel classModel : classDiagram.getClasses()) {
+            final String id = classDiagram.getIdOf(classModel);
+
+            graphController.clearConnections(id);
+            addClassConnections(classModel, id);
+        }
+
+        for (InterfaceModel interfaceModel : classDiagram.getInterfaces()) {
+            final String id = classDiagram.getIdOf(interfaceModel);
+
+            graphController.clearConnections(id);
+            addInterfaceConnections(interfaceModel, id);
+        }
+    }
 }
