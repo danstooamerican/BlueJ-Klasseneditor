@@ -1,9 +1,7 @@
 package class_diagram_editor.presentation.graph_editor;
 
 import class_diagram_editor.diagram.ClassDiagram;
-import class_diagram_editor.diagram.ClassModel;
 import class_diagram_editor.diagram.Connectable;
-import class_diagram_editor.diagram.InterfaceModel;
 import class_diagram_editor.presentation.MainScreenViewModel;
 import class_diagram_editor.presentation.skins.ClassSkin;
 import class_diagram_editor.presentation.skins.InterfaceSkin;
@@ -232,17 +230,18 @@ public class GraphController {
         node.setWidth(200);
         node.setHeight(150);
 
+        // getConnectionConnector(...) depends on the order these connectors are added to the node
         node.getConnectors().add(createConnector("top"));
         node.getConnectors().add(createConnector("top"));
 
         node.getConnectors().add(createConnector("right"));
         node.getConnectors().add(createConnector("right"));
 
-        node.getConnectors().add(createConnector("left"));
-        node.getConnectors().add(createConnector("left"));
+        node.getConnectors().add(createConnector("bottom"));
+        node.getConnectors().add(createConnector("bottom"));
 
-        node.getConnectors().add(createConnector("bottom"));
-        node.getConnectors().add(createConnector("bottom"));
+        node.getConnectors().add(createConnector("left"));
+        node.getConnectors().add(createConnector("left"));
 
         EReference nodes = GraphPackage.Literals.GMODEL__NODES;
 
@@ -287,12 +286,99 @@ public class GraphController {
         }
 
         if (start != null && end != null) {
-            GConnector startConnector = start.getConnectors().get(0);
-            GConnector endConnector = end.getConnectors().get(0);
+            final double startCenterX = start.getX() + start.getWidth() / 2;
+            final double startCenterY = start.getY() + start.getHeight() / 2;
+
+            final double dividerSlope = Math.abs((startCenterY - start.getY()) / (startCenterX - start.getX()));
+
+            final double endCenterX = end.getX() + end.getWidth() / 2;
+            final double endCenterY = end.getY() + end.getHeight() / 2;
+
+            final double nodeSlope = Math.abs((endCenterY - startCenterY) / (endCenterX - startCenterX));
+
+            GConnector startConnector = start.getConnectors().get(
+                    getStartConnectionConnector(startCenterX, startCenterY, endCenterX, endCenterY, dividerSlope, nodeSlope));
+
+            GConnector endConnector = end.getConnectors().get(
+                    getEndConnectionConnector(startCenterX, startCenterY, endCenterX, endCenterY, dividerSlope, nodeSlope));
 
             AddConnectionCommand command = new AddConnectionCommand(graphModel, startConnector, endConnector, type.name(), name);
             domain.getCommandStack().execute(command);
         }
+    }
+
+    private int getStartConnectionConnector(double startCenterX, double startCenterY, double endCenterX, double endCenterY, double dividerSlope, double nodeSlope) {
+        // has to be hardcoded because the connector list doesn't follow a specific order
+
+        final int connector;
+        if (endCenterX >= startCenterX) {
+            if (endCenterY >= startCenterY) {
+                if (dividerSlope >= nodeSlope) {
+                    connector = 3;
+                } else {
+                    connector = 5;
+                }
+            } else {
+                if (dividerSlope >= nodeSlope) {
+                    connector = 2;
+                } else {
+                    connector = 1;
+                }
+            }
+        } else {
+            if (endCenterY >= startCenterY) {
+                if (dividerSlope >= nodeSlope) {
+                    connector = 7;
+                } else {
+                    connector = 4;
+                }
+            } else {
+                if (dividerSlope >= nodeSlope) {
+                    connector = 6;
+                } else {
+                    connector = 0;
+                }
+            }
+        }
+
+        return connector;
+    }
+
+    private int getEndConnectionConnector(double startCenterX, double startCenterY, double endCenterX, double endCenterY, double dividerSlope, double nodeSlope) {
+        // has to be hardcoded because the connector list doesn't follow a specific order
+
+        final int connector;
+        if (endCenterX >= startCenterX) {
+            if (endCenterY >= startCenterY) {
+                if (dividerSlope >= nodeSlope) {
+                    connector = 7;
+                } else {
+                    connector = 1;
+                }
+            } else {
+                if (dividerSlope >= nodeSlope) {
+                    connector = 6;
+                } else {
+                    connector = 5;
+                }
+            }
+        } else {
+            if (endCenterY >= startCenterY) {
+                if (dividerSlope >= nodeSlope) {
+                    connector = 3;
+                } else {
+                    connector = 0;
+                }
+            } else {
+                if (dividerSlope >= nodeSlope) {
+                    connector = 2;
+                } else {
+                    connector = 4;
+                }
+            }
+        }
+
+        return connector;
     }
 
     /**
