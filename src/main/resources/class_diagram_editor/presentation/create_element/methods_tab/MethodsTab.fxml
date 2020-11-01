@@ -19,7 +19,7 @@
     <ListView fx:id="lstMethods" BorderPane.alignment="CENTER" />
 </left>
 <center>
-    <VBox prefHeight="525.0" prefWidth="564.0" BorderPane.alignment="CENTER">
+    <VBox prefHeight="813.0" prefWidth="571.0" BorderPane.alignment="CENTER">
         <children>
             <HBox alignment="CENTER" spacing="50.0">
                 <children>
@@ -165,6 +165,16 @@
                                     <Insets left="16.0" right="16.0" top="8.0" />
                                 </VBox.margin>
                             </Button>
+                        <Label fx:id="lblParameterNameTypeError" text="* Es muss ein Name und Datentyp angegeben werden" textFill="#e12828" wrapText="true">
+                           <VBox.margin>
+                              <Insets left="16.0" right="16.0" top="8.0" />
+                           </VBox.margin>
+                        </Label>
+                        <Label fx:id="lblDuplicateParameterError" text="* Es existiert ein Parameter mit diesem Namen" textFill="#e12828" wrapText="true">
+                           <VBox.margin>
+                              <Insets left="16.0" right="16.0" top="8.0" />
+                           </VBox.margin>
+                        </Label>
                         </children>
                     </VBox>
                 </center>
@@ -176,10 +186,23 @@
             </Button>
             <Button fx:id="btnEditMethod" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Methode bearbeiten">
                <VBox.margin>
-                  <Insets bottom="16.0" left="16.0" right="16.0" top="8.0" />
+                  <Insets left="16.0" right="16.0" top="8.0" />
                </VBox.margin>
             </Button>
+            <Label fx:id="lblMethodNameError" text="* Es muss ein Name angegeben werden" textFill="#e12828">
+               <VBox.margin>
+                  <Insets left="16.0" right="16.0" top="8.0" />
+               </VBox.margin>
+            </Label>
+            <Label fx:id="lblDuplicateSignatureError" text="* Es existiert eine Methode mit dieser Signatur" textFill="#e12828">
+               <VBox.margin>
+                  <Insets left="16.0" right="16.0" top="8.0" />
+               </VBox.margin>
+            </Label>
         </children>
+         <BorderPane.margin>
+            <Insets bottom="16.0" />
+         </BorderPane.margin>
     </VBox>
 </center>
 </BorderPane>

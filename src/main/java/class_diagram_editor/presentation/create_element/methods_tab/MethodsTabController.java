@@ -10,6 +10,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Separator;
@@ -58,6 +59,11 @@ public class MethodsTabController {
 
     @FXML private Button btnAddMethod;
     @FXML private Button btnEditMethod;
+
+    @FXML private Label lblParameterNameTypeError;
+    @FXML private Label lblDuplicateParameterError;
+    @FXML private Label lblMethodNameError;
+    @FXML private Label lblDuplicateSignatureError;
 
     private final BooleanProperty isConstructor = new SimpleBooleanProperty();
     private final BooleanProperty methodAlreadyExists = new SimpleBooleanProperty();
@@ -226,6 +232,13 @@ public class MethodsTabController {
         btnEditParameter.disableProperty().bind(nameOrTypeEmpty);
 
         btnEditParameter.visibleProperty().bind(viewModel.parameterSelectedProperty());
+        btnEditParameter.managedProperty().bind(viewModel.parameterSelectedProperty());
+
+        lblParameterNameTypeError.visibleProperty().bind(nameOrTypeEmpty);
+        lblParameterNameTypeError.managedProperty().bind(nameOrTypeEmpty);
+
+        lblDuplicateParameterError.visibleProperty().bind(parameterAlreadyExists);
+        lblDuplicateParameterError.managedProperty().bind(parameterAlreadyExists);
 
         btnAddParameter.setOnAction(event -> {
             viewModel.addParameter();
@@ -241,12 +254,20 @@ public class MethodsTabController {
 
     private void initMethodControls(MethodsTabViewModel viewModel) {
         btnEditMethod.visibleProperty().bind(viewModel.methodSelectedProperty());
+        btnEditMethod.managedProperty().bind(viewModel.methodSelectedProperty());
 
-        btnAddMethod.disableProperty().bind(viewModel.nameProperty().isEmpty()
+        BooleanBinding nameEmpty = viewModel.nameProperty().isEmpty();
+        btnAddMethod.disableProperty().bind(nameEmpty
                 .and(isConstructor.not()).or(methodAlreadyExists)
                 .or(isConstructor.and(viewModel.classNameProperty().isEmpty())));
 
-        btnEditMethod.disableProperty().bind(viewModel.nameProperty().isEmpty());
+        btnEditMethod.disableProperty().bind(nameEmpty);
+
+        lblMethodNameError.visibleProperty().bind(nameEmpty);
+        lblMethodNameError.managedProperty().bind(nameEmpty);
+
+        lblDuplicateSignatureError.visibleProperty().bind(methodAlreadyExists);
+        lblDuplicateSignatureError.managedProperty().bind(methodAlreadyExists);
 
         btnAddMethod.setOnAction(event -> {
             viewModel.addMethod();

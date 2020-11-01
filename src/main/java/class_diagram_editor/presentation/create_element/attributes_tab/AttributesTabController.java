@@ -9,6 +9,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
@@ -36,6 +37,9 @@ public class AttributesTabController {
 
     @FXML private Button btnAddAttribute;
     @FXML private Button btnEditAttribute;
+
+    @FXML private Label lblDuplicateError;
+    @FXML private Label lblNameTypeError;
 
     private final BooleanProperty attributeAlreadyExists = new SimpleBooleanProperty();
 
@@ -116,6 +120,13 @@ public class AttributesTabController {
         btnEditAttribute.disableProperty().bind(nameOrTypeEmpty);
 
         btnEditAttribute.visibleProperty().bind(viewModel.isAttributeSelected());
+        btnEditAttribute.managedProperty().bind(viewModel.isAttributeSelected());
+
+        lblNameTypeError.visibleProperty().bind(nameOrTypeEmpty);
+        lblNameTypeError.managedProperty().bind(nameOrTypeEmpty);
+
+        lblDuplicateError.visibleProperty().bind(attributeAlreadyExists);
+        lblDuplicateError.managedProperty().bind(attributeAlreadyExists);
 
         btnAddAttribute.setOnAction(event -> {
             viewModel.addAttribute();

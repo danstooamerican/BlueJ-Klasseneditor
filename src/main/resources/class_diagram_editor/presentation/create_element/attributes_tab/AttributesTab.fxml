@@ -102,6 +102,16 @@
                     <Insets left="16.0" right="16.0" top="8.0" />
                 </VBox.margin>
             </Button>
+            <Label fx:id="lblNameTypeError" maxWidth="1.7976931348623157E308" text="* Es muss ein Name und Datentyp angegeben werden" textFill="#e12828">
+               <VBox.margin>
+                  <Insets left="16.0" right="16.0" top="8.0" />
+               </VBox.margin>
+            </Label>
+            <Label fx:id="lblDuplicateError" maxWidth="1.7976931348623157E308" text="* Es existiert ein Attribut mit dem gleichen Namen" textFill="#e12828">
+               <VBox.margin>
+                  <Insets left="16.0" right="16.0" top="8.0" />
+               </VBox.margin>
+            </Label>
         </children>
     </VBox>
 </center>

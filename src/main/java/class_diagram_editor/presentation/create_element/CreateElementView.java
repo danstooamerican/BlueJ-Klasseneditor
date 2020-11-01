@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
@@ -40,6 +41,10 @@ public class CreateElementView implements Initializable {
         scene.getStylesheets().add(ClassEditorApplication.class.getResource("skins.css").toExternalForm());
 
         stage.setScene(scene);
+
+        stage.setMinWidth(835);
+        stage.setMinHeight(770);
+
         stage.show();
     }
 
@@ -57,6 +62,8 @@ public class CreateElementView implements Initializable {
 
     @FXML private TabPane tabPane;
     @FXML private Tab tabAttributes;
+
+    @FXML private Label lblError;
 
     public CreateElementView(Stage stage, CreateElementViewModel viewModel) {
         this.stage = stage;
@@ -95,6 +102,8 @@ public class CreateElementView implements Initializable {
         });
 
         btnCreateElement.disableProperty().bind(viewModel.canSubmitProperty().not());
+        lblError.visibleProperty().bind(btnCreateElement.disableProperty());
+        lblError.managedProperty().bind(btnCreateElement.disableProperty());
 
         btnEditElement.setOnAction(event -> {
             viewModel.editElement();
