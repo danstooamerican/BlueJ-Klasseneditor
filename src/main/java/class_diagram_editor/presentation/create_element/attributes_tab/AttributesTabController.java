@@ -110,8 +110,7 @@ public class AttributesTabController {
         });
 
         txbType.textProperty().bindBidirectional(viewModel.typeProperty());
-        TextFields.bindAutoCompletion(txbType,
-                "String", "int", "double", "float", "char", "long", "boolean", "byte", "short");
+        TextFields.bindAutoCompletion(txbType, viewModel.getAvailableTypes());
     }
 
     private void initControlButtons(AttributesTabViewModel viewModel) {

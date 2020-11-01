@@ -47,9 +47,13 @@ public class MethodsTabViewModel {
     private AttributeModel selectedParameter = null;
     private final BooleanProperty parameterSelected = new SimpleBooleanProperty();
 
-    public MethodsTabViewModel(List<MethodModel> methods, StringProperty className,
+    private final Collection<String> availableTypes;
+
+    public MethodsTabViewModel(Collection<String> availableTypes,
+                               List<MethodModel> methods, StringProperty className,
                                ListProperty<InterfaceModel> implementedInterfaces, ObjectProperty<ClassModel> extendsElement,
                                BooleanProperty isClassAbstract) {
+        this.availableTypes = availableTypes;
         this.methods = new SimpleListProperty<>(FXCollections.observableArrayList(methods));
         this.className = className;
         this.implementedInterfaces = implementedInterfaces;
@@ -224,6 +228,10 @@ public class MethodsTabViewModel {
         return methodExists(name.get());
     }
 
+
+    public Collection<String> getAvailableTypes() {
+        return availableTypes;
+    }
 
     public void setVisibility(Visibility visibility) {
         this.visibility = visibility;

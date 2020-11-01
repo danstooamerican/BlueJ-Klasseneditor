@@ -145,8 +145,7 @@ public class MethodsTabController {
         });
 
         txbReturnType.textProperty().bindBidirectional(viewModel.returnTypeProperty());
-        TextFields.bindAutoCompletion(txbReturnType,
-                "String", "int", "double", "float", "char", "long", "boolean", "byte", "short");
+        TextFields.bindAutoCompletion(txbReturnType, viewModel.getAvailableTypes());
 
         pnlName.visibleProperty().bind(rbnTypeMethod.selectedProperty());
         pnlName.managedProperty().bind(rbnTypeMethod.selectedProperty());
@@ -223,8 +222,7 @@ public class MethodsTabController {
         });
 
         txbParameterType.textProperty().bindBidirectional(viewModel.parameterTypeProperty());
-        TextFields.bindAutoCompletion(txbParameterType,
-                "String", "int", "double", "float", "char", "long", "boolean", "byte", "short");
+        TextFields.bindAutoCompletion(txbParameterType, viewModel.getAvailableTypes());
 
         BooleanBinding nameOrTypeEmpty = viewModel.parameterNameProperty().isEmpty().or(viewModel.parameterTypeProperty().isEmpty());
 

@@ -11,8 +11,11 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class CreateElementViewModel implements ViewModel {
 
@@ -24,6 +27,8 @@ public class CreateElementViewModel implements ViewModel {
 
     private final BooleanProperty canSubmit = new SimpleBooleanProperty();
 
+    private Collection<String> availableTypes;
+
     public CreateElementViewModel(CreateElementService createElementService) {
         this.createElementService = createElementService;
         ClassDiagram classDiagram = ClassDiagram.getInstance();
@@ -33,9 +38,15 @@ public class CreateElementViewModel implements ViewModel {
                 classDiagram.getInterfaces(),
                 classDiagram.getClasses());
 
-        this.attributesTabViewModel = new AttributesTabViewModel(createElementService.getAttributes());
+        this.availableTypes = new ArrayList<>();
+        this.availableTypes.addAll(List.of("String", "int", "double", "float", "char", "long", "boolean", "byte", "short"));
+        this.availableTypes.addAll(classDiagram.getClasses().stream().map(ClassModel::getName).collect(Collectors.toList()));
+        this.availableTypes.addAll(classDiagram.getInterfaces().stream().map(InterfaceModel::getName).collect(Collectors.toList()));
+
+        this.attributesTabViewModel = new AttributesTabViewModel(createElementService.getAttributes(), availableTypes);
 
         this.methodsTabViewModel = new MethodsTabViewModel(
+                availableTypes,
                 createElementService.getMethods(),
                 generalTabViewModel.nameProperty(),
                 generalTabViewModel.implementedInterfacesProperty(),

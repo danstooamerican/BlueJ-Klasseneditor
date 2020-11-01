@@ -10,6 +10,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 
+import java.util.Collection;
 import java.util.List;
 
 public class AttributesTabViewModel {
@@ -26,7 +27,10 @@ public class AttributesTabViewModel {
     private AttributeModel selectedAttribute = null;
     private final BooleanProperty attributeSelected = new SimpleBooleanProperty();
 
-    public AttributesTabViewModel(List<AttributeModel> attributes) {
+    private final Collection<String> availableTypes;
+
+    public AttributesTabViewModel(List<AttributeModel> attributes, Collection<String> availableTypes) {
+        this.availableTypes = availableTypes;
         this.visibility = Visibility.PRIVATE;
         this.attributes = new SimpleListProperty<>(FXCollections.observableArrayList(attributes));
     }
@@ -98,6 +102,10 @@ public class AttributesTabViewModel {
         attributeSelected.set(false);
     }
 
+
+    public Collection<String> getAvailableTypes() {
+        return availableTypes;
+    }
 
     public void setVisibility(Visibility visibility) {
         this.visibility = visibility;
