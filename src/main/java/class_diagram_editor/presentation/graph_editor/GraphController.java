@@ -351,29 +351,29 @@ public class GraphController {
         if (endCenterX >= startCenterX) {
             if (endCenterY >= startCenterY) {
                 if (dividerSlope >= nodeSlope) {
-                    connector = 7;
-                } else {
-                    connector = 1;
-                }
-            } else {
-                if (dividerSlope >= nodeSlope) {
                     connector = 6;
-                } else {
-                    connector = 5;
-                }
-            }
-        } else {
-            if (endCenterY >= startCenterY) {
-                if (dividerSlope >= nodeSlope) {
-                    connector = 3;
                 } else {
                     connector = 0;
                 }
             } else {
                 if (dividerSlope >= nodeSlope) {
-                    connector = 2;
+                    connector = 7;
                 } else {
                     connector = 4;
+                }
+            }
+        } else {
+            if (endCenterY >= startCenterY) {
+                if (dividerSlope >= nodeSlope) {
+                    connector = 2;
+                } else {
+                    connector = 1;
+                }
+            } else {
+                if (dividerSlope >= nodeSlope) {
+                    connector = 3;
+                } else {
+                    connector = 5;
                 }
             }
         }
