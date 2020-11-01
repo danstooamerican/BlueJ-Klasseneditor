@@ -13,6 +13,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import org.controlsfx.control.textfield.TextFields;
 
 public class AttributesTabController {
 
@@ -100,11 +101,13 @@ public class AttributesTabController {
 
     private void initNameAndType(AttributesTabViewModel viewModel) {
         txbName.textProperty().bindBidirectional(viewModel.nameProperty());
-        txbType.textProperty().bindBidirectional(viewModel.typeProperty());
-
         txbName.textProperty().addListener((observable, oldValue, newValue) -> {
             attributeAlreadyExists.set(viewModel.attributeExists(newValue));
         });
+
+        txbType.textProperty().bindBidirectional(viewModel.typeProperty());
+        TextFields.bindAutoCompletion(txbType,
+                "String", "int", "double", "float", "char", "long", "boolean", "byte", "short");
     }
 
     private void initControlButtons(AttributesTabViewModel viewModel) {

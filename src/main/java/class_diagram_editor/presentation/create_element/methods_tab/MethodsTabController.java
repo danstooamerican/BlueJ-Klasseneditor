@@ -17,6 +17,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import org.controlsfx.control.textfield.TextFields;
 
 public class MethodsTabController {
 
@@ -138,6 +139,8 @@ public class MethodsTabController {
         });
 
         txbReturnType.textProperty().bindBidirectional(viewModel.returnTypeProperty());
+        TextFields.bindAutoCompletion(txbReturnType,
+                "String", "int", "double", "float", "char", "long", "boolean", "byte", "short");
 
         pnlName.visibleProperty().bind(rbnTypeMethod.selectedProperty());
         pnlName.managedProperty().bind(rbnTypeMethod.selectedProperty());
@@ -214,6 +217,8 @@ public class MethodsTabController {
         });
 
         txbParameterType.textProperty().bindBidirectional(viewModel.parameterTypeProperty());
+        TextFields.bindAutoCompletion(txbParameterType,
+                "String", "int", "double", "float", "char", "long", "boolean", "byte", "short");
 
         BooleanBinding nameOrTypeEmpty = viewModel.parameterNameProperty().isEmpty().or(viewModel.parameterTypeProperty().isEmpty());
 
@@ -237,7 +242,10 @@ public class MethodsTabController {
     private void initMethodControls(MethodsTabViewModel viewModel) {
         btnEditMethod.visibleProperty().bind(viewModel.methodSelectedProperty());
 
-        btnAddMethod.disableProperty().bind(viewModel.nameProperty().isEmpty().and(isConstructor.not()).or(methodAlreadyExists).or(isConstructor.and(viewModel.classNameProperty().isEmpty())));
+        btnAddMethod.disableProperty().bind(viewModel.nameProperty().isEmpty()
+                .and(isConstructor.not()).or(methodAlreadyExists)
+                .or(isConstructor.and(viewModel.classNameProperty().isEmpty())));
+
         btnEditMethod.disableProperty().bind(viewModel.nameProperty().isEmpty());
 
         btnAddMethod.setOnAction(event -> {
