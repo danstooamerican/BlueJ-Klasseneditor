@@ -15,6 +15,10 @@ public class CodeRepositoryTest {
                 "private String name;" +
                 "private boolean test;" +
 
+                "public TestClass(String test, int hello) {" +
+                    "this.name = test;" +
+                "}" +
+
                 METHOD_SIGNATURE + " {" +
                     METHOD_BODY +
                 "}" +

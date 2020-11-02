@@ -2,7 +2,9 @@ package class_diagram_editor.code_generation;
 
 import com.thoughtworks.qdox.JavaProjectBuilder;
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaConstructor;
 import com.thoughtworks.qdox.model.JavaMethod;
+import com.thoughtworks.qdox.model.JavaParameter;
 
 import java.io.StringReader;
 import java.util.HashMap;
@@ -59,6 +61,28 @@ public class CodeRepository {
             methodSignature = methodSignature.replaceAll("java.lang.", "");
 
             String methodCode = javaMethod.getSourceCode();
+            methodCode = methodCode.replaceAll("java.lang.", "");
+            methodCode = methodCode.trim();
+            methodCode = methodCode.replaceAll(FOUR_SPACE_INDENT, "");
+
+            methodImplementations.put(methodSignature, methodCode);
+        }
+
+        for (JavaConstructor javaConstructor : javaClass.getConstructors()) {
+            String methodSignature = javaConstructor.getCallSignature();
+
+            // getCallSignature() only returns the signature without parameter types so they have to be added again
+            for (JavaParameter javaParameter : javaConstructor.getParameters()) {
+                methodSignature = methodSignature.replace(javaParameter.getName(), javaParameter.getType() + " " + javaParameter.getName());
+            }
+
+            methodSignature = methodSignature.replaceAll("java.lang.", "");
+
+            for (int i = javaConstructor.getModifiers().size() - 1; i >= 0; i--) {
+                methodSignature = javaConstructor.getModifiers().get(i) + " " + methodSignature;
+            }
+
+            String methodCode = javaConstructor.getSourceCode();
             methodCode = methodCode.replaceAll("java.lang.", "");
             methodCode = methodCode.trim();
             methodCode = methodCode.replaceAll(FOUR_SPACE_INDENT, "");

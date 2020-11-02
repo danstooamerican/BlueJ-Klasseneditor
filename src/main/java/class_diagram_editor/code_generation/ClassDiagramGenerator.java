@@ -9,6 +9,7 @@ import class_diagram_editor.diagram.Visibility;
 import com.thoughtworks.qdox.JavaProjectBuilder;
 import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaConstructor;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaParameter;
@@ -97,7 +98,7 @@ public class ClassDiagramGenerator {
         classModel.setLastGeneratedName(elementName);
         classModel.setAbstract(javaClass.isAbstract());
 
-        classModel.setMethods(generateMethods(javaClass.getMethods()));
+        classModel.setMethods(generateMethods(javaClass.getMethods(), javaClass.getConstructors()));
         classModel.setAttributes(generateAttributes(javaClass.getFields()));
 
         final Collection<MethodModel> methodsToRemove = new ArrayList<>();
@@ -138,7 +139,7 @@ public class ClassDiagramGenerator {
         interfaceModel.setName(elementName);
         interfaceModel.setLastGeneratedName(elementName);
 
-        interfaceModel.setMethods(generateMethods(javaClass.getMethods()));
+        interfaceModel.setMethods(generateMethods(javaClass.getMethods(), javaClass.getConstructors()));
 
         return interfaceModel;
     }
@@ -163,7 +164,7 @@ public class ClassDiagramGenerator {
         }
     }
 
-    private List<MethodModel> generateMethods(Collection<JavaMethod> javaMethods) {
+    private List<MethodModel> generateMethods(Collection<JavaMethod> javaMethods, Collection<JavaConstructor> javaConstructors) {
         final List<MethodModel> methodModels = new ArrayList<>();
 
         for (JavaMethod javaMethod : javaMethods) {
@@ -201,19 +202,53 @@ public class ClassDiagramGenerator {
                 }
             }
 
-            for (JavaParameter javaParameter : javaMethod.getParameters()) {
-                final AttributeModel attributeModel = new AttributeModel();
+            methodModel.setParameters(generateParameters(javaMethod.getParameters()));
 
-                attributeModel.setName(javaParameter.getName());
-                attributeModel.setType(javaParameter.getType().getValue());
+            methodModels.add(methodModel);
+        }
 
-                methodModel.addParameter(attributeModel);
+        for (JavaConstructor javaConstructor : javaConstructors) {
+            final MethodModel methodModel = new MethodModel();
+
+            methodModel.setConstructor(true);
+            methodModel.setName(javaConstructor.getName());
+            methodModel.setVisibility(Visibility.PACKAGE_PRIVATE);
+
+            for (String modifier : javaConstructor.getModifiers()) {
+                switch (modifier) {
+                    case "public":
+                        methodModel.setVisibility(Visibility.PUBLIC);
+                        break;
+                    case "private":
+                        methodModel.setVisibility(Visibility.PRIVATE);
+                        break;
+                    case "protected":
+                        methodModel.setVisibility(Visibility.PROTECTED);
+                        break;
+                }
             }
+
+            methodModel.setParameters(generateParameters(javaConstructor.getParameters()));
 
             methodModels.add(methodModel);
         }
 
         return methodModels;
+    }
+
+    private List<AttributeModel> generateParameters(List<JavaParameter> parameters) {
+        final List<AttributeModel> attributeModels = new ArrayList<>();
+
+        for (JavaParameter javaParameter : parameters) {
+            final AttributeModel attributeModel = new AttributeModel();
+
+            attributeModel.setName(javaParameter.getName());
+            attributeModel.setType(javaParameter.getType().getValue());
+
+            attributeModels.add(attributeModel);
+        }
+
+        return attributeModels;
     }
 
     private boolean isOverride(JavaMethod javaMethod) {

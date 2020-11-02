@@ -261,8 +261,9 @@ public class MethodsTabController {
 
         btnEditMethod.disableProperty().bind(nameEmpty);
 
-        lblMethodNameError.visibleProperty().bind(nameEmpty);
-        lblMethodNameError.managedProperty().bind(nameEmpty);
+        BooleanBinding methodNameRequired = nameEmpty.and(isConstructor.not());
+        lblMethodNameError.visibleProperty().bind(methodNameRequired);
+        lblMethodNameError.managedProperty().bind(methodNameRequired);
 
         lblDuplicateSignatureError.visibleProperty().bind(methodAlreadyExists);
         lblDuplicateSignatureError.managedProperty().bind(methodAlreadyExists);
