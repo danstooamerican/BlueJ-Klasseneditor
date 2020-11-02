@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,6 +13,8 @@ import java.util.Objects;
  */
 @Setter
 public class MethodModel {
+
+    private MethodModel lastGenerated;
 
     private String name;
     private boolean isConstructor;
@@ -27,6 +30,7 @@ public class MethodModel {
      */
     public MethodModel() {
         this.parameters = new ArrayList<>();
+        this.lastGenerated = null;
     }
 
     /**
@@ -87,6 +91,17 @@ public class MethodModel {
     }
 
     /**
+     * @return the last generated state of this {@link MethodModel method}. This state can be set with {@code markEdited()}.
+     */
+    public MethodModel getLastGenerated() {
+        if (lastGenerated != null) {
+            return lastGenerated;
+        }
+
+        return this;
+    }
+
+    /**
      * Adds a new method parameter. Adding the same object multiple times is ignored.
      *
      * @param attributeModel the {@link AttributeModel attribute} to add.
@@ -97,5 +112,44 @@ public class MethodModel {
         if (!parameters.contains(attributeModel)) {
             parameters.add(attributeModel);
         }
+    }
+
+    /**
+     * Remembers the current state of this {@link MethodModel method} if it has not been marked edited before.
+     * The remembered state is used in code generation to retrieve the method body of the old method.
+     */
+    public void markEdited() {
+        this.lastGenerated = this.clone();
+    }
+
+    /**
+     * Forgets the last edited state. This method is usually called after the generation finished.
+     */
+    public void unmarkEdited() {
+        this.lastGenerated = null;
+    }
+
+    /**
+     * @return a clone of this {@link MethodModel method}.
+     */
+    public MethodModel clone() {
+        MethodModel methodModel = new MethodModel();
+
+        methodModel.setName(name);
+        methodModel.setAbstract(isAbstract);
+        methodModel.setReturnType(returnType);
+        methodModel.setVisibility(visibility);
+        methodModel.setConstructor(isConstructor);
+        methodModel.setStatic(isStatic);
+
+        List<AttributeModel> parametersCopy = new ArrayList<>();
+
+        for (AttributeModel attributeModel : parameters) {
+            parametersCopy.add(attributeModel.clone());
+        }
+
+        methodModel.setParameters(parametersCopy);
+
+        return methodModel;
     }
 }

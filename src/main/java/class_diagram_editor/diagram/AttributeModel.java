@@ -113,4 +113,21 @@ public class AttributeModel {
 
         return getter;
     }
+
+    /**
+     * @return a clone of this {@link AttributeModel attribute model}.
+     */
+    public AttributeModel clone() {
+        AttributeModel attributeModelCopy = new AttributeModel();
+
+        attributeModelCopy.setName(name);
+        attributeModelCopy.setHasSetter(hasSetter);
+        attributeModelCopy.setHasGetter(hasGetter);
+        attributeModelCopy.setType(type);
+        attributeModelCopy.setStatic(isStatic);
+        attributeModelCopy.setFinal(isFinal);
+        attributeModelCopy.setVisibility(visibility);
+
+        return attributeModelCopy;
+    }
 }

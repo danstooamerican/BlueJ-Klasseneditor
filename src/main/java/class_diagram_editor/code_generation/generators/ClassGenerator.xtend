@@ -36,7 +36,7 @@ class ClassGenerator extends Generator {
             «ENDIF»«
             FOR MethodModel methodModel : c.getMethods() BEFORE '\n' SEPARATOR '\n\n'»«
                 generateMethodSignature(methodModel).trim()»«IF methodModel.isAbstract()»;«ELSE» {
-                «codeRepository.getMethodBody(generateMethodSignature(methodModel).trim())»
+                «codeRepository.getMethodBody(generateMethodSignature(methodModel.getLastGenerated()).trim())»
             }«ENDIF»«
             ENDFOR»«
             IF c.isExtending() && !c.isAbstract()»«
@@ -44,14 +44,14 @@ class ClassGenerator extends Generator {
                 IF methodModel.isAbstract()»
             @Override
             «generateOverrideMethodSignature(methodModel).trim()» {
-                «codeRepository.getMethodBody(generateOverrideMethodSignature(methodModel).trim())»
+                «codeRepository.getMethodBody(generateOverrideMethodSignature(methodModel.getLastGenerated()).trim())»
             }«ENDIF»«ENDFOR»«
             ENDIF»«
             FOR InterfaceModel interfaceModel : c.getImplementsInterfaces() BEFORE '\n\n'»«
                 FOR MethodModel methodModel : interfaceModel.getMethodsWithExtending() SEPARATOR '\n\n'»
             @Override
             «generateMethodSignature(methodModel).trim()» {
-                «codeRepository.getMethodBody(generateMethodSignature(methodModel).trim())»
+                «codeRepository.getMethodBody(generateMethodSignature(methodModel.getLastGenerated()).trim())»
             }«
                 ENDFOR»«
             ENDFOR»«

@@ -47,6 +47,10 @@ public class ClassModel extends Editable<ClassModel> implements CodeElement, Con
     @Override
     public void accept(JavaCodeGenerator codeGenerator) {
         codeGenerator.visitClass(this);
+
+        for (MethodModel methodModel : methods) {
+            methodModel.unmarkEdited();
+        }
         this.lastGeneratedName = name;
     }
 

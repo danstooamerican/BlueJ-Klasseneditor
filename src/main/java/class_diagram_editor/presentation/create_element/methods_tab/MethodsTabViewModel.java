@@ -133,6 +133,7 @@ public class MethodsTabViewModel {
 
     public void editMethod() {
         if (selectedMethod != null) {
+            selectedMethod.markEdited();
             setMethodValues(selectedMethod);
             clearMethodValues();
         }
