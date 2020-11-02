@@ -276,7 +276,7 @@ public class ClassModel extends Editable<ClassModel> implements CodeElement, Con
 
     @Override
     protected void performEdit(ClassModel classModel) {
-        this.name = classModel.getName();
+        this.name = classModel.name;
         this.isAbstract = classModel.isAbstract;
         this.extendsType = classModel.extendsType;
         this.implementsInterfaces = classModel.implementsInterfaces;

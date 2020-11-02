@@ -12,8 +12,9 @@ import java.util.Objects;
  */
 @Setter
 public class MethodModel {
-    private boolean isConstructor;
+
     private String name;
+    private boolean isConstructor;
     private String returnType;
     private Visibility visibility;
     private boolean isStatic;
@@ -44,7 +45,7 @@ public class MethodModel {
 
     /**
      * @return whether the {@link MethodModel method} has a return type which is not null or empty.
-     * If the method is a constructor the method always returns false.
+     *         If the method is a constructor the method always returns false.
      */
     public boolean hasReturnType() {
         return !isConstructor && returnType != null && !returnType.trim().isEmpty();

@@ -21,7 +21,6 @@ import java.util.Set;
 @Setter
 public class InterfaceModel extends Editable<InterfaceModel> implements CodeElement, Connectable {
 
-    @Setter(AccessLevel.NONE)
     private String lastGeneratedName;
     private String name;
 

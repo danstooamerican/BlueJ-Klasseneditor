@@ -94,6 +94,7 @@ public class ClassDiagramGenerator {
         final ClassModel classModel = new ClassModel();
 
         classModel.setName(elementName);
+        classModel.setLastGeneratedName(elementName);
         classModel.setAbstract(javaClass.isAbstract());
 
         classModel.setMethods(generateMethods(javaClass.getMethods()));
@@ -135,6 +136,7 @@ public class ClassDiagramGenerator {
         final InterfaceModel interfaceModel = new InterfaceModel();
 
         interfaceModel.setName(elementName);
+        interfaceModel.setLastGeneratedName(elementName);
 
         interfaceModel.setMethods(generateMethods(javaClass.getMethods()));
 
