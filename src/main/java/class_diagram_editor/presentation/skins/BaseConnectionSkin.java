@@ -1,5 +1,7 @@
 package class_diagram_editor.presentation.skins;
 
+import class_diagram_editor.diagram.Connectable;
+import class_diagram_editor.diagram.Editable;
 import de.tesis.dynaware.grapheditor.GConnectionSkin;
 import de.tesis.dynaware.grapheditor.GJointSkin;
 import de.tesis.dynaware.grapheditor.GraphEditor;
@@ -33,7 +35,7 @@ public abstract class BaseConnectionSkin extends GConnectionSkin {
     protected Arrow arrow = new Arrow();
     protected final Group root = new Group();
 
-    public BaseConnectionSkin(GConnection connection) {
+    public BaseConnectionSkin(GConnection connection, Editable<Connectable> start, Editable<Connectable> end) {
         super(connection);
 
         haloFirstSide.getStyleClass().add(STYLE_CLASS_SELECTION_HALO);
@@ -44,6 +46,8 @@ public abstract class BaseConnectionSkin extends GConnectionSkin {
         root.setOnMouseDragged((Event::consume));
 
         root.getChildren().addAll(arrow, selectionHalo);
+
+        getRoot().visibleProperty().bind(start.isDisplayedProperty().and(end.isDisplayedProperty()));
     }
 
     protected void handleMousePressed(final MouseEvent event) {

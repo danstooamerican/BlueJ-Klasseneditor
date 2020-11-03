@@ -1,6 +1,10 @@
 package class_diagram_editor.diagram;
 
 import class_diagram_editor.code_generation.CodeElement;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,6 +35,8 @@ public class ClassDiagram implements Iterable<CodeElement> {
     private final Map<String, ClassModel> classes;
     private final Map<String, InterfaceModel> interfaces;
 
+    private final ListProperty<Editable<?>> allElements;
+
     /**
      * Creates a new {@link ClassDiagram}.
      * The constructor is marked public because class diagrams can be generated. The Singleton instance
@@ -39,6 +45,7 @@ public class ClassDiagram implements Iterable<CodeElement> {
     public ClassDiagram() {
         this.classes = new HashMap<>();
         this.interfaces = new HashMap<>();
+        this.allElements = new SimpleListProperty<>(FXCollections.observableArrayList());
     }
 
     /**
@@ -47,11 +54,27 @@ public class ClassDiagram implements Iterable<CodeElement> {
      * @param classDiagram the new {@link ClassDiagram class diagram}.
      */
     public void replaceWith(ClassDiagram classDiagram) {
+        allElements.clear();
+
         classes.clear();
         classes.putAll(classDiagram.classes);
+        allElements.addAll(classDiagram.classes.values());
+
+        for (Map.Entry<String, ClassModel> entry : classDiagram.classes.entrySet()) {
+            entry.getValue().registerForUpdates(() -> {
+                allElements.set(allElements.indexOf(entry.getValue()), entry.getValue());
+            });
+        }
 
         interfaces.clear();
         interfaces.putAll(classDiagram.interfaces);
+        allElements.addAll(classDiagram.interfaces.values());
+
+        for (Map.Entry<String, InterfaceModel> entry : classDiagram.interfaces.entrySet()) {
+            entry.getValue().registerForUpdates(() -> {
+                allElements.set(allElements.indexOf(entry.getValue()), entry.getValue());
+            });
+        }
     }
 
     /**
@@ -70,6 +93,11 @@ public class ClassDiagram implements Iterable<CodeElement> {
         String uuid = UUID.randomUUID().toString();
 
         classes.put(uuid, classModel);
+        allElements.add(classModel);
+
+        classModel.registerForUpdates(() -> {
+            allElements.set(allElements.indexOf(classModel), classModel);
+        });
 
         return uuid;
     }
@@ -90,6 +118,11 @@ public class ClassDiagram implements Iterable<CodeElement> {
         String uuid = UUID.randomUUID().toString();
 
         interfaces.put(uuid, interfaceModel);
+        allElements.add(interfaceModel);
+
+        interfaceModel.registerForUpdates(() -> {
+            allElements.set(allElements.indexOf(interfaceModel), interfaceModel);
+        });
 
         return uuid;
     }
@@ -103,8 +136,16 @@ public class ClassDiagram implements Iterable<CodeElement> {
         ids.forEach(id -> {
             Connectable removedElement = findElement(id);
 
-            classes.remove(id);
-            interfaces.remove(id);
+            final ClassModel removedClass = classes.remove(id);
+            final InterfaceModel removedInterface = interfaces.remove(id);
+
+            if (removedClass != null) {
+                allElements.remove(removedClass);
+            }
+
+            if (removedInterface != null) {
+                allElements.remove(removedInterface);
+            }
 
             classes.values().forEach(classModel -> {
                 classModel.removeReferencesTo(removedElement);
@@ -329,6 +370,13 @@ public class ClassDiagram implements Iterable<CodeElement> {
      */
     public Collection<ClassModel> getClasses() {
         return new ArrayList<>(classes.values());
+    }
+
+    /**
+     * @return a list of all elements in currently added to this {@link ClassDiagram class diagram}.
+     */
+    public ListProperty<Editable<?>> allElementsProperty() {
+        return allElements;
     }
 
     @Override

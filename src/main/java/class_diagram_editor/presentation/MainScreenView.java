@@ -1,6 +1,7 @@
 package class_diagram_editor.presentation;
 
 import class_diagram_editor.bluej_adapters.source_control.GenerationType;
+import class_diagram_editor.diagram.Editable;
 import class_diagram_editor.presentation.create_element.CreateElementService;
 import class_diagram_editor.presentation.create_element.CreateElementView;
 import class_diagram_editor.presentation.graph_editor.GraphController;
@@ -14,6 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
@@ -37,12 +39,14 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
     @FXML private Button btnReconnect;
     @FXML private CheckBox ckbAssociation;
     @FXML private BorderPane bdpRoot;
+    @FXML private ListView<Editable<?>> lstAllElements;
 
     private GraphController graphController;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         addControlHandlers();
+        initAllElementsList();
 
         graphController = GraphController.getInstance();
 
@@ -103,6 +107,11 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
         btnReconnect.setOnAction(e -> {
             viewModel.reconnectElements();
         });
+    }
+
+    private void initAllElementsList() {
+        lstAllElements.setCellFactory(param -> new DisplayedElementListCell());
+        lstAllElements.itemsProperty().bind(viewModel.getAllElements());
     }
 
     private GenerationType showCodeGenerationConfirmation() {

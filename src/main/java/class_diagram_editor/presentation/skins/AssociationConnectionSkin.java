@@ -1,5 +1,7 @@
 package class_diagram_editor.presentation.skins;
 
+import class_diagram_editor.diagram.Connectable;
+import class_diagram_editor.diagram.Editable;
 import class_diagram_editor.presentation.graph_editor.GraphController;
 import class_diagram_editor.presentation.skins.arrows.AssociationArrowHead;
 import class_diagram_editor.presentation.skins.arrows.UMLArrow;
@@ -24,8 +26,8 @@ public class AssociationConnectionSkin extends BaseConnectionSkin {
 
     private final Label identifier;
 
-    public AssociationConnectionSkin(GConnection connection) {
-        super(connection);
+    public AssociationConnectionSkin(GConnection connection, Editable<Connectable> start, Editable<Connectable> end) {
+        super(connection, start, end);
 
         this.arrow = new UMLArrow(new AssociationArrowHead());
         arrow.setManaged(false);

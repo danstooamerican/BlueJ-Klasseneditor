@@ -1,6 +1,8 @@
 package class_diagram_editor.presentation.graph_editor;
 
 import class_diagram_editor.diagram.ClassDiagram;
+import class_diagram_editor.diagram.Connectable;
+import class_diagram_editor.diagram.Editable;
 import class_diagram_editor.presentation.skins.AssociationConnectionSkin;
 import class_diagram_editor.presentation.skins.ClassSkin;
 import class_diagram_editor.presentation.skins.ConnectorSkin;
@@ -41,13 +43,16 @@ public class GraphSkinFactory {
     public GConnectionSkin createConnectionSkin(final GConnection connection) {
         final String connectionType = connection.getType();
 
+        final Editable<Connectable> start = classDiagram.findElement(connection.getSource().getParent().getId());
+        final Editable<Connectable> end = classDiagram.findElement(connection.getTarget().getParent().getId());
+
         switch (GraphController.ConnectionType.valueOf(connectionType)) {
             case EXTENDS:
-                return new ExtendsConnectionSkin(connection);
+                return new ExtendsConnectionSkin(connection, start, end);
             case IMPLEMENTS:
-                return new ImplementsConnectionSkin(connection);
+                return new ImplementsConnectionSkin(connection, start, end);
             case ASSOCIATION:
-                return new AssociationConnectionSkin(connection);
+                return new AssociationConnectionSkin(connection, start, end);
         }
 
         return null;

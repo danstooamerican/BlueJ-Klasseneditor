@@ -5,12 +5,14 @@ import class_diagram_editor.bluej_adapters.source_control.SourceCodeControl;
 import class_diagram_editor.diagram.AttributeModel;
 import class_diagram_editor.diagram.ClassDiagram;
 import class_diagram_editor.diagram.ClassModel;
+import class_diagram_editor.diagram.Editable;
 import class_diagram_editor.diagram.InterfaceModel;
 import class_diagram_editor.diagram.MethodModel;
 import class_diagram_editor.diagram.Visibility;
 import class_diagram_editor.presentation.graph_editor.DiagramElementService;
 import de.saxsys.mvvmfx.ViewModel;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 
 import java.util.Collection;
@@ -79,5 +81,9 @@ public class MainScreenViewModel implements ViewModel {
 
     public void reconnectElements() {
         this.diagramElementService.reconnectElements();
+    }
+
+    public ListProperty<Editable<?>> getAllElements() {
+        return classDiagram.allElementsProperty();
     }
 }

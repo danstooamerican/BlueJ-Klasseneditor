@@ -1,5 +1,7 @@
 package class_diagram_editor.presentation.skins;
 
+import class_diagram_editor.diagram.Connectable;
+import class_diagram_editor.diagram.Editable;
 import class_diagram_editor.presentation.graph_editor.GraphController;
 import de.tesis.dynaware.grapheditor.model.GConnection;
 
@@ -9,8 +11,8 @@ public class ExtendsConnectionSkin extends BaseConnectionSkin {
 
     private static final String STYLE_CLASS = "extends-connection";
 
-    public ExtendsConnectionSkin(GConnection connection) {
-        super(connection);
+    public ExtendsConnectionSkin(GConnection connection, Editable<Connectable> start, Editable<Connectable> end) {
+        super(connection, start, end);
 
         arrow.setManaged(false);
         arrow.getStyleClass().setAll(STYLE_CLASS);

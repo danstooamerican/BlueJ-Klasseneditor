@@ -1,5 +1,7 @@
 package class_diagram_editor.diagram;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import lombok.NonNull;
 
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ import java.util.Objects;
 public abstract class Editable<T> {
 
     private final Collection<Runnable> callbacks;
+    private final BooleanProperty isDisplayed = new SimpleBooleanProperty(true);
 
     /**
      * Creates a new {@link Editable}.
@@ -63,4 +66,10 @@ public abstract class Editable<T> {
      */
     protected abstract void performEdit(@NonNull T editable);
 
+    /**
+     * @return whether the element should be displayed.
+     */
+    public BooleanProperty isDisplayedProperty() {
+        return isDisplayed;
+    }
 }

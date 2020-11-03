@@ -39,6 +39,7 @@ public class InterfaceSkin extends DefaultNodeSkin {
         interfaceModel.registerForUpdates(this::buildUI);
 
         getRoot().getChildren().add(layout);
+        getRoot().visibleProperty().bind(interfaceModel.isDisplayedProperty());
 
         getRoot().setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {

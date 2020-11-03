@@ -43,6 +43,7 @@ public class ClassSkin extends DefaultNodeSkin {
         classModel.registerForUpdates(this::buildUI);
 
         getRoot().getChildren().add(layout);
+        getRoot().visibleProperty().bind(classModel.isDisplayedProperty());
 
         getRoot().setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
