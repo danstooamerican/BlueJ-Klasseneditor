@@ -83,6 +83,12 @@ public class MethodsTabController {
     private void initMethodType(MethodsTabViewModel viewModel) {
         rbnTypeMethod.selectedProperty().addListener((observable, oldValue, newValue) -> {
             viewModel.setIsConstructor(!newValue);
+
+            // Method type is Constructor
+            if (!newValue) {
+                methodModifier.selectToggle(rbnNoModifier);
+                
+            }
         });
 
         rbnTypeConstructor.selectedProperty().bindBidirectional(isConstructor);
