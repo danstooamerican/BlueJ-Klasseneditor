@@ -7,19 +7,25 @@ import class_diagram_editor.presentation.create_element.CreateElementService;
 import class_diagram_editor.presentation.create_element.CreateElementView;
 import class_diagram_editor.presentation.main_screen.skins.generators.UMLAttributeGenerator;
 import class_diagram_editor.presentation.main_screen.skins.generators.UMLMethodGenerator;
+import de.tesis.dynaware.grapheditor.GConnectorSkin;
+import de.tesis.dynaware.grapheditor.GNodeSkin;
 import de.tesis.dynaware.grapheditor.core.skins.defaults.DefaultNodeSkin;
 import de.tesis.dynaware.grapheditor.model.GNode;
+import de.tesis.dynaware.grapheditor.utils.DraggableBox;
+import de.tesis.dynaware.grapheditor.utils.ResizableBox;
 import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
-public class ClassSkin extends DefaultNodeSkin {
+public class ClassSkin extends BaseNodeSkin {
 
     public static final String TYPE = "class";
 

@@ -17,7 +17,7 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
-public class InterfaceSkin extends DefaultNodeSkin {
+public class InterfaceSkin extends BaseNodeSkin {
 
     public static final String TYPE = "interface";
 
