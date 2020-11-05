@@ -242,6 +242,9 @@ public class ClassDiagramGenerator {
         for (JavaParameter javaParameter : parameters) {
             final AttributeModel attributeModel = new AttributeModel();
 
+            // Visibility must be set or the edit method tab crashes
+            attributeModel.setVisibility(Visibility.PUBLIC);
+
             attributeModel.setName(javaParameter.getName());
             attributeModel.setType(javaParameter.getType().getValue());
 
