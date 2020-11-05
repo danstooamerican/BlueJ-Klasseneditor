@@ -62,6 +62,8 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
                 graphController.selectAllNodes();
             }
         });
+
+        viewModel.generateClassDiagram();
     }
 
     private void addControlHandlers() {
