@@ -18,6 +18,9 @@ public class CodeRepository {
     private static final String FOUR_SPACE_INDENT = " {4}";
 
     private final Map<String, String> methodImplementations;
+    private final Map<String, String> methodComments;
+
+    private String classImports;
 
     /**
      * Creates a new {@link CodeRepository} for the given java source code of a Java class with the given name.
@@ -28,6 +31,7 @@ public class CodeRepository {
      */
     public CodeRepository(String elementName, String sourceCode) {
         this.methodImplementations = new HashMap<>();
+        this.methodComments = new HashMap<>();
 
         initialize(elementName, sourceCode);
     }
@@ -37,9 +41,11 @@ public class CodeRepository {
      */
     public CodeRepository() {
         this.methodImplementations = new HashMap<>();
+        this.methodComments = new HashMap<>();
     }
 
     private void initialize(String elementName, String sourceCode) {
+        System.out.println("Initializing for " + elementName);
         try {
             JavaProjectBuilder builder = new JavaProjectBuilder();
 
@@ -48,11 +54,25 @@ public class CodeRepository {
             JavaClass javaClass = builder.getClassByName(elementName);
 
             if (javaClass != null) {
+                classImports = extractImports(javaClass);
+
+                System.out.println("Extracting methods");
                 extractMethodBodies(javaClass);
+                System.out.println("Found " + methodImplementations.values().size() + " methods");
             }
         } catch (Exception ex) { // ParseException is thrown but not declared to be thrown
+            ex.printStackTrace();
             this.methodImplementations.clear();
         }
+    }
+
+    private String extractImports(JavaClass javaClass) {
+        final StringBuilder stringBuilder = new StringBuilder();
+
+        javaClass.getSource().getImports().forEach(i ->
+                stringBuilder.append("import ").append(i).append(";").append(System.lineSeparator()));
+
+        return stringBuilder.toString();
     }
 
     private void extractMethodBodies(JavaClass javaClass) {
@@ -66,6 +86,10 @@ public class CodeRepository {
             methodCode = methodCode.replaceAll(FOUR_SPACE_INDENT, "");
 
             methodImplementations.put(methodSignature, methodCode);
+
+            methodComments.put(methodSignature, extractMethodComment(javaMethod));
+
+            System.out.println("Saved method under " + methodSignature);
         }
 
         for (JavaConstructor javaConstructor : javaClass.getConstructors()) {
@@ -88,7 +112,21 @@ public class CodeRepository {
             methodCode = methodCode.replaceAll(FOUR_SPACE_INDENT, "");
 
             methodImplementations.put(methodSignature, methodCode);
+            methodComments.put(methodSignature,
+                    javaConstructor.getCodeBlock().substring(javaConstructor.getCodeBlock().indexOf("/**"), javaConstructor.getCodeBlock().lastIndexOf("*/") + 2));
         }
+    }
+
+    private String extractMethodComment(JavaMethod javaMethod) {
+        final String END_TOKEN = "*/";
+        final int startIndex = javaMethod.getCodeBlock().indexOf("/**");
+        final int endIndex = javaMethod.getCodeBlock().lastIndexOf(END_TOKEN) + END_TOKEN.length();
+
+        if (startIndex >= 0 && endIndex >= 0) {
+            return javaMethod.getCodeBlock().substring(startIndex, endIndex);
+        }
+
+        return "";
     }
 
     /**
@@ -98,8 +136,32 @@ public class CodeRepository {
      * @return the method body or an empty string if it does not exist.
      */
     public String getMethodBody(String methodSignature) {
+        System.out.println("Requested body for " + methodSignature);
         if (methodImplementations.containsKey(methodSignature)) {
+            System.out.println("Found something");
             return methodImplementations.get(methodSignature);
+        }
+
+        System.out.println("Found nothing");
+        return "";
+    }
+
+    /**
+     * @return all import statements.
+     */
+    public String getImports() {
+        return classImports;
+    }
+
+    /**
+     * Gets the comment of the method with the given method signature.
+     *
+     * @param methodSignature he signature of the method.
+     * @return the method comment or an empty string if it does not exist.
+     */
+    public String getMethodComment(String methodSignature) {
+        if (methodComments.containsKey(methodSignature)) {
+            return methodComments.get(methodSignature);
         }
 
         return "";

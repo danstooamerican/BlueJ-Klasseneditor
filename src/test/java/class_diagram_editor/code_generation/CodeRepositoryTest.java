@@ -19,6 +19,11 @@ public class CodeRepositoryTest {
                     "this.name = test;" +
                 "}" +
 
+                "/**" + System.lineSeparator() +
+                "* Hallo ich bin ein Kommentar" + System.lineSeparator() +
+                "* @param test string to test" + System.lineSeparator() +
+                "* @return new class" + System.lineSeparator() +
+                "*/" + System.lineSeparator() +
                 METHOD_SIGNATURE + " {" +
                     METHOD_BODY +
                 "}" +

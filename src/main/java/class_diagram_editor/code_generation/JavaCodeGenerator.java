@@ -58,7 +58,7 @@ public class JavaCodeGenerator {
      * @param interfaceModel the {@link InterfaceModel class} which is generated.
      */
     public void visitInterface(InterfaceModel interfaceModel) {
-        final String sourceCode = interfaceGenerator.generate(interfaceModel);
+        final String sourceCode = interfaceGenerator.generate(interfaceModel, codeRepository);
 
         generate(sourceCode);
     }

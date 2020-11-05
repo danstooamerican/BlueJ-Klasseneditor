@@ -12,7 +12,7 @@ import class_diagram_editor.code_generation.CodeRepository;
 class ClassGenerator extends Generator {
 
     def String generate(ClassModel c, CodeRepository codeRepository) '''
-        public«
+        «codeRepository.getImports()»public«
             IF c.isAbstract()» abstract«ENDIF» class «c.getName()»«IF c.isExtending()» extends «
                 FOR Connectable connectable : c.getExtendsRelations() SEPARATOR ', '»«
                     connectable.getName()»«
@@ -35,13 +35,16 @@ class ClassGenerator extends Generator {
                 «ENDFOR»
             «ENDIF»«
             FOR MethodModel methodModel : c.getMethods() BEFORE '\n' SEPARATOR '\n\n'»«
-                generateMethodSignature(methodModel).trim()»«IF methodModel.isAbstract()»;«ELSE» {
+                codeRepository.getMethodComment(generateMethodSignature(methodModel.getLastGenerated()).trim())
+            »
+            «generateMethodSignature(methodModel).trim()»«IF methodModel.isAbstract()»;«ELSE» {
                 «codeRepository.getMethodBody(generateMethodSignature(methodModel.getLastGenerated()).trim())»
             }«ENDIF»«
             ENDFOR»«
             IF c.isExtending() && !c.isAbstract()»«
             FOR MethodModel methodModel : c.getExtendsClass().getMethods() SEPARATOR '\n\n'»«
                 IF methodModel.isAbstract()»
+            «codeRepository.getMethodComment(generateOverrideMethodSignature(methodModel.getLastGenerated()).trim())»
             @Override
             «generateOverrideMethodSignature(methodModel).trim()» {
                 «codeRepository.getMethodBody(generateOverrideMethodSignature(methodModel.getLastGenerated()).trim())»
@@ -49,6 +52,7 @@ class ClassGenerator extends Generator {
             ENDIF»«
             FOR InterfaceModel interfaceModel : c.getImplementsInterfaces() BEFORE '\n\n'»«
                 FOR MethodModel methodModel : interfaceModel.getMethodsWithExtending() SEPARATOR '\n\n'»
+            «codeRepository.getMethodComment(generateMethodSignature(methodModel.getLastGenerated()).trim())»
             @Override
             «generateMethodSignature(methodModel).trim()» {
                 «codeRepository.getMethodBody(generateMethodSignature(methodModel.getLastGenerated()).trim())»
