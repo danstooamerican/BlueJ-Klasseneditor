@@ -53,7 +53,6 @@ public class SourceControl implements SourceCodeControl {
         try {
             BPackage bpackage = project.getPackages()[0];
 
-
             if (generationType.equals(GenerationType.WITH_BACKUP)) {
                 createBackup(bpackage.getDir());
             }
@@ -93,6 +92,17 @@ public class SourceControl implements SourceCodeControl {
         }
 
         return classDiagramGenerator.generate();
+    }
+
+    @Override
+    public String getGenerationDirPath() {
+        try {
+            return project.getPackages()[0].getDir().getPath();
+        } catch (ProjectNotOpenException | PackageNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     private void createBackup(File directory) {

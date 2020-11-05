@@ -23,4 +23,8 @@ public interface SourceCodeControl {
      */
     ClassDiagram generateDiagram();
 
+    /**
+     * @return the path to the directory the code is generated to. This is null if the code is not saved.
+     */
+    String getGenerationDirPath();
 }

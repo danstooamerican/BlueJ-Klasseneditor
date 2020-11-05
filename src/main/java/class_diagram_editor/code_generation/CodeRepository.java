@@ -45,7 +45,6 @@ public class CodeRepository {
     }
 
     private void initialize(String elementName, String sourceCode) {
-        System.out.println("Initializing for " + elementName);
         try {
             JavaProjectBuilder builder = new JavaProjectBuilder();
 
@@ -56,9 +55,7 @@ public class CodeRepository {
             if (javaClass != null) {
                 classImports = extractImports(javaClass);
 
-                System.out.println("Extracting methods");
                 extractMethodBodies(javaClass);
-                System.out.println("Found " + methodImplementations.values().size() + " methods");
             }
         } catch (Exception ex) { // ParseException is thrown but not declared to be thrown
             ex.printStackTrace();
@@ -87,9 +84,7 @@ public class CodeRepository {
 
             methodImplementations.put(methodSignature, methodCode);
 
-            methodComments.put(methodSignature, extractMethodComment(javaMethod));
-
-            System.out.println("Saved method under " + methodSignature);
+            methodComments.put(methodSignature, extractMethodComment(javaMethod.getCodeBlock()));
         }
 
         for (JavaConstructor javaConstructor : javaClass.getConstructors()) {
@@ -112,18 +107,17 @@ public class CodeRepository {
             methodCode = methodCode.replaceAll(FOUR_SPACE_INDENT, "");
 
             methodImplementations.put(methodSignature, methodCode);
-            methodComments.put(methodSignature,
-                    javaConstructor.getCodeBlock().substring(javaConstructor.getCodeBlock().indexOf("/**"), javaConstructor.getCodeBlock().lastIndexOf("*/") + 2));
+            methodComments.put(methodSignature, extractMethodComment(javaConstructor.getCodeBlock()));
         }
     }
 
-    private String extractMethodComment(JavaMethod javaMethod) {
+    private String extractMethodComment(String codeBlock) {
         final String END_TOKEN = "*/";
-        final int startIndex = javaMethod.getCodeBlock().indexOf("/**");
-        final int endIndex = javaMethod.getCodeBlock().lastIndexOf(END_TOKEN) + END_TOKEN.length();
+        final int startIndex = codeBlock.indexOf("/**");
+        final int endIndex = codeBlock.lastIndexOf(END_TOKEN) + END_TOKEN.length();
 
         if (startIndex >= 0 && endIndex >= 0) {
-            return javaMethod.getCodeBlock().substring(startIndex, endIndex);
+            return codeBlock.substring(startIndex, endIndex);
         }
 
         return "";
@@ -136,13 +130,10 @@ public class CodeRepository {
      * @return the method body or an empty string if it does not exist.
      */
     public String getMethodBody(String methodSignature) {
-        System.out.println("Requested body for " + methodSignature);
         if (methodImplementations.containsKey(methodSignature)) {
-            System.out.println("Found something");
             return methodImplementations.get(methodSignature);
         }
 
-        System.out.println("Found nothing");
         return "";
     }
 

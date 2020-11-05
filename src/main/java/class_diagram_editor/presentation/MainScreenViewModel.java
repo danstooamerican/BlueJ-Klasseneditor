@@ -35,16 +35,37 @@ public class MainScreenViewModel implements ViewModel {
         this.drawAssociation = new SimpleBooleanProperty();
     }
 
-    public void generateCode(GenerationType generationType) {
+    /**
+     * Generates code for all elements in the class diagram.
+     *
+     * @param generationType options for the code generator.
+     * @return the path to the folder the code was generated or null if noting was generated.
+     */
+    public String generateCode(GenerationType generationType) {
         if (sourceCodeControl != null) {
             sourceCodeControl.generateCode(classDiagram, generationType);
+
+            return sourceCodeControl.getGenerationDirPath();
         }
+
+        return null;
     }
 
-    public void generateCode(Collection<String> selectedElementIds, GenerationType generationType) {
+    /**
+     * Generates code for all elements belonging to the selectedElementIds.
+     *
+     * @param selectedElementIds the ids of all elements to be generated.
+     * @param generationType options for the code generator.
+     * @return the path to the folder the code was generated or null if noting was generated.
+     */
+    public String generateCode(Collection<String> selectedElementIds, GenerationType generationType) {
         if (sourceCodeControl != null) {
             sourceCodeControl.generateCode(classDiagram.getSubDiagram(selectedElementIds), generationType);
+
+            return sourceCodeControl.getGenerationDirPath();
         }
+
+        return null;
     }
 
     public void generateClassDiagram() {
@@ -85,5 +106,13 @@ public class MainScreenViewModel implements ViewModel {
 
     public ListProperty<Editable<?>> getAllElements() {
         return classDiagram.allElementsProperty();
+    }
+
+    public String getLayoutDirPath() {
+        if (sourceCodeControl != null) {
+            return sourceCodeControl.getGenerationDirPath();
+        }
+
+        return null;
     }
 }

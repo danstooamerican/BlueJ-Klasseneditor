@@ -47,4 +47,9 @@ public class PrintCodeSourceControl implements SourceCodeControl {
 
         return classDiagramGenerator.generate();
     }
+
+    @Override
+    public String getGenerationDirPath() {
+        return null;
+    }
 }

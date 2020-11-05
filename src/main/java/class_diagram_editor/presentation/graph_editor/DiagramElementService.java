@@ -6,7 +6,6 @@ import class_diagram_editor.diagram.Connectable;
 import class_diagram_editor.diagram.InterfaceModel;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -57,7 +56,7 @@ public class DiagramElementService {
         String id = classDiagram.addClass(classModel);
 
         if (id != null) {
-            graphController.addNode(GraphController.NodeType.CLASS, id);
+            graphController.addNode(GraphController.NodeType.CLASS, id, classModel.getName());
         }
 
         return id;
@@ -111,7 +110,7 @@ public class DiagramElementService {
         String id = classDiagram.addInterface(interfaceModel);
 
         if (id != null) {
-            graphController.addNode(GraphController.NodeType.INTERFACE, id);
+            graphController.addNode(GraphController.NodeType.INTERFACE, id, interfaceModel.getName());
         }
 
         return id;
@@ -164,13 +163,13 @@ public class DiagramElementService {
         for (ClassModel classModel : classDiagram.getClasses()) {
             final String id = generatedDiagram.getIdOf(classModel);
 
-            graphController.addNode(GraphController.NodeType.CLASS, id);
+            graphController.addNode(GraphController.NodeType.CLASS, id, classModel.getName());
         }
 
         for (InterfaceModel interfaceModel : classDiagram.getInterfaces()) {
             final String id = generatedDiagram.getIdOf(interfaceModel);
 
-            graphController.addNode(GraphController.NodeType.INTERFACE, id);
+            graphController.addNode(GraphController.NodeType.INTERFACE, id, interfaceModel.getName());
         }
 
         // now add the connections so all elements can be connected

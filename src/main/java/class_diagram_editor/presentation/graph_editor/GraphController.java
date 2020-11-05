@@ -6,6 +6,7 @@ import class_diagram_editor.presentation.MainScreenViewModel;
 import class_diagram_editor.presentation.skins.ClassSkin;
 import class_diagram_editor.presentation.skins.InterfaceSkin;
 import class_diagram_editor.presentation.validator.UMLConnectorValidator;
+import com.google.gson.Gson;
 import de.tesis.dynaware.grapheditor.Commands;
 import de.tesis.dynaware.grapheditor.GraphEditor;
 import de.tesis.dynaware.grapheditor.core.DefaultGraphEditor;
@@ -17,6 +18,7 @@ import de.tesis.dynaware.grapheditor.model.GModel;
 import de.tesis.dynaware.grapheditor.model.GNode;
 import de.tesis.dynaware.grapheditor.model.GraphFactory;
 import de.tesis.dynaware.grapheditor.model.GraphPackage;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextInputDialog;
@@ -27,6 +29,11 @@ import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
@@ -61,6 +68,12 @@ public class GraphController {
     private GraphEditor graphEditor;
     private GraphSkinFactory skinFactory;
 
+    private GraphLayout graphLayout;
+
+    private GraphController() {
+
+    }
+
     /**
      * Sets up the visual representation of the
      * {@link ClassDiagram class diagram} of the {@link MainScreenViewModel view model}.
@@ -88,6 +101,56 @@ public class GraphController {
         addGraphModel(graphEditor);
 
         return graphEditorContainer;
+    }
+
+    /**
+     * Saves the current layout in the given directory.
+     *
+     * @param dir the path of the directory.
+     */
+    public void saveLayout(String dir) {
+        if (dir == null) {
+            return;
+        }
+
+        graphLayout = new GraphLayout(new ArrayList<>(graphEditor.getModel().getNodes()), classDiagram);
+
+        Gson gson = new Gson();
+        File saveFile = new File(dir + "/layout.json");
+
+        try {
+            saveFile.createNewFile();
+
+            try(FileWriter fw = new FileWriter(saveFile)) {
+                fw.write(gson.toJson(graphLayout));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Loads a layout from the given directory.
+     *
+     * @param dir the path to the directory.
+     */
+    public void loadLayout(String dir) {
+        try {
+            if (dir != null) {
+                String contents = new String(Files.readAllBytes(Paths.get(dir + "/layout.json")));
+
+                Gson gson = new Gson();
+                graphLayout = gson.fromJson(contents, GraphLayout.class);
+            }
+
+            if (graphLayout == null) {
+                graphLayout = new GraphLayout();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -218,15 +281,17 @@ public class GraphController {
      *
      * @param type the {@link NodeType type} of the element.
      * @param id the id of the element.
+     * @param elementName the name of the element to add.
      */
-    public void addNode(NodeType type, String id) {
+    public void addNode(NodeType type, String id, String elementName) {
         GNode node = GraphFactory.eINSTANCE.createGNode();
 
         node.setType(type.value);
         node.setId(id);
 
-        node.setX(100);
-        node.setY(100);
+        Point2D nodePosition = graphLayout.getPosition(elementName);
+        node.setX(nodePosition.getX());
+        node.setY(nodePosition.getY());
         node.setWidth(200);
         node.setHeight(150);
 

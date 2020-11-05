@@ -36,7 +36,6 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
     @FXML private Button btnGenerateCodeSelected;
     @FXML private Button btnGenerateDiagram;
     @FXML private Button btnCreateElement;
-    @FXML private Button btnReconnect;
     @FXML private CheckBox ckbAssociation;
     @FXML private BorderPane bdpRoot;
     @FXML private ListView<Editable<?>> lstAllElements;
@@ -51,6 +50,8 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
         graphController = GraphController.getInstance();
 
         Node graphEditor = graphController.initialize(viewModel);
+        graphController.loadLayout(viewModel.getLayoutDirPath());
+
         bdpRoot.centerProperty().setValue(graphEditor);
 
         bdpRoot.setOnKeyPressed(event -> {
@@ -70,7 +71,11 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
         btnGenerateCode.setOnAction(e -> {
             final GenerationType generationType = showCodeGenerationConfirmation();
 
-            viewModel.generateCode(generationType);
+            final String generationDir = viewModel.generateCode(generationType);
+
+            if (generationDir != null) {
+                graphController.saveLayout(generationDir);
+            }
         });
 
         btnGenerateCodeSelected.setOnAction(e -> {
@@ -79,7 +84,11 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
             if (!selectedElementIds.isEmpty()) {
                 final GenerationType generationType = showCodeGenerationConfirmation();
 
-                viewModel.generateCode(selectedElementIds, generationType);
+                final String generationDir = viewModel.generateCode(selectedElementIds, generationType);
+
+                if (generationDir != null) {
+                    graphController.saveLayout(generationDir);
+                }
             } else {
                 showNoElementsSelectedDialog();
             }
@@ -103,11 +112,6 @@ public class MainScreenView implements FxmlView<MainScreenViewModel>, Initializa
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-        });
-
-        btnReconnect.setTooltip(new Tooltip("Zeichnet alle Verbindungen neu"));
-        btnReconnect.setOnAction(e -> {
-            viewModel.reconnectElements();
         });
     }
 
