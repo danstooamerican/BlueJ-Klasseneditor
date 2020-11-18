@@ -206,6 +206,15 @@ public class InterfaceModel extends Editable<InterfaceModel> implements CodeElem
         this.methods = new ArrayList<>(interfaceModel.methods);
     }
 
+    public void setMethods(List<MethodModel> methods) {
+        List<MethodModel> publicMethods = new ArrayList<>(methods);
+
+        publicMethods.forEach(methodModel -> {
+            methodModel.setVisibility(Visibility.PUBLIC);
+        });
+
+        this.methods = publicMethods;
+    }
 
     /**
      * @return the name of the {@link InterfaceModel interface}.

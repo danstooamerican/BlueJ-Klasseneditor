@@ -42,7 +42,7 @@ class ClassGenerator extends Generator {
             }«ENDIF»«
             ENDFOR»«
             IF c.isExtending() && !c.isAbstract()»«
-            FOR MethodModel methodModel : c.getExtendsClass().getMethods() SEPARATOR '\n\n'»«
+            FOR MethodModel methodModel : c.getExtendsClass().getMethodsWithExtending() SEPARATOR '\n\n'»«
                 IF methodModel.isAbstract()»
             «codeRepository.getMethodComment(generateOverrideMethodSignature(methodModel.getLastGenerated()).trim())»
             @Override
