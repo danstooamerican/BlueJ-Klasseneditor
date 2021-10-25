@@ -45,6 +45,10 @@ public class CodeRepository {
     }
 
     private void initialize(String elementName, String sourceCode) {
+        if (sourceCode.isEmpty()) {
+            return;
+        }
+
         try {
             JavaProjectBuilder builder = new JavaProjectBuilder();
 

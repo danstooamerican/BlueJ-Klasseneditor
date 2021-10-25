@@ -1,7 +1,7 @@
 package class_diagram_editor.bluej_adapters;
 
-import bluej.extensions.BlueJ;
-import bluej.extensions.Extension;
+import bluej.extensions2.BlueJ;
+import bluej.extensions2.Extension;
 import class_diagram_editor.ClassEditorApplication;
 import class_diagram_editor.bluej_adapters.menu.BlueJMenuGenerator;
 import class_diagram_editor.bluej_adapters.source_control.PrintCodeSourceControl;
@@ -16,7 +16,7 @@ import java.awt.EventQueue;
 public class BlueJExtension extends Extension {
 
     private static final String NAME = "Klasseneditor";
-    private static final String VERSION = "0.0.1";
+    private static final String VERSION = "2.0.0";
 
     /**
      * Main method for starting the application directly
@@ -55,7 +55,7 @@ public class BlueJExtension extends Extension {
     }
 
     /**
-     * @return the version of the extension. TODO: update version on release
+     * @return the version of the extension.
      */
     public String getVersion() {
         return VERSION;

@@ -1,16 +1,12 @@
 package class_diagram_editor.bluej_adapters.menu;
 
-import bluej.extensions.BPackage;
-import bluej.extensions.BProject;
-import bluej.extensions.MenuGenerator;
-import bluej.extensions.ProjectNotOpenException;
+import bluej.extensions2.BPackage;
+import bluej.extensions2.BProject;
+import bluej.extensions2.MenuGenerator;
+import bluej.extensions2.ProjectNotOpenException;
 import class_diagram_editor.ClassEditorApplication;
 import class_diagram_editor.bluej_adapters.source_control.SourceControl;
-import class_diagram_editor.bluej_adapters.source_control.SourceCodeControl;
-
-import javax.swing.AbstractAction;
-import javax.swing.JMenuItem;
-import java.awt.event.ActionEvent;
+import javafx.scene.control.MenuItem;
 
 /**
  * Adds extra JMenu entries which belong to the {@link class_diagram_editor.bluej_adapters.BlueJExtension extension}.
@@ -18,30 +14,22 @@ import java.awt.event.ActionEvent;
 public class BlueJMenuGenerator extends MenuGenerator {
 
     @Override
-    public JMenuItem getToolsMenuItem(BPackage bp) {
+    public MenuItem getToolsMenuItem(BPackage bp) {
         try {
             BProject project = bp.getProject();
 
-            return new JMenuItem(new OpenClassEditorAction(project.getName(), new SourceControl(project)));
+            MenuItem menuItem = new MenuItem("Klasseneditor öffnen");
+
+            final String projectName = project.getName();
+            final SourceControl sourceControl = new SourceControl(project);
+
+            menuItem.setOnAction(event -> {
+                new ClassEditorApplication(projectName, sourceControl).run();
+            });
+
+            return menuItem;
         } catch (ProjectNotOpenException e) {
             return null;
-        }
-    }
-
-    private static class OpenClassEditorAction extends AbstractAction {
-        private final SourceCodeControl sourceCodeControl;
-        private final String projectTitle;
-
-        public OpenClassEditorAction(String projectTitle, SourceCodeControl sourceCodeControl) {
-            this.sourceCodeControl = sourceCodeControl;
-            this.projectTitle = projectTitle;
-
-            putValue(AbstractAction.NAME, "Klasseneditor öffnen");
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            new ClassEditorApplication(projectTitle, sourceCodeControl).run();
         }
     }
 }
