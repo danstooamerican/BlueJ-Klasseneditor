@@ -6,6 +6,7 @@
 
 # Package Files #
 *.jar
+!bluejext2.jar
 *.war
 *.ear
 

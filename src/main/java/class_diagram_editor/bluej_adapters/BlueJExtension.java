@@ -16,7 +16,7 @@ import java.awt.EventQueue;
 public class BlueJExtension extends Extension {
 
     private static final String NAME = "Klasseneditor";
-    private static final String VERSION = "0.0.1";
+    private static final String VERSION = "2.0.0";
 
     /**
      * Main method for starting the application directly
@@ -55,7 +55,7 @@ public class BlueJExtension extends Extension {
     }
 
     /**
-     * @return the version of the extension. TODO: update version on release
+     * @return the version of the extension.
      */
     public String getVersion() {
         return VERSION;
