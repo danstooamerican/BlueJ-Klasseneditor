@@ -1,14 +1,9 @@
 package class_diagram_editor.bluej_adapters.source_control;
 
-import bluej.extensions.BClass;
-import bluej.extensions.BPackage;
-import bluej.extensions.BProject;
-import bluej.extensions.ClassNotFoundException;
-import bluej.extensions.MissingJavaFileException;
-import bluej.extensions.PackageNotFoundException;
-import bluej.extensions.ProjectNotOpenException;
-import bluej.extensions.editor.Editor;
-import bluej.extensions.editor.TextLocation;
+import bluej.extensions2.*;
+import bluej.extensions2.ClassNotFoundException;
+import bluej.extensions2.editor.JavaEditor;
+import bluej.extensions2.editor.TextLocation;
 import class_diagram_editor.code_generation.ClassDiagramGenerator;
 import class_diagram_editor.code_generation.CodeElement;
 import class_diagram_editor.code_generation.JavaCodeGenerator;
@@ -17,7 +12,6 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -60,7 +54,7 @@ public class SourceControl implements SourceCodeControl {
             while (iterator.hasNext()) {
                 CodeElement codeElement = iterator.next();
 
-                Editor editor = createFile(bpackage, codeElement);
+                JavaEditor editor = createFile(bpackage, codeElement);
 
                 if (editor != null) {
                     generateElement(editor, codeElement);
@@ -81,7 +75,7 @@ public class SourceControl implements SourceCodeControl {
             BPackage bpackage = project.getPackages()[0];
 
             for (BClass bClass : bpackage.getClasses()) {
-                final Editor editor = bClass.getEditor();
+                final JavaEditor editor = bClass.getJavaEditor();
 
                 final String elementContent = editor.getText(START_LOCATION, getEndLocation(editor));
 
@@ -122,8 +116,8 @@ public class SourceControl implements SourceCodeControl {
         }
     }
 
-    private Editor createFile(BPackage bPackage, CodeElement codeElement) {
-        Editor editor = null;
+    private JavaEditor createFile(BPackage bPackage, CodeElement codeElement) {
+        JavaEditor editor = null;
 
         try {
             File javaFile = new File(bPackage.getDir(), codeElement.getLastGeneratedName() + JAVA_FILE_EXTENSION);
@@ -134,10 +128,10 @@ public class SourceControl implements SourceCodeControl {
             }
 
             if (javaFile.exists() && !elementRenamed) {
-                editor = bPackage.getBClass(codeElement.getName()).getEditor();
+                editor = bPackage.getBClass(codeElement.getName()).getJavaEditor();
             } else {
                 if (javaFile.createNewFile() || javaFile.exists()) {
-                    editor = bPackage.newClass(codeElement.getName()).getEditor();
+                    editor = bPackage.newClass(codeElement.getName()).getJavaEditor();
                 }
             }
         } catch (ProjectNotOpenException | PackageNotFoundException | MissingJavaFileException
@@ -149,7 +143,7 @@ public class SourceControl implements SourceCodeControl {
     }
 
     private File renameOldClassWithNew(BPackage bPackage, File javaFile, CodeElement codeElement)
-            throws ProjectNotOpenException, PackageNotFoundException, ClassNotFoundException, IOException {
+            throws ProjectNotOpenException, PackageNotFoundException, IOException, ClassNotFoundException {
         File newJavaFile = new File(bPackage.getDir(), codeElement.getName() + JAVA_FILE_EXTENSION);
 
         if (javaFile.exists()) {
@@ -170,7 +164,7 @@ public class SourceControl implements SourceCodeControl {
         return newJavaFile;
     }
 
-    private void generateElement(Editor editor, CodeElement codeElement) {
+    private void generateElement(JavaEditor editor, CodeElement codeElement) {
         editor.setReadOnly(true);
 
         final TextLocation endLocation = getEndLocation(editor);
@@ -187,7 +181,7 @@ public class SourceControl implements SourceCodeControl {
         editor.setReadOnly(false);
     }
 
-    private TextLocation getEndLocation(Editor editor) {
+    private TextLocation getEndLocation(JavaEditor editor) {
         // line index is zero indexed
         int lastLine = editor.getLineCount() - 1;
         int lastColumn = editor.getLineLength(lastLine);

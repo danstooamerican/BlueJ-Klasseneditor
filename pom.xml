@@ -49,7 +49,7 @@
             <artifactId>bluejext</artifactId>
             <scope>system</scope>
             <version>1.0</version>
-            <systemPath>${basedir}\libs\bluejext.jar</systemPath>
+            <systemPath>${basedir}\libs\bluejext2.jar</systemPath>
         </dependency>
 
         <dependency>

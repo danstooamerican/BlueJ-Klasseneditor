@@ -1,7 +1,7 @@
 package class_diagram_editor.bluej_adapters;
 
-import bluej.extensions.BlueJ;
-import bluej.extensions.Extension;
+import bluej.extensions2.BlueJ;
+import bluej.extensions2.Extension;
 import class_diagram_editor.ClassEditorApplication;
 import class_diagram_editor.bluej_adapters.menu.BlueJMenuGenerator;
 import class_diagram_editor.bluej_adapters.source_control.PrintCodeSourceControl;
